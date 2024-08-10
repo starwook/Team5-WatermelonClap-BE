@@ -111,6 +111,7 @@ class OrderEventControllerTest extends ControllerTest {
         System.out.println(openOrderEventResponse);
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenReturn(openOrderEventResponse);
 
+
         mockMvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(openOrderEventResponse)))

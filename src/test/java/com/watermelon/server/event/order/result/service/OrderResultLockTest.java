@@ -74,6 +74,4 @@ class OrderResultLockTest {
 //        Assertions.assertThat(orderResultSet.size()).isNotEqualTo(orderResultQueryService.getAvailableTicket());
 //    }
 
-//    @Test
-//    void
 }
