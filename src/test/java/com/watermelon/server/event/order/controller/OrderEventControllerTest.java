@@ -108,7 +108,6 @@ class OrderEventControllerTest extends ControllerTest {
     void getOrderEvent() throws Exception {
         final String PATH = "/event/order/{eventId}";
         final String DOCUMENT_NAME ="event/order/{eventId}";
-        System.out.println(openOrderEventResponse);
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenReturn(openOrderEventResponse);
 
 
