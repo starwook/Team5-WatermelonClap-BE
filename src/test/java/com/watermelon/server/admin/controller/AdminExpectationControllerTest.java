@@ -72,7 +72,7 @@ class AdminExpectationControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("기대평 목록 조회")));
+                        resourceSnippet("기대평 상태 토글" )));
     }
 
 
