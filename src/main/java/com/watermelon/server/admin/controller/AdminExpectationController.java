@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class AdminExpectationController {
-    private ExpectationService expectationService;
+    private final ExpectationService expectationService;
 
     @GetMapping("/admin/expectations")
     public ResponseEntity<List<ResponseExpectationDto>> getExpectationForAdmin(){
