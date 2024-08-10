@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,11 +39,9 @@ public class AdminOrderEventService {
     public List<ResponseOrderEventWinnerDto> getOrderEventWinnersForAdmin(Long eventId) throws WrongOrderEventFormatException {
         OrderEvent orderEvent = orderEventRepository.findByIdFetchWinner(eventId).orElseThrow(WrongOrderEventFormatException::new);
         List< OrderEventWinner> orderEventWinners = orderEvent.getOrderEventWinner();
-        List<ResponseOrderEventWinnerDto> responseOrderEventWinnerDtos = new ArrayList<>();
-        orderEventWinners.forEach(orderEventWinner-> responseOrderEventWinnerDtos.add(
-                ResponseOrderEventWinnerDto.forAdmin(orderEventWinner)
-        ));
-        return responseOrderEventWinnerDtos;
+        return orderEventWinners.stream()
+                .map(orderEventWinner -> ResponseOrderEventWinnerDto.forAdmin(orderEventWinner))
+                .collect(Collectors.toList());
     }
 
     @Transactional
