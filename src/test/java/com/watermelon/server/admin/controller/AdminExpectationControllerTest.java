@@ -56,6 +56,25 @@ class AdminExpectationControllerTest extends ControllerTest {
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resourceSnippet("기대평 목록 조회")));
     }
+    @Test
+    @DisplayName("[DOC] 기대평 상태를 변경한다.")
+    void toggleExpectation() throws Exception {
+        final String PATH ="/admin/expectations/{expectationId}/toggle";
+        final String DOCUMENT_NAME ="admin/expectations/{expectationId}/toggle";
+        Expectation expectation = Expectation.makeExpectation(
+                RequestExpectationDto.makeExpectation("기대돼요"),
+                LotteryApplier.createLotteryApplier(String.valueOf(1))
+        );
+        Mockito.when(expectationService.toggleExpectation(any())).thenReturn(ResponseAdminExpectationApprovedDto.forAdminAfterToggleIsApproved(expectation));
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post(PATH,1)
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resourceSnippet("기대평 목록 조회")));
+    }
+
 
 
 }
