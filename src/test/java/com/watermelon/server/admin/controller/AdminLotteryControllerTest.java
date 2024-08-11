@@ -31,7 +31,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_ADMIN_APPLIER,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("응모자 명단 조회")
                                         .queryParameters(
                                                 parameterWithName(PARAM_PAGE).description("페이지"),
@@ -57,7 +57,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_LOTTERY_WINNERS,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("추첨 당첨자 명단 조회")
                                         .build()
                         )));
@@ -78,7 +78,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_PARTS_WINNERS,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("파츠 당첨자 명단 조회")
                                         .build()
                         )));
@@ -97,7 +97,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_ADMIN_LOTTERY_WINNER_CHECK,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("추첨 당첨자 확인처리")
                                         .build()
                         )));
@@ -115,7 +115,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_ADMIN_PARTS_WINNER_CHECK,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("파츠 추첨 당첨자 확인처리")
                                         .build()
                         )));
@@ -133,7 +133,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_LOTTERY,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("추첨 이벤트 응모자에 대해 추첨")
                                         .build()
                         )));
@@ -151,7 +151,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_PARTS_LOTTERY,
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG_ADMIN)
+                                        .tag(TAG_LOTTERY)
                                         .description("파츠 이벤트 응모자에 대해 추첨")
                                         .build()
                         )));
