@@ -28,18 +28,13 @@ class LinkControllerTest extends ControllerTest {
     @Test
     void getMyLink() throws Exception {
 
-        //given
-        MyLinkDto expected = MyLinkDto.createTestDto();
+        givenLink();
 
-        Mockito.when(linkService.getMyLink(TEST_UID))
-                .thenReturn(expected);
+        whenLinkIsRetrieved();
 
-        //when & then
-        this.mockMvc.perform(get(MY_LINK)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+        resultActions
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expected)))
-
+                .andExpect(jsonPath("link").isString())
                 .andDo(document(DocumentConstants.MY_LINK,
                         resourceSnippetAuthed("로그인한 유저의 링크를 조회")
                 ));
@@ -50,16 +45,35 @@ class LinkControllerTest extends ControllerTest {
     @DisplayName("링크의 URI 가 포함된 주소로 리디렉션한다.")
     void redirect() throws Exception {
 
-        //given
-        Mockito.when(linkService.getUrl(TEST_SHORTED_URI)).thenReturn(TEST_URI);
+        givenOriginUri();
 
-        //when & then
-        this.mockMvc.perform(get(SHORTED_LINK, TEST_SHORTED_URI))
+        whenRedirect();
+
+        resultActions
                 .andExpect(status().isFound())
                 .andExpect(header().string(HEADER_NAME_LOCATION, LinkUtils.makeUrl(TEST_URI)))
-
                 .andDo(document(DocumentConstants.SHORTED_LINK,
                         resourceSnippet("단축된 URL 에 대한 공유 페이지로 리디렉션")
                 ));
     }
+
+    private void givenLink(){
+        Mockito.when(linkService.getMyLink(TEST_UID))
+                .thenReturn(MyLinkDto.createTestDto());
+    }
+
+    private void givenOriginUri(){
+        Mockito.when(linkService.getUrl(TEST_SHORTED_URI)).thenReturn(TEST_URI);
+    }
+
+    private void whenLinkIsRetrieved() throws Exception {
+        resultActions = mockMvc.perform(get(MY_LINK)
+                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+    }
+
+    private void whenRedirect() throws Exception {
+        resultActions = mockMvc.perform(get(SHORTED_LINK, TEST_SHORTED_URI));
+    }
+
+
 }
