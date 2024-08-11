@@ -46,7 +46,7 @@ class LotteryControllerTest extends ControllerTest {
     private LotteryRewardService lotteryRewardService;
 
     @Test
-    @DisplayName("추첨자 명단을 반환한다.")
+    @DisplayName("당첨자 명단을 반환한다.")
     void testGetOrderEventResultSuccess() throws Exception {
 
         //given
@@ -54,7 +54,6 @@ class LotteryControllerTest extends ControllerTest {
         final String DOCUMENT_NAME = "event/lotteries";
 
         List<ResponseLotteryWinnerDto> expectedResponse = List.of(
-                ResponseLotteryWinnerDto.from("email1@email.com", -1),
                 ResponseLotteryWinnerDto.from("email2@email.com", 1)
         );
 
@@ -70,7 +69,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andExpect(jsonPath("[0].email").isString())
                 .andExpect(jsonPath("[0].rank").isNumber())
                 .andDo(document(DOCUMENT_NAME,
-                        resourceSnippet("추첨자 명단 조회")));
+                        resourceSnippet("당첨자 명단 조회")));
 
     }
 
