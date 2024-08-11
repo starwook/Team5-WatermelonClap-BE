@@ -15,8 +15,6 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 @DisplayName("[단위] 추첨 컨트롤러")
 class LotteryControllerTest extends ControllerTest {
 
-    private final String TAG = "추첨 이벤트";
-
     @Test
     @DisplayName("당첨자 명단 반환 - 성공")
     void testGetOrderEventResultSuccess() throws Exception {
@@ -31,7 +29,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("당첨자 명단 조회")
                                         .build()
                         )
@@ -53,7 +51,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries/info",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("당첨자 정보 조회")
                                         .build()
                         )));
@@ -72,7 +70,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries/info/create",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("당첨자 정보 입력")
                                         .build()
                         )));
@@ -93,7 +91,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries/rank/success",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("응모 정보 조회")
                                         .build()
                         )));
@@ -114,7 +112,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries/rank/failure",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("응모 정보 조회")
                                         .build()
                         )));
@@ -135,7 +133,7 @@ class LotteryControllerTest extends ControllerTest {
                 .andDo(document("event/lotteries/rank",
                         resource(
                                 ResourceSnippetParameters.builder()
-                                        .tag(TAG)
+                                        .tag(TAG_LOTTERY)
                                         .description("추첨이벤트 경품 정보 조회")
                                         .build()
                         )));
