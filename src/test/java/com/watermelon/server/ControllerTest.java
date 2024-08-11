@@ -143,7 +143,14 @@ public class ControllerTest extends APITest{
     }
 
     protected void givenLotteryApplierNotExist() {
-        Mockito.doThrow(new NoSuchElementException()).when(lotteryService).getLotteryRank(anyString());
+        Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
+                ResponseLotteryRankDto.createNotApplied()
+        );
+    }
+
+    @Override
+    protected void givenLotteryApplierApplied() {
+
     }
 
     protected void givenLotteryWinner(){

@@ -42,7 +42,7 @@ class LotteryServiceImplTest {
 
         //given
         Mockito.when(lotteryApplierRepository.findByUid(TEST_UID)).thenReturn(
-                Optional.of(LotteryApplier.builder().lotteryRank(TEST_RANK).build())
+                Optional.of(LotteryApplier.builder().lotteryRank(TEST_RANK).isLotteryApplier(true).build())
         );
 
         //when

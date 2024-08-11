@@ -4,13 +4,10 @@ import com.watermelon.server.BaseIntegrationTest;
 import com.watermelon.server.event.lottery.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.parts.domain.Parts;
-import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
-import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.PARTS;
@@ -22,6 +19,88 @@ public class LotteryIntegrationTest extends BaseIntegrationTest {
     @BeforeEach
     void setUp() {
         partsRepository.saveAll(Parts.createAllParts());
+    }
+
+    @Test
+    @DisplayName("당첨자 명단 반환 - 성공")
+    void testGetOrderEventResultSuccess() throws Exception {
+
+        givenLotteryWinners();
+
+        whenLotteryWinnersAreRetrieved();
+
+        thenLotteryWinnersAreRetrieved();
+
+    }
+
+    @Test
+    @DisplayName("당첨자 정보 반환 - 성공")
+    void testGetOrderEventResultFailure() throws Exception {
+
+        givenLotteryWinnerInfo();
+
+        whenLotteryWinnerInfoIsRetrieved();
+
+        thenLotteryWinnerInfoIsRetrieved();
+
+    }
+
+    @Test
+    @DisplayName("당첨자 정보 저장 - 성공")
+    void testCreateLotteryWinnerInfoSuccess() throws Exception {
+
+        whenLotteryWinnerInfoIsAdded();
+
+        thenLotteryWinnerInfoIsAdded();
+
+    }
+
+    @Test
+    @DisplayName("응모 정보 반환 - 실패 (정보 없음)")
+    void testGetLotteryRankNotAppliedCase() throws Exception {
+
+        givenLotteryApplierNotExist();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedWithNoInfo();
+
+    }
+
+    @Test
+    @DisplayName("응모 정보 반환 - 성공 (응모했는데 당첨 됨)")
+    void testGetLotteryRankAppliedCase() throws Exception {
+
+        givenLotteryWinner();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedForWinner();
+
+    }
+
+    @Test
+    @DisplayName("응모 정보 반환 - 성공 (응모했는데 당첨 안됨)")
+    void testGetLotteryRankAppliedButNotWinnerCase() throws Exception {
+
+        givenLotteryApplierApplied();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedForApplier();
+
+    }
+
+    @Test
+    @DisplayName("추첨이벤트 경품 정보 반환 - 성공")
+    void getRewardInfo() throws Exception {
+
+        givenLotteryRewardInfo();
+
+        whenLotteryRewardInfoIsRetrieved();
+
+        thenLotteryRewardInfoIsRetrieved();
+
     }
 
     @Test

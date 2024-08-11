@@ -82,7 +82,7 @@ class LotteryControllerTest extends ControllerTest {
 
         whenLotteryAppliersRankIsRetrieved();
 
-        thenLotteryAppliersRankIsRetrieved();
+        thenLotteryAppliersRankIsRetrievedForWinner();
 
         resultActions
                 .andDo(document("event/lotteries/rank/failure",

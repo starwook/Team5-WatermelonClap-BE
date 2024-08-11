@@ -87,6 +87,18 @@ public class LotteryApplier extends BaseEntity {
         this.isPartsWinner = true;
     }
 
+    public static LotteryApplier createTestLotteryWinner(String uid){
+        return LotteryApplier.builder()
+                .uid(uid)
+                .lotteryRank(1)
+                .name("name")
+                .email("email")
+                .address("address")
+                .phoneNumber("phoneNumber")
+                .isLotteryApplier(true)
+                .build();
+    }
+
     public static LotteryApplier createLotteryApplier(String uid){
 
         LotteryApplier lotteryApplier = LotteryApplier.builder()

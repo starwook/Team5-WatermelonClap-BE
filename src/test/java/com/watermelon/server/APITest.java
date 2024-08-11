@@ -37,6 +37,7 @@ public abstract class APITest {
     protected abstract void givenLotteryWinnersForAdmin();
     protected abstract void givenLotteryWinnerInfo();
     protected abstract void givenLotteryApplierNotExist();
+    protected abstract void givenLotteryApplierApplied();
     protected abstract void givenLotteryWinner();
 
     protected abstract void givenPartsListForUri();
@@ -58,10 +59,17 @@ public abstract class APITest {
         resultActions = mvc.perform(authedRequest(get("/event/lotteries/rank")));
     }
 
-    protected void thenLotteryAppliersRankIsRetrieved() throws Exception {
+    protected void thenLotteryAppliersRankIsRetrievedForWinner() throws Exception {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("rank").value(TEST_RANK))
+                .andExpect(jsonPath("applied").value(true));
+    }
+
+    protected void thenLotteryAppliersRankIsRetrievedForApplier() throws Exception {
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("rank").value(-1))
                 .andExpect(jsonPath("applied").value(true));
     }
 

@@ -3,14 +3,15 @@ package com.watermelon.server;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
+import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.lottery.parts.domain.Parts;
 import com.watermelon.server.event.lottery.parts.domain.PartsCategory;
 import com.watermelon.server.event.lottery.parts.repository.LotteryApplierPartsRepository;
 import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
+import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class BaseIntegrationTest extends APITest {
 
     @Autowired
     protected LotteryApplierPartsRepository lotteryApplierPartsRepository;
+    @Autowired
+    private LotteryRewardRepository lotteryRewardRepository;
 
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(
@@ -57,6 +60,16 @@ public class BaseIntegrationTest extends APITest {
 
     }
 
+    private LotteryApplier saveTestLotteryWinner(){
+        return lotteryApplierRepository.save(LotteryApplier.createTestLotteryWinner(TEST_UID));
+    }
+
+    private LotteryApplier saveTestLotteryApplierApplied(){
+        LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
+        lotteryApplier.applyLottery();
+        return lotteryApplierRepository.save(lotteryApplier);
+    }
+
     private LotteryApplier saveTestLotteryApplier() {
         return lotteryApplierRepository.save(LotteryApplier.createLotteryApplier(TEST_UID));
     }
@@ -72,14 +85,20 @@ public class BaseIntegrationTest extends APITest {
         );
     }
 
-    @Override
-    protected void givenLotteryRewardInfo() {
-
+    private void saveTestLotteryReward() {
+        lotteryRewardRepository.save(LotteryReward.createTestLotteryReward());
     }
 
     @Override
-    protected void givenLotteryWinners() {
+    protected void givenLotteryRewardInfo() {
+        saveTestLotteryReward();
+    }
 
+
+
+    @Override
+    protected void givenLotteryWinners() {
+        saveTestLotteryWinner();
     }
 
     @Override
@@ -89,17 +108,22 @@ public class BaseIntegrationTest extends APITest {
 
     @Override
     protected void givenLotteryWinnerInfo() {
-
+        saveTestLotteryWinner();
     }
 
     @Override
     protected void givenLotteryApplierNotExist() {
+        saveTestLotteryApplier();
+    }
 
+    @Override
+    protected void givenLotteryApplierApplied() {
+        saveTestLotteryApplierApplied();
     }
 
     @Override
     protected void givenLotteryWinner() {
-
+        saveTestLotteryWinner();
     }
 
     @Override
