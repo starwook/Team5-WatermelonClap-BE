@@ -229,6 +229,10 @@ public abstract class APITest {
 
     }
 
+    protected void thenPartsEquippedStatusIsChanged() throws Exception {
+        resultActions.andExpect(status().isOk());
+    }
+
     protected void whenMyRemainChanceIsRetrieved() throws Exception {
         resultActions = mvc.perform(authedRequest(get("/event/parts/remain")));
 

@@ -51,8 +51,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenPartsEquippedStatusIsChanged();
 
+        thenPartsEquippedStatusIsChanged();
+
         resultActions
-                .andExpect(status().isOk())
                 .andDo(document("event/parts/equip",
                         resourceSnippetAuthed("자신의 파츠 상태 변경")));
 
