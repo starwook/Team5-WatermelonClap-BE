@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.Constants.TEST_TOKEN;
@@ -46,10 +48,13 @@ public abstract class APITest {
     protected abstract void givenLink();
     protected abstract void givenOriginUri();
 
-    protected void whenLotteryAppliersRankIsRetrieved() throws Exception {
-        resultActions = this.mvc.perform(get("/event/lotteries/rank")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+    private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) throws Exception {
+        return requestBuilder
+                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN);
+    }
 
+    protected void whenLotteryAppliersRankIsRetrieved() throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/event/lotteries/rank")));
     }
 
     protected void thenLotteryAppliersRankIsRetrieved() throws Exception {
@@ -88,9 +93,7 @@ public abstract class APITest {
     }
 
     protected void whenLotteryWinnerInfoIsRetrieved() throws Exception {
-        resultActions = this.mvc.perform(get("/event/lotteries/info")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
-
+        resultActions = mvc.perform(authedRequest(get("/event/lotteries/info")));
     }
 
     protected void thenLotteryWinnerInfoIsRetrieved() throws Exception {
@@ -110,8 +113,8 @@ public abstract class APITest {
 
         String requestJson = objectMapper.writeValueAsString(requestLotteryWinnerInfoDto);
 
-        resultActions = this.mvc.perform(post("/event/lotteries/info")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
+        resultActions = this.mvc.perform(
+                authedRequest(post("/event/lotteries/info"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson));
     }
@@ -122,8 +125,8 @@ public abstract class APITest {
     }
 
     protected void whenLotteryApplierListAreRetrievedForAdmin() throws Exception {
-        resultActions = mvc.perform(get(PATH_ADMIN_APPLIER)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
+        resultActions = mvc.perform(
+                authedRequest(get(PATH_ADMIN_APPLIER))
                 .param(PARAM_PAGE, String.valueOf(TEST_PAGE_NUMBER))
                 .param(PARAM_SIZE, String.valueOf(TEST_PAGE_SIZE))
         );
@@ -138,9 +141,7 @@ public abstract class APITest {
     }
 
     protected void whenLotteryWinnerListAreRetrievedForAdmin() throws Exception {
-        resultActions = mvc.perform(get(PATH_ADMIN_LOTTERY_WINNERS)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
-        );
+        resultActions = mvc.perform(authedRequest(get(PATH_ADMIN_LOTTERY_WINNERS)));
     }
 
     protected void thenLotteryWinnerListAreRetrievedForAdmin() throws Exception {
@@ -154,8 +155,7 @@ public abstract class APITest {
     }
 
     protected void whenPartsWinnerListAreRetrievedForAdmin() throws Exception {
-        resultActions = mvc.perform(get(PATH_ADMIN_PARTS_WINNERS)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(get(PATH_ADMIN_PARTS_WINNERS)));
     }
 
     protected void thenPartsWinnerListAreRetrievedForAdmin() throws Exception {
@@ -169,9 +169,7 @@ public abstract class APITest {
     }
 
     protected void whenLotteryWinnerCheck() throws Exception {
-        resultActions = mvc.perform(post(PATH_ADMIN_LOTTERY_WINNER_CHECK, TEST_UID)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
-        );
+        resultActions = mvc.perform(authedRequest(post(PATH_ADMIN_LOTTERY_WINNER_CHECK, TEST_UID)));
     }
 
     protected void thenLotteryWinnerCheck() throws Exception {
@@ -180,9 +178,7 @@ public abstract class APITest {
     }
 
     protected void whenPartsWinnerCheck() throws Exception {
-        resultActions = mvc.perform(post(PATH_ADMIN_PARTS_WINNER_CHECK, TEST_UID)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
-        );
+        resultActions = mvc.perform(authedRequest(post(PATH_ADMIN_PARTS_WINNER_CHECK, TEST_UID)));
     }
 
     protected void thenPartsWinnerCheck() throws Exception {
@@ -191,8 +187,7 @@ public abstract class APITest {
     }
 
     protected void whenLottery() throws Exception {
-        resultActions = mvc.perform(post(PATH_LOTTERY)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(post(PATH_LOTTERY)));
     }
 
     protected void thenLottery() throws Exception {
@@ -201,8 +196,7 @@ public abstract class APITest {
     }
 
     protected void whenPartsLottery() throws Exception {
-        resultActions = mvc.perform(post(PATH_PARTS_LOTTERY)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(post(PATH_PARTS_LOTTERY)));
     }
 
     protected void thenPartsLottery() throws Exception {
@@ -211,8 +205,7 @@ public abstract class APITest {
     }
 
     protected void whenDrawParts() throws Exception {
-        resultActions = mvc.perform(post("/event/parts")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(post("/event/parts")));
     }
 
     protected void thenDrawParts() throws Exception {
@@ -232,14 +225,12 @@ public abstract class APITest {
     }
 
     protected void whenPartsEquippedStatusIsChanged() throws Exception {
-        resultActions = mvc.perform(patch("/event/parts/{parts_id}", TEST_PARTS_ID)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(patch("/event/parts/{parts_id}", TEST_PARTS_ID)));
 
     }
 
     protected void whenMyRemainChanceIsRetrieved() throws Exception {
-        resultActions = mvc.perform(get("/event/parts/remain")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(get("/event/parts/remain")));
 
     }
 
@@ -250,8 +241,7 @@ public abstract class APITest {
     }
 
     protected void whenMyPartsListAreRetrieved() throws Exception {
-        resultActions = mvc.perform(get("/event/parts")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(get("/event/parts")));
     }
 
     protected void thenMyPartsListAreRetrieved() throws Exception {
@@ -267,8 +257,7 @@ public abstract class APITest {
     }
 
     protected void whenPartsListAreRetrievedWithUri() throws Exception {
-        resultActions = mvc.perform(get(PARTS_LINK_LIST, TEST_URI)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(get(PARTS_LINK_LIST, TEST_URI)));
     }
 
     protected void thenPartsListAreRetrievedWithUri() throws Exception {
@@ -284,8 +273,7 @@ public abstract class APITest {
     }
 
     protected void whenLinkIsRetrieved() throws Exception {
-        resultActions = mvc.perform(get(MY_LINK)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+        resultActions = mvc.perform(authedRequest(get(MY_LINK)));
     }
 
     protected void thenLinkIsRetrieved() throws Exception {
@@ -303,5 +291,6 @@ public abstract class APITest {
                 .andExpect(status().isFound())
                 .andExpect(header().string(HEADER_NAME_LOCATION, LinkUtils.makeUrl(TEST_URI)));
     }
+
 
 }
