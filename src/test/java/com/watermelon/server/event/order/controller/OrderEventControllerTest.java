@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventStatus;
@@ -22,6 +23,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -98,7 +100,12 @@ class OrderEventControllerTest extends ControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("선착순 이벤트 목록 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 이벤트 목록 조회")
+                                        .build()
+                        )));
     }
     @Test
     @DisplayName("[DOC] 특정 선착순 이벤트를 가져온다")
@@ -113,7 +120,12 @@ class OrderEventControllerTest extends ControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(openOrderEventResponse)))
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("특정 선착순 이벤트 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("특정 선착순 이벤트 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -134,7 +146,12 @@ class OrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("선착순 퀴즈 번호 제출")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 번호 제출")
+                                        .build()
+                        )));
 
 //        Mockito.doThrow(WrongPhoneNumberFormatException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
 //        mockMvc.perform(RestDocumentationRequestBuilders.post(Path,
@@ -178,6 +195,11 @@ class OrderEventControllerTest extends ControllerTest {
 //                .andExpect(jsonPath("$").value(objectMapper.writeValueAsString(ResponseApplyTicketDto.class)))
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("선착순 퀴즈 정답 제출")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 정답 제출")
+                                        .build()
+                        )));
     }
 }

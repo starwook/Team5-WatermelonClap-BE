@@ -117,8 +117,12 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("어드민 선착순 이벤트 당첨자 반환")
-                ));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 당첨자 반환")
+                                        .build()
+                        )));
 
     }
 
@@ -135,7 +139,12 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("어드민 선착순 이벤트 목록 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 목록 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -164,6 +173,12 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 목록 조회")
+                                        .build()
+                        ),
                         requestParts(
                                 partWithName("rewardImage").description("rewardImage"),
                                 partWithName("quizImage").description("quizImage"),
