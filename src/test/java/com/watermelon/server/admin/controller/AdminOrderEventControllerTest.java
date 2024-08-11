@@ -142,7 +142,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     @DisplayName("[DOC] 선착순 이벤트를 생성한다")
     void makeOrderEvent() throws Exception {
         final String PATH = "/admin/event/order";
-        final String DOCUMENT_NAME ="admin/event/order";
+        final String DOCUMENT_NAME ="admin/event/order/create";
         Mockito.when(adminOrderEventService.makeOrderEvent(any(),any(),any())).thenReturn(openOrderEventResponse);
 
         RequestOrderEventDto requestOrderEventDto = RequestOrderEventDto.makeForTestOpened(
