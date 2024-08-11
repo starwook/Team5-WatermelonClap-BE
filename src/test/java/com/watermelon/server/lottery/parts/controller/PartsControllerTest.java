@@ -22,14 +22,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenDrawParts();
 
+        thenDrawParts();
+
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("category").isString())
-                .andExpect(jsonPath("partsId").isNumber())
-                .andExpect(jsonPath("name").isString())
-                .andExpect(jsonPath("description").isString())
-                .andExpect(jsonPath("imgSrc").isString())
-                .andExpect(jsonPath("equipped").isBoolean())
                 .andDo(document("event/parts/success",
                         resourceSnippetAuthed("파츠 뽑기")));
     }
@@ -42,8 +37,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenDrawParts();
 
+        thenDrawPartsHasNotRemainChance();
+
         resultActions
-                .andExpect(status().isTooManyRequests())
                 .andDo(document("event/parts/too-many-request",
                         resourceSnippetAuthed("파츠 뽑기")));
 
@@ -71,9 +67,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenMyRemainChanceIsRetrieved();
 
+        thenMyRemainChanceIsRetrieved();
+
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("remainChance").isNumber())
                 .andDo(document("event/parts/remain",
                         resourceSnippetAuthed("자신의 남은 파츠 뽑기 횟수 조회")));
 
@@ -87,15 +83,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenMyPartsListAreRetrieved();
 
+        thenMyPartsListAreRetrieved();
+
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("[0].category").isString())
-                .andExpect(jsonPath("[0].parts[0].category").isString())
-                .andExpect(jsonPath("[0].parts[0].partsId").isNumber())
-                .andExpect(jsonPath("[0].parts[0].name").isString())
-                .andExpect(jsonPath("[0].parts[0].description").isString())
-                .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
-                .andExpect(jsonPath("[0].parts[0].equipped").isBoolean())
                 .andDo(document("event/parts/get",
                         resourceSnippetAuthed("자신의 파츠 목록 조회")))
                 .andDo(print());
@@ -110,15 +100,9 @@ class PartsControllerTest extends ControllerTest {
 
         whenPartsListAreRetrievedWithUri();
 
+        thenPartsListAreRetrievedWithUri();
+
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("[0].category").isString())
-                .andExpect(jsonPath("[0].parts[0].category").isString())
-                .andExpect(jsonPath("[0].parts[0].partsId").isNumber())
-                .andExpect(jsonPath("[0].parts[0].name").isString())
-                .andExpect(jsonPath("[0].parts[0].description").isString())
-                .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
-                .andExpect(jsonPath("[0].parts[0].equipped").isBoolean())
                 .andDo(document(DocumentConstants.PARTS_LINK_LIST,
                         resourceSnippetAuthed("링크 키의 주인에 대한 파츠 목록 조회")));
 
