@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

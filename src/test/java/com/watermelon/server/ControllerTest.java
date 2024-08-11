@@ -44,6 +44,7 @@ import java.util.NoSuchElementException;
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.Constants.TEST_TOKEN;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
