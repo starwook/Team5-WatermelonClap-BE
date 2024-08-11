@@ -34,7 +34,7 @@ class PartsControllerTest extends ControllerTest {
     private PartsService partsService;
 
     @Test
-    @DisplayName("파츠 뽑기 결과를 반환한다.")
+    @DisplayName("파츠 뽑기 결과 반환 - 성공")
     void drawParts() throws Exception {
 
         givenLotteryApplierWhoDrawsPartsFirst();
@@ -54,7 +54,7 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("파츠 뽑기 횟수가 소진되었을 경우 429 에러를 반환한다.")
+    @DisplayName("파츠 뽑기 결과 반환 - 횟수 소진")
     void drawPartsException() throws Exception {
 
         givenLotteryApplierWhoHasNoRemainChance();
@@ -69,7 +69,7 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("파츠 상태 변경에 성공")
+    @DisplayName("파츠 상태 변경 - 성공")
     void toggleParts() throws Exception {
 
         whenPartsEquippedStatusIsChanged();
@@ -83,7 +83,7 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("남은 파츠 뽑기 횟수를 반환한다.")
+    @DisplayName("파츠 뽑기 횟수 반환 - 성공")
     void getRemainChance() throws Exception {
 
         givenLotteryApplierWhoHasRemainChance();
@@ -99,7 +99,7 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("자신의 파츠 목록을 반환한다.")
+    @DisplayName("파츠 목록 반환 - 성공")
     void getMyPartsList() throws Exception {
 
         givenMyPartsList();
@@ -122,7 +122,7 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("링크 키의 주인에 대한 파츠 목록을 반환한다.")
+    @DisplayName("Uri 주인의 파츠 목록 반환 - 성공")
     void getLinkPartsList() throws Exception {
 
         givenPartsListForUri();

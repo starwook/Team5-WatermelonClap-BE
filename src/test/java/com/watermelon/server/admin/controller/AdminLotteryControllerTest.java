@@ -45,7 +45,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     private PartsService partsService;
 
     @Test
-    @DisplayName("응모자 명단을 반환한다.")
+    @DisplayName("응모자 명단 반환 - 성공")
     void getLotteryAppliers() throws Exception {
 
         givenLotteryApplierList();
@@ -73,7 +73,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("추첨 당첨자 명단을 반환한다.")
+    @DisplayName("추첨 당첨자 명단 반환 - 성공")
     void getLotteryWinners() throws Exception {
 
         givenLotteryWinners();
@@ -92,7 +92,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("파츠 당첨자 명단을 반환한다.")
+    @DisplayName("파츠 당첨자 명단 반환 - 성공")
     void getPartsWinners() throws Exception {
 
         givenPartsWinnerList();
@@ -111,7 +111,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("추첨 당첨자를 확인처리 한다.")
+    @DisplayName("추첨 당첨자 확인처리 - 성공")
     void lotteryWinnerCheckDone() throws Exception {
 
         whenLotteryWinnerCheck();
@@ -124,7 +124,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("파츠 추첨 당첨자를 확인처리 한다.")
+    @DisplayName("파츠 추첨 당첨자 확인처리 - 성공")
     void partsWinnerCheckDone() throws Exception {
 
         whenPartsWinnerCheck();
@@ -137,7 +137,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("추첨 이벤트 응모자에 대해 추첨을 진행한다.")
+    @DisplayName("추첨 이벤트 추첨 - 성공")
     void lottery() throws Exception {
 
         whenLottery();
@@ -150,7 +150,7 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("파츠 이벤트 응모자에 대해 추첨을 진행한다.")
+    @DisplayName("파츠 이벤트 추첨 - 성공")
     void partsLottery() throws Exception {
 
         whenPartsLottery();

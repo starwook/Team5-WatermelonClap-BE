@@ -27,6 +27,7 @@ class LinkControllerTest extends ControllerTest {
     private LinkService linkService;
 
     @Test
+    @DisplayName("자신의 링크 반환 - 성공")
     void getMyLink() throws Exception {
 
         givenLink();
@@ -43,7 +44,7 @@ class LinkControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("링크의 URI 가 포함된 주소로 리디렉션한다.")
+    @DisplayName("Uri 포함 주소 리디렉션 - 성공")
     void redirect() throws Exception {
 
         givenOriginUri();

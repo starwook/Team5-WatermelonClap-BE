@@ -47,7 +47,7 @@ class LotteryControllerTest extends ControllerTest {
     private LotteryRewardService lotteryRewardService;
 
     @Test
-    @DisplayName("당첨자 명단을 반환한다.")
+    @DisplayName("당첨자 명단 반환 - 성공")
     void testGetOrderEventResultSuccess() throws Exception {
 
         givenLotteryWinners();
@@ -63,7 +63,7 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("당첨자 정보를 반환한다.")
+    @DisplayName("당첨자 정보 반환 - 성공")
     void testGetOrderEventResultFailure() throws Exception {
 
         givenLotteryWinnerInfo();
@@ -81,7 +81,7 @@ class LotteryControllerTest extends ControllerTest {
 
 
     @Test
-    @DisplayName("당첨자 정보가 성공적으로 저장되면 201 Status 로 응답한다.")
+    @DisplayName("당첨자 정보 저장 - 성공")
     void testCreateLotteryWinnerInfoSuccess() throws Exception {
 
         whenLotteryWinnerInfoIsAdded();
@@ -93,7 +93,7 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("응모 정보가 없으면 rank : -1, applied : false 로 응답한다.")
+    @DisplayName("응모 정보 반환 - 정보 없음")
     void testGetLotteryRankNotAppliedCase() throws Exception {
 
         givenLotteryApplierNotExist();
@@ -110,7 +110,7 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("응모 정보가 있으면 해당 유저의 rank, applied : true 로 응답한다.")
+    @DisplayName("응모 정보 반환 - 성공")
     void testGetLotteryRankAppliedCase() throws Exception {
 
         givenLotteryWinner();
@@ -127,7 +127,7 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("추첨이벤트 경품 정보를 반환한다.")
+    @DisplayName("추첨이벤트 경품 정보 반환 - 성공")
     void getRewardInfo() throws Exception {
 
         givenLotteryRewardInfo();
