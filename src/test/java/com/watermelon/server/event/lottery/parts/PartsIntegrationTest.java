@@ -32,7 +32,7 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
     private LotteryApplierPartsRepository lotteryApplierPartsRepository;
 
     @Test
-    @DisplayName("각 카테고리의 파츠를 1개 이상 뽑으면 '나만의 아반떼 N 미니어처'를 받을 수 있는 추첨권을 부여한다.")
+    @DisplayName("추첨권 부여 - 성공")
     void partsLotteryPolicyTest() throws Exception {
 
         //given
@@ -54,7 +54,7 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("파츠 뽑기권이 없으면 429 에러를 반환한다.")
+    @DisplayName("파츠 뽑기 - 뽑기권 없음")
     void partsLotteryNotRemainCountExceptionTest() throws Exception {
 
         //given

@@ -34,7 +34,7 @@ public class LotteryIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("내 아반떼 N 뽑기 이벤트에 최초 참여시 자동으로 응모된다.")
+    @DisplayName("추첨 이벤트 응모 - 성공")
     void applySuccessTest() throws Exception {
 
         //when
