@@ -44,8 +44,18 @@ public class Expectation extends BaseEntity {
         return expectation;
     }
 
+
     public void toggleApproved(){
         isApproved = !isApproved;
     }
 
+    @Override
+    public String toString() {
+        return "Expectation{" +
+                "id=" + id +
+                ", lotteryApplier=" + lotteryApplier +
+                ", expectation='" + expectation + '\'' +
+                ", isApproved=" + isApproved +
+                '}';
+    }
 }

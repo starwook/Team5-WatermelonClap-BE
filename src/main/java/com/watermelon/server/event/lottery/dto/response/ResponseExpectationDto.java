@@ -32,6 +32,7 @@ public class ResponseExpectationDto {
     public static ResponseExpectationDto forUser(Expectation expectation){
         return ResponseExpectationDto.builder()
                 .expectation(expectation.getExpectation())
+                .isApproved(expectation.isApproved())
                 .build();
     }
 
