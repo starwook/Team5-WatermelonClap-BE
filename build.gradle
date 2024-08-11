@@ -104,6 +104,18 @@ tasks.register('copySwaggerUI', Copy) {
 
 tasks.register('customGenerateSwaggerUI', GenerateSwaggerUI) {
 	dependsOn 'openapi3'
+	doFirst {
+		def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+
+		def securitySchemesContent =  "  securitySchemes:\n" +  \
+                                      "    bearerAuth:\n" +  \
+                                      "      type: http\n" +  \
+									  "      scheme: bearer\n"+  \
+                                      "security:\n" +
+				"  - bearerAuth: []  # Apply the security scheme here"
+
+		swaggerUIFile.append securitySchemesContent
+	}
 	inputFile = file('build/api-spec/openapi3.yaml')
 	outputDir = file("build/swagger-ui-watermelon")
 	wipeOutputDir = true
