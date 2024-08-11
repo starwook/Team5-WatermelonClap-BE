@@ -1,15 +1,12 @@
 package com.watermelon.server.event.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.watermelon.server.ControllerTest;
-import com.watermelon.server.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.dto.request.*;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
-import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
@@ -96,7 +93,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String DOCUMENT_NAME ="event/order";
         Mockito.when(orderEventQueryService.getOrderEvents()).thenReturn(responseOrderEventDtos);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(PATH))
+        mvc.perform(RestDocumentationRequestBuilders.get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
@@ -111,7 +108,7 @@ class OrderEventControllerTest extends ControllerTest {
         System.out.println(openOrderEventResponse);
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenReturn(openOrderEventResponse);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
+        mvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(openOrderEventResponse)))
                 .andDo(print())
@@ -128,7 +125,7 @@ class OrderEventControllerTest extends ControllerTest {
 
         String applyTicket = "applyTicket";
 
-        mockMvc.perform(RestDocumentationRequestBuilders.post(Path,
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
                 openOrderEventResponse.getEventId(),
                 openOrderEventResponse.getQuiz().getQuizId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -171,7 +168,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}";
         String applyTicket = "applyTicket";
         Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.applySuccess(applyTicket));
-        mockMvc.perform(RestDocumentationRequestBuilders.post(Path,
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())
                         .contentType(MediaType.APPLICATION_JSON)

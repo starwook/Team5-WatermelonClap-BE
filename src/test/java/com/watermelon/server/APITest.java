@@ -21,7 +21,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 public abstract class APITest {
 
     @Autowired
-    protected MockMvc mockMvc;
+    protected MockMvc mvc;
 
     @Autowired
     protected ObjectMapper objectMapper;
@@ -45,21 +45,21 @@ public abstract class APITest {
     protected abstract void givenOriginUri();
 
     protected void whenLotteryAppliersRankIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/rank")
+        resultActions = this.mvc.perform(get("/event/lotteries/rank")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
 
     }
 
     protected void whenLotteryRewardInfoIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/reward/{rank}", TEST_RANK));
+        resultActions = this.mvc.perform(get("/event/lotteries/reward/{rank}", TEST_RANK));
     }
 
     protected void whenLotteryWinnersAreRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get("/event/lotteries"));
+        resultActions = mvc.perform(get("/event/lotteries"));
     }
 
     protected void whenLotteryWinnerInfoIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/info")
+        resultActions = this.mvc.perform(get("/event/lotteries/info")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
 
     }
@@ -73,14 +73,14 @@ public abstract class APITest {
 
         String requestJson = objectMapper.writeValueAsString(requestLotteryWinnerInfoDto);
 
-        resultActions = this.mockMvc.perform(post("/event/lotteries/info")
+        resultActions = this.mvc.perform(post("/event/lotteries/info")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson));
     }
 
     protected void whenLotteryApplierListAreRetrievedForAdmin() throws Exception {
-        resultActions = mockMvc.perform(get(PATH_ADMIN_APPLIER)
+        resultActions = mvc.perform(get(PATH_ADMIN_APPLIER)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
                 .param(PARAM_PAGE, String.valueOf(TEST_PAGE_NUMBER))
                 .param(PARAM_SIZE, String.valueOf(TEST_PAGE_SIZE))
@@ -88,73 +88,73 @@ public abstract class APITest {
     }
 
     protected void whenLotteryWinnerListAreRetrievedForAdmin() throws Exception {
-        resultActions = mockMvc.perform(get(PATH_ADMIN_LOTTERY_WINNERS)
+        resultActions = mvc.perform(get(PATH_ADMIN_LOTTERY_WINNERS)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
         );
     }
 
     protected void whenPartsWinnerListAreRetrievedForAdmin() throws Exception {
-        resultActions = mockMvc.perform(get(PATH_ADMIN_PARTS_WINNERS)
+        resultActions = mvc.perform(get(PATH_ADMIN_PARTS_WINNERS)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
     }
 
     protected void whenLotteryWinnerCheck() throws Exception {
-        resultActions = mockMvc.perform(post(PATH_ADMIN_LOTTERY_WINNER_CHECK, TEST_UID)
+        resultActions = mvc.perform(post(PATH_ADMIN_LOTTERY_WINNER_CHECK, TEST_UID)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
         );
     }
 
     protected void whenPartsWinnerCheck() throws Exception {
-        resultActions = mockMvc.perform(post(PATH_ADMIN_PARTS_WINNER_CHECK, TEST_UID)
+        resultActions = mvc.perform(post(PATH_ADMIN_PARTS_WINNER_CHECK, TEST_UID)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
         );
     }
 
     protected void whenLottery() throws Exception {
-        resultActions = mockMvc.perform(post(PATH_LOTTERY)
+        resultActions = mvc.perform(post(PATH_LOTTERY)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
     }
 
     protected void whenPartsLottery() throws Exception {
-        resultActions = mockMvc.perform(post(PATH_PARTS_LOTTERY)
+        resultActions = mvc.perform(post(PATH_PARTS_LOTTERY)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN));
     }
 
 
     protected void whenDrawParts() throws Exception {
-        resultActions = mockMvc.perform(post("/event/parts")
+        resultActions = mvc.perform(post("/event/parts")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
     }
 
     protected void whenPartsEquippedStatusIsChanged() throws Exception {
-        resultActions = mockMvc.perform(patch("/event/parts/{parts_id}", TEST_PARTS_ID)
+        resultActions = mvc.perform(patch("/event/parts/{parts_id}", TEST_PARTS_ID)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
 
     }
 
     protected void whenMyRemainChanceIsRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get("/event/parts/remain")
+        resultActions = mvc.perform(get("/event/parts/remain")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
 
     }
 
     protected void whenMyPartsListAreRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get("/event/parts")
+        resultActions = mvc.perform(get("/event/parts")
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
     }
 
     protected void whenPartsListAreRetrievedWithUri() throws Exception {
-        resultActions = mockMvc.perform(get(PARTS_LINK_LIST, TEST_URI)
+        resultActions = mvc.perform(get(PARTS_LINK_LIST, TEST_URI)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
     }
 
     protected void whenLinkIsRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get(MY_LINK)
+        resultActions = mvc.perform(get(MY_LINK)
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
     }
 
     protected void whenRedirect() throws Exception {
-        resultActions = mockMvc.perform(get(SHORTED_LINK, TEST_SHORTED_URI));
+        resultActions = mvc.perform(get(SHORTED_LINK, TEST_SHORTED_URI));
     }
 
 
