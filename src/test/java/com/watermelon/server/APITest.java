@@ -225,8 +225,8 @@ public abstract class APITest {
                 .andExpect(status().isTooManyRequests());
     }
 
-    protected void whenPartsEquippedStatusIsChanged() throws Exception {
-        resultActions = mvc.perform(authedRequest(patch("/event/parts/{parts_id}", TEST_PARTS_ID)));
+    protected void whenPartsEquippedStatusIsChanged(Long partsId) throws Exception {
+        resultActions = mvc.perform(authedRequest(patch("/event/parts/{parts_id}", partsId)));
 
     }
 
@@ -261,8 +261,8 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].parts[0].equipped").isBoolean());
     }
 
-    protected void whenPartsListAreRetrievedWithUri() throws Exception {
-        resultActions = mvc.perform(authedRequest(get(PARTS_LINK_LIST, TEST_URI)));
+    protected void whenPartsListAreRetrievedWithUri(String uri) throws Exception {
+        resultActions = mvc.perform(authedRequest(get(PARTS_LINK_LIST, uri)));
     }
 
     protected void thenPartsListAreRetrievedWithUri() throws Exception {

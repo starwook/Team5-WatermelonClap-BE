@@ -32,6 +32,9 @@ public class Parts {
 
     public static Parts createTestCategoryParts(PartsCategory category){
         return Parts.builder()
+                .name("name")
+                .description("description")
+                .imgSrc("imgSrc")
                 .category(category)
                 .build();
     }

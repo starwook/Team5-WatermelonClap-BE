@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.watermelon.server.Constants.TEST_PARTS_ID;
+import static com.watermelon.server.Constants.TEST_URI;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -49,7 +51,7 @@ class PartsControllerTest extends ControllerTest {
     @DisplayName("파츠 상태 변경 - 성공")
     void toggleParts() throws Exception {
 
-        whenPartsEquippedStatusIsChanged();
+        whenPartsEquippedStatusIsChanged(TEST_PARTS_ID);
 
         thenPartsEquippedStatusIsChanged();
 
@@ -99,7 +101,7 @@ class PartsControllerTest extends ControllerTest {
 
         givenPartsListForUri();
 
-        whenPartsListAreRetrievedWithUri();
+        whenPartsListAreRetrievedWithUri(TEST_URI);
 
         thenPartsListAreRetrievedWithUri();
 
