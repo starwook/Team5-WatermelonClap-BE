@@ -51,12 +51,7 @@ public class LotteryController {
     public ResponseEntity<ResponseLotteryRankDto> getLotteryRank(
             @Uid String uid
     ){
-        try {
-            return new ResponseEntity<>(lotteryService.getLotteryRank(uid), HttpStatus.OK);
-        }catch (NoSuchElementException e) {
-            return new ResponseEntity<>(ResponseLotteryRankDto.createNotApplied(), HttpStatus.OK);
-        }
-
+        return new ResponseEntity<>(lotteryService.getLotteryRank(uid), HttpStatus.OK);
     }
 
     @GetMapping("/reward/{rank}")
