@@ -68,7 +68,7 @@ class LinkControllerTest extends ControllerTest {
 
     private void whenLinkIsRetrieved() throws Exception {
         resultActions = mockMvc.perform(get(MY_LINK)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
     }
 
     private void whenRedirect() throws Exception {
