@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,10 +34,23 @@ class ExpectationControllerTest extends ControllerTest {
 
 
     @Test
-    @DisplayName("[DOC] 기대평을 만든다")
-    void makeExpectation() {
-        final String PATH = "/event/order/{eventId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}";
+    @DisplayName("[DOC] 사용자 기대평을 만든다")
+    void makeExpectation() throws Exception {
+        final String PATH = "/expectations";
+        final String DOCUMENT_NAME ="expectations/create";
+
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.post(PATH)
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(RequestExpectationDto.makeExpectation("기개돼요")))
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resourceSnippet("기대평 생성")));
+
+
 
 
     }
