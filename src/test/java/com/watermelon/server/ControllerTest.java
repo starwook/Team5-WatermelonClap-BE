@@ -69,6 +69,12 @@ public class ControllerTest extends APITest{
     @MockBean
     private LinkService linkService;
 
+    protected final String TAG_PARTS = "파츠 이벤트";
+    protected final String TAG_ORDER = "선착순 이벤트";
+    protected final String TAG_LINK = "링크";
+    protected final String TAG_EXPECTATION = "기대평";
+    protected final String TAG_ADMIN = "어드민";
+
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(
                 ResourceSnippetParameters.builder()
