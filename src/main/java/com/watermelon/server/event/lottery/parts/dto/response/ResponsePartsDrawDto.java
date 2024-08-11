@@ -19,6 +19,7 @@ public class ResponsePartsDrawDto {
         return ResponsePartsDrawDto.builder()
                 .category("Test")
                 .partsId(1L)
+                .name("Test")
                 .imgSrc("Test")
                 .description("Test")
                 .isEquipped(true)
