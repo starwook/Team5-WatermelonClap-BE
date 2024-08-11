@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AdminLotteryController.class)
+@DisplayName("[단위] 추첨 어드민 컨트롤러")
 class AdminLotteryControllerTest extends ControllerTest {
 
     @MockBean

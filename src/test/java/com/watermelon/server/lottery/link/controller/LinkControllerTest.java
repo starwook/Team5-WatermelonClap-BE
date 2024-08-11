@@ -20,6 +20,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LinkController.class)
+@DisplayName("[단위] 링크 컨트롤러")
 class LinkControllerTest extends ControllerTest {
 
     @MockBean

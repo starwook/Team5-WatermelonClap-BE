@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PartsController.class)
+@DisplayName("[단위] 파츠 컨트롤러")
 class PartsControllerTest extends ControllerTest {
 
     @MockBean

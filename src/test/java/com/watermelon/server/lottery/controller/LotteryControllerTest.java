@@ -34,6 +34,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LotteryController.class)
+@DisplayName("[단위] 추첨 컨트롤러")
 class LotteryControllerTest extends ControllerTest {
 
     @MockBean
