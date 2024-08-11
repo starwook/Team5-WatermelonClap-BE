@@ -158,6 +158,11 @@ public class ControllerTest extends APITest{
         );
     }
 
+    @Override
+    protected void givenPartsNotEquipped() {
+
+    }
+
     protected void givenLotteryApplierWhoHasNoRemainChance(){
         Mockito.when(partsService.drawParts(TEST_UID)).thenThrow(new PartsDrawLimitExceededException());
     }

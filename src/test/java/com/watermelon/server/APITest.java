@@ -40,6 +40,7 @@ public abstract class APITest {
     protected abstract void givenLotteryWinner();
 
     protected abstract void givenPartsListForUri();
+    protected abstract void givenPartsNotEquipped();
     protected abstract void givenLotteryApplierWhoHasNoRemainChance();
     protected abstract void givenLotteryApplierWhoDrawsPartsFirst();
     protected abstract void givenLotteryApplierWhoHasRemainChance();
