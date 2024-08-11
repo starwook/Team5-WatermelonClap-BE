@@ -19,14 +19,10 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 
 @SpringBootTest
 @Disabled
-@AutoConfigureMockMvc
 @Transactional
 @Import(PartsRegistrationConfig.class)
-public class BaseIntegrationTest {
-    @Autowired
-    protected MockMvc mvc;
-    @Autowired
-    protected ObjectMapper objectMapper;
+public class BaseIntegrationTest extends APITest{
+
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(
                 ResourceSnippetParameters.builder()
@@ -48,5 +44,68 @@ public class BaseIntegrationTest {
     }
 
 
+    @Override
+    protected void givenLotteryRewardInfo() {
 
+    }
+
+    @Override
+    protected void givenLotteryWinners() {
+
+    }
+
+    @Override
+    protected void givenLotteryWinnersForAdmin() {
+
+    }
+
+    @Override
+    protected void givenLotteryWinnerInfo() {
+
+    }
+
+    @Override
+    protected void givenLotteryApplierNotExist() {
+
+    }
+
+    @Override
+    protected void givenLotteryWinner() {
+
+    }
+
+    @Override
+    protected void givenPartsListForUri() {
+
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoHasNoRemainChance() {
+
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoDrawsPartsFirst() {
+
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoHasRemainChance() {
+
+    }
+
+    @Override
+    protected void givenMyPartsList() {
+
+    }
+
+    @Override
+    protected void givenLink() {
+
+    }
+
+    @Override
+    protected void givenOriginUri() {
+
+    }
 }
