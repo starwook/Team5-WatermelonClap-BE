@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -62,8 +63,11 @@ class LotteryControllerTest extends ControllerTest {
 
         String expectedJson = objectMapper.writeValueAsString(expectedResponse);
 
+        //when
+        resultActions = this.mockMvc.perform(get(PATH));
+
         //then
-        this.mockMvc.perform(get(PATH))
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson))
                 .andDo(document(DOCUMENT_NAME,
@@ -87,9 +91,12 @@ class LotteryControllerTest extends ControllerTest {
 
         Mockito.when(lotteryWinnerService.getLotteryWinnerInfo(TEST_UID)).thenReturn(expected);
 
+        //when
+        resultActions = this.mockMvc.perform(get(PATH)
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+
         //then
-        this.mockMvc.perform(get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(TEST_NAME))
                 .andExpect(jsonPath("$.address").value(TEST_ADDRESS))
@@ -115,11 +122,14 @@ class LotteryControllerTest extends ControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(requestLotteryWinnerInfoDto);
 
-        //then
-        this.mockMvc.perform(post(PATH)
+        //when
+        resultActions = this.mockMvc.perform(post(PATH)
                         .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
+                        .content(requestJson));
+
+        //then
+        resultActions
                 .andExpect(status().isCreated())
                 .andDo(document(DOCUMENT_NAME,
                         resourceSnippetAuthed("당첨자 정보 입력")
@@ -138,9 +148,12 @@ class LotteryControllerTest extends ControllerTest {
         //given
         Mockito.doThrow(new NoSuchElementException()).when(lotteryService).getLotteryRank(anyString());
 
+        //when
+        resultActions = this.mockMvc.perform(get(PATH)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+
         //then
-        this.mockMvc.perform(get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+        resultActions
                 .andExpect(jsonPath("$.rank").value(-1))
                 .andExpect(jsonPath("$.applied").value(false))
                 .andDo(document(DOCUMENT_NAME,
@@ -161,9 +174,12 @@ class LotteryControllerTest extends ControllerTest {
                 ResponseLotteryRankDto.createAppliedTest()
         );
 
+        //when
+        resultActions = this.mockMvc.perform(get(PATH)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
+
         //then
-        this.mockMvc.perform(get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN))
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rank").value(TEST_RANK))
                 .andExpect(jsonPath("$.applied").value(true))
@@ -184,8 +200,11 @@ class LotteryControllerTest extends ControllerTest {
                 new ResponseRewardInfoDto(TEST_IMGSRC, TEST_NAME)
         );
 
+        //when
+        resultActions = this.mockMvc.perform(get(PATH, TEST_RANK));
+
         //then
-        this.mockMvc.perform(get(PATH, TEST_RANK))
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.imgSrc").value(TEST_IMGSRC))
                 .andExpect(jsonPath("$.name").value(TEST_NAME))
@@ -193,4 +212,7 @@ class LotteryControllerTest extends ControllerTest {
                         resourceSnippet("추첨이벤트 경품 정보 조회")));
 
     }
+
+
+
 }
