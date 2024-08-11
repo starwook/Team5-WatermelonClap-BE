@@ -23,9 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("[단위] 링크 컨트롤러")
 class LinkControllerTest extends ControllerTest {
 
-    @MockBean
-    private LinkService linkService;
-
     @Test
     @DisplayName("자신의 링크 반환 - 성공")
     void getMyLink() throws Exception {
@@ -58,24 +55,5 @@ class LinkControllerTest extends ControllerTest {
                         resourceSnippet("단축된 URL 에 대한 공유 페이지로 리디렉션")
                 ));
     }
-
-    private void givenLink(){
-        Mockito.when(linkService.getMyLink(TEST_UID))
-                .thenReturn(MyLinkDto.createTestDto());
-    }
-
-    private void givenOriginUri(){
-        Mockito.when(linkService.getUrl(TEST_SHORTED_URI)).thenReturn(TEST_URI);
-    }
-
-    private void whenLinkIsRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get(MY_LINK)
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
-    }
-
-    private void whenRedirect() throws Exception {
-        resultActions = mockMvc.perform(get(SHORTED_LINK, TEST_SHORTED_URI));
-    }
-
 
 }

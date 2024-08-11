@@ -37,15 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("[단위] 추첨 컨트롤러")
 class LotteryControllerTest extends ControllerTest {
 
-    @MockBean
-    private LotteryService lotteryService;
-
-    @MockBean
-    private LotteryWinnerService lotteryWinnerService;
-
-    @MockBean
-    private LotteryRewardService lotteryRewardService;
-
     @Test
     @DisplayName("당첨자 명단 반환 - 성공")
     void testGetOrderEventResultSuccess() throws Exception {
@@ -142,75 +133,5 @@ class LotteryControllerTest extends ControllerTest {
                         resourceSnippet("추첨이벤트 경품 정보 조회")));
 
     }
-
-    private void givenLotteryRewardInfo(){
-        Mockito.when(lotteryRewardService.getRewardInfo(TEST_RANK)).thenReturn(
-                new ResponseRewardInfoDto(TEST_IMGSRC, TEST_NAME)
-        );
-    }
-
-    private void givenLotteryWinners() {
-        Mockito.when(lotteryWinnerService.getLotteryWinners())
-                .thenReturn(List.of(
-                        ResponseLotteryWinnerDto.from("email2@email.com", 1)
-                ));
-    }
-
-
-    private void givenLotteryWinnerInfo() {
-        Mockito.when(lotteryWinnerService.getLotteryWinnerInfo(TEST_UID))
-                .thenReturn(ResponseLotteryWinnerInfoDto.builder()
-                        .name(TEST_NAME)
-                        .address(TEST_ADDRESS)
-                        .phoneNumber(TEST_PHONE_NUMBER)
-                        .build());
-    }
-
-    private void givenLotteryApplierNotExist() {
-        Mockito.doThrow(new NoSuchElementException()).when(lotteryService).getLotteryRank(anyString());
-    }
-
-    private void givenLotteryWinner(){
-        Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
-                ResponseLotteryRankDto.createAppliedTest()
-        );
-    }
-
-    private void whenLotteryAppliersRankIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/rank")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
-
-    }
-
-    private void whenLotteryRewardInfoIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/reward/{rank}", TEST_RANK));
-    }
-
-    private void whenLotteryWinnersAreRetrieved() throws Exception {
-        resultActions = mockMvc.perform(get("/event/lotteries"));
-    }
-
-    private void whenLotteryWinnerInfoIsRetrieved() throws Exception {
-        resultActions = this.mockMvc.perform(get("/event/lotteries/info")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN));
-
-    }
-
-    private void whenLotteryWinnerInfoIsAdded() throws Exception {
-        RequestLotteryWinnerInfoDto requestLotteryWinnerInfoDto = RequestLotteryWinnerInfoDto.builder()
-                .address(TEST_ADDRESS)
-                .name(TEST_NAME)
-                .phoneNumber(TEST_PHONE_NUMBER)
-                .build();
-
-        String requestJson = objectMapper.writeValueAsString(requestLotteryWinnerInfoDto);
-
-        //when
-        resultActions = this.mockMvc.perform(post("/event/lotteries/info")
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson));
-    }
-
 
 }
