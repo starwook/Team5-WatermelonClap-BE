@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static com.watermelon.server.Constants.*;
-import static com.watermelon.server.Constants.TEST_TOKEN;
 import static com.watermelon.server.common.constants.PathConstants.*;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,9 +47,9 @@ public abstract class APITest {
     protected abstract void givenLink();
     protected abstract void givenOriginUri();
 
-    private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) throws Exception {
+    private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
-                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN);
+                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_VALID_TOKEN);
     }
 
     protected void whenLotteryAppliersRankIsRetrieved() throws Exception {
