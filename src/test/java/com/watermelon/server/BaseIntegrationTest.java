@@ -4,6 +4,9 @@ package com.watermelon.server;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.event.lottery.parts.repository.LotteryApplierPartsRepository;
+import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
+import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,15 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 @Transactional
 @Import(PartsRegistrationConfig.class)
 public class BaseIntegrationTest extends APITest{
+
+    @Autowired
+    protected LotteryApplierRepository lotteryApplierRepository;
+
+    @Autowired
+    protected PartsRepository partsRepository;
+
+    @Autowired
+    protected LotteryApplierPartsRepository lotteryApplierPartsRepository;
 
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(

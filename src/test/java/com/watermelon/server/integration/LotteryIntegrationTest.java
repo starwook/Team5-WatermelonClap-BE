@@ -19,12 +19,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @DisplayName("[통합] 추첨 통합 테스트")
 public class LotteryIntegrationTest extends BaseIntegrationTest {
 
-    @Autowired
-    private LotteryApplierRepository lotteryApplierRepository;
-
-    @Autowired
-    private PartsRepository partsRepository;
-
     @BeforeEach
     void setUp() {
         partsRepository.saveAll(Parts.createAllParts());

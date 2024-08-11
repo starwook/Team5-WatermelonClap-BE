@@ -22,15 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("[통합] 파츠 통합 테스트")
 public class PartsIntegrationTest extends BaseIntegrationTest {
 
-    @Autowired
-    private LotteryApplierRepository lotteryApplierRepository;
-
-    @Autowired
-    private PartsRepository partsRepository;
-
-    @Autowired
-    private LotteryApplierPartsRepository lotteryApplierPartsRepository;
-
     @Test
     @DisplayName("추첨권 부여 - 성공")
     void partsLotteryPolicyTest() throws Exception {
