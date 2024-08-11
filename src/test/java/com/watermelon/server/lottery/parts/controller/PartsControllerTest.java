@@ -1,5 +1,6 @@
 package com.watermelon.server.lottery.parts.controller;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.DocumentConstants;
 import com.watermelon.server.event.lottery.parts.controller.PartsController;
@@ -7,10 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.watermelon.server.Constants.TEST_PARTS_ID;
 import static com.watermelon.server.Constants.TEST_URI;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PartsController.class)
 @DisplayName("[단위] 파츠 컨트롤러")
@@ -28,7 +28,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/parts/success",
-                        resourceSnippetAuthed("파츠 뽑기")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("파츠 뽑기")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -43,8 +48,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/parts/too-many-request",
-                        resourceSnippetAuthed("파츠 뽑기")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("파츠 뽑기")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -57,9 +66,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/parts/equip",
-                        resourceSnippetAuthed("자신의 파츠 상태 변경")));
-
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("자신의 파츠 상태 변경")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -74,8 +86,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/parts/remain",
-                        resourceSnippetAuthed("자신의 남은 파츠 뽑기 횟수 조회")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("자신의 남은 파츠 뽑기 횟수 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -90,9 +106,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/parts/get",
-                        resourceSnippetAuthed("자신의 파츠 목록 조회")))
-                .andDo(print());
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("자신의 파츠 목록 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -107,8 +126,12 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DocumentConstants.PARTS_LINK_LIST,
-                        resourceSnippetAuthed("링크 키의 주인에 대한 파츠 목록 조회")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("링크 키의 주인에 대한 파츠 목록 조회")
+                                        .build()
+                        )));
     }
 
 }
