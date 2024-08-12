@@ -27,6 +27,9 @@ public class OrderEventCheckService {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+    public Long getCurrentOrderEventId() {
+        return eventId;
+    }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
         this.eventId = orderEvent.getId();

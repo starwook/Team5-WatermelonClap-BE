@@ -24,7 +24,7 @@ import java.util.UUID;
 public class S3ImageService {
 
     private final AmazonS3 s3Client;
-    private List<String> allowedImageExtentionList = Arrays.asList("jpg","jped","png","gif", "svg");
+    private List<String> allowedImageExtentionList = Arrays.asList("jpg","jped","png","gif","svg","webp");
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
