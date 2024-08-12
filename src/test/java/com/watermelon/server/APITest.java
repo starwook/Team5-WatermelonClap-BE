@@ -2,14 +2,18 @@ package com.watermelon.server;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.link.utils.LinkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+import java.nio.charset.StandardCharsets;
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
@@ -305,5 +309,21 @@ public abstract class APITest {
                 .andExpect(header().string(HEADER_NAME_LOCATION, LinkUtils.makeUrl(TEST_URI)));
     }
 
+    protected void whenLotteryEventCreate() throws Exception {
+
+        resultActions = mvc.perform(authedRequest(multipart("/admin/event/lotteries/create")
+                        .file(new MockMultipartFile("files", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "image1 content".getBytes()))
+                        .file(new MockMultipartFile(
+                                "event", "event",
+                                "application/json",
+                                objectMapper.writeValueAsString(RequestLotteryEventDto.createTest()).getBytes(StandardCharsets.UTF_8)))
+                .contentType(MediaType.MULTIPART_FORM_DATA)));
+
+    }
+
+    protected void thenLotteryEventCreate() throws Exception {
+        resultActions
+                .andExpect(status().isOk());
+    }
 
 }

@@ -3,6 +3,7 @@ package com.watermelon.server.admin.controller;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.parts.service.PartsService;
 import com.watermelon.server.event.lottery.service.LotteryService;
@@ -73,9 +74,9 @@ public class AdminLotteryController {
 
     @PostMapping("/admin/event/lotteries/create")
     public ResponseEntity<Void> createLotteryEvent(
-            RequestLotteryEventDto lotteryEventDto,
-            @RequestParam("files") List<MultipartFile> files
-    ) {
+            @RequestPart("event") RequestLotteryEventDto lotteryEventDto,
+            @RequestPart("files") List<MultipartFile> files
+    ) throws S3ImageFormatException {
 
         lotteryEventService.createLotteryEvent(lotteryEventDto, files);
         return new ResponseEntity<>(HttpStatus.OK);

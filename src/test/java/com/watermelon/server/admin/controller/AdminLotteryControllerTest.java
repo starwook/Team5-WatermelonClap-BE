@@ -157,4 +157,12 @@ class AdminLotteryControllerTest extends ControllerTest {
                         )));
     }
 
+    @Test
+    void createLotteryEvent() throws Exception {
+
+        whenLotteryEventCreate();
+
+        thenLotteryEventCreate();
+
+    }
 }
