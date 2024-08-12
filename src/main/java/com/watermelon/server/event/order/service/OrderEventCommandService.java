@@ -14,6 +14,7 @@ import com.watermelon.server.event.order.result.service.OrderResultCommandServic
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -55,9 +56,15 @@ public class OrderEventCommandService {
     @Transactional
     public void findOrderEventToMakeInProgress(){
         //현재 OrderEvent의 상태를 주기적으로 변경
-        List<OrderEvent> orderEvent = orderEventRepository.findAll();
-        if(orderEvent.isEmpty()) return; // 이벤트 없을시 스킵
-        OrderEvent currentOrderEvent = orderEvent.get(0); // 여기서 현재 이벤트를 검증해야함
-        this.orderEventCheckService.refreshOrderEventInProgress(currentOrderEvent);
+        List<OrderEvent> orderEvents = orderEventRepository.findAll();
+        if(orderEvents.isEmpty()) return; // 이벤트 없을시 스킵
+
+        for(OrderEvent orderEvent : orderEvents){
+            //현재 이벤트중 시간에 맞는 이벤트가 있다면 현재 이벤트로 설정한다
+            if(orderEvent.isTimeInEventTime(LocalDateTime.now())){
+                this.orderEventCheckService.refreshOrderEventInProgress(orderEvent);
+            }
+        }
+
     }
 }
