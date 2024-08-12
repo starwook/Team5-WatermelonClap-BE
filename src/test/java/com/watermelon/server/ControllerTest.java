@@ -1,6 +1,5 @@
 package com.watermelon.server;
 
-import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder;
@@ -26,7 +25,6 @@ import com.watermelon.server.event.lottery.service.LotteryWinnerService;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
@@ -68,6 +66,12 @@ public class ControllerTest extends APITest{
 
     @MockBean
     private LinkService linkService;
+
+    protected final String TAG_LOTTERY = "추첨 이벤트";
+    protected final String TAG_PARTS = "파츠 이벤트";
+    protected final String TAG_ORDER = "선착순 이벤트";
+    protected final String TAG_LINK = "링크";
+    protected final String TAG_EXPECTATION = "기대평";
 
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(

@@ -31,6 +31,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                 .andDo(document(DOCUMENT_NAME_ADMIN_APPLIER,
                         resource(
                                 ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
                                         .description("응모자 명단 조회")
                                         .queryParameters(
                                                 parameterWithName(PARAM_PAGE).description("페이지"),
@@ -53,7 +54,13 @@ class AdminLotteryControllerTest extends ControllerTest {
         thenLotteryWinnerListAreRetrievedForAdmin();
 
         resultActions
-                .andDo(document(DOCUMENT_NAME_LOTTERY_WINNERS, resourceSnippetAuthed("추첨 당첨자 명단 조회")));
+                .andDo(document(DOCUMENT_NAME_LOTTERY_WINNERS,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨 당첨자 명단 조회")
+                                        .build()
+                        )));
 
     }
 
@@ -68,7 +75,13 @@ class AdminLotteryControllerTest extends ControllerTest {
         thenPartsWinnerListAreRetrievedForAdmin();
 
         resultActions
-                .andDo(document(DOCUMENT_NAME_PARTS_WINNERS, resourceSnippetAuthed("파츠 당첨자 명단 조회")));
+                .andDo(document(DOCUMENT_NAME_PARTS_WINNERS,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("파츠 당첨자 명단 조회")
+                                        .build()
+                        )));
 
     }
 
@@ -82,8 +95,12 @@ class AdminLotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DOCUMENT_NAME_ADMIN_LOTTERY_WINNER_CHECK,
-                        resourceSnippetAuthed("추첨 당첨자 확인처리")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨 당첨자 확인처리")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -96,8 +113,12 @@ class AdminLotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DOCUMENT_NAME_ADMIN_PARTS_WINNER_CHECK,
-                        resourceSnippetAuthed("파츠 추첨 당첨자 확인처리")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("파츠 추첨 당첨자 확인처리")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -110,8 +131,12 @@ class AdminLotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DOCUMENT_NAME_LOTTERY,
-                        resourceSnippetAuthed("추첨 이벤트 응모자에 대해 추첨")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨 이벤트 응모자에 대해 추첨")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -124,8 +149,12 @@ class AdminLotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DOCUMENT_NAME_PARTS_LOTTERY,
-                        resourceSnippetAuthed("파츠 이벤트 응모자에 대해 추첨")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("파츠 이벤트 응모자에 대해 추첨")
+                                        .build()
+                        )));
     }
 
 }

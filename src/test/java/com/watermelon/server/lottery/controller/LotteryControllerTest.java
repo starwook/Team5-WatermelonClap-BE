@@ -1,5 +1,7 @@
 package com.watermelon.server.lottery.controller;
 
+import com.epages.restdocs.apispec.ResourceSnippet;
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.event.lottery.controller.LotteryController;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +26,14 @@ class LotteryControllerTest extends ControllerTest {
         thenLotteryWinnersAreRetrieved();
 
         resultActions
-                .andDo(document("event/lotteries", resource("당첨자 명단 조회")));
-
+                .andDo(document("event/lotteries",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("당첨자 명단 조회")
+                                        .build()
+                        )
+                ));
     }
 
     @Test
@@ -39,8 +47,13 @@ class LotteryControllerTest extends ControllerTest {
         thenLotteryWinnerInfoIsRetrieved();
 
         resultActions
-                .andDo(document("event/lotteries/info", resource("당첨자 정보 조회")));
-
+                .andDo(document("event/lotteries/info",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("당첨자 정보 조회")
+                                        .build()
+                        )));
     }
 
 
@@ -53,8 +66,13 @@ class LotteryControllerTest extends ControllerTest {
         thenLotteryWinnerInfoIsAdded();
 
         resultActions
-                .andDo(document("event/lotteries/info/create", resource("당첨자 정보 입력")));
-
+                .andDo(document("event/lotteries/info/create",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("당첨자 정보 입력")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -69,9 +87,12 @@ class LotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/lotteries/rank/success",
-                        resourceSnippetAuthed("응모 정보 조회"))
-                );
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("응모 정보 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -86,7 +107,12 @@ class LotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/lotteries/rank/failure",
-                        resourceSnippetAuthed("응모 정보 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("응모 정보 조회")
+                                        .build()
+                        )));
 
     }
 
@@ -102,8 +128,12 @@ class LotteryControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document("event/lotteries/rank",
-                        resourceSnippet("추첨이벤트 경품 정보 조회")));
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨이벤트 경품 정보 조회")
+                                        .build()
+                        )));
     }
 
 }
