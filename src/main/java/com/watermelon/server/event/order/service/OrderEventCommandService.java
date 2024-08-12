@@ -57,7 +57,7 @@ public class OrderEventCommandService {
     public Long findOrderEventToMakeInProgress(){
         //현재 OrderEvent의 상태를 주기적으로 변경
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
-        if(orderEvents.isEmpty()) return null;// 이벤트 없을시 스킵
+        if(orderEvents.isEmpty()) return orderEventCheckService.getCurrentOrderEventId();// 이벤트 없을시 스킵
 
         for(OrderEvent orderEvent : orderEvents){
             //현재 이벤트중 시간에 맞는 이벤트가 있다면 현재 이벤트로 설정한다
@@ -66,6 +66,6 @@ public class OrderEventCommandService {
                 return orderEvent.getId();
             }
         }
-        return null;
+        return orderEventCheckService.getCurrentOrderEventId();
     }
 }
