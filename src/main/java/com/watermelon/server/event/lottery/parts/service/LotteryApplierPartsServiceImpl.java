@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +27,21 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
     public LotteryApplierParts addPartsAndGet(LotteryApplier lotteryApplier, Parts parts) {
 
         boolean isFirst = isFirstPartsInCategory(lotteryApplier, parts);
+        Optional<LotteryApplierParts> lotteryApplierParts = lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidAndPartsId(
+                lotteryApplier.getUid(), parts.getId());
 
-        LotteryApplierParts lotteryApplierParts = lotteryApplierPartsRepository.save(
-                LotteryApplierParts.createApplierParts(isFirst, lotteryApplier, parts)
-        );
-
-        //만약 모든 카테고리의 파츠를 모았다면
-        if(hasAllCategoriesParts(lotteryApplier)) {
-            //파츠 응모 처리 후 저장
-            lotteryApplierService.applyPartsLotteryApplier(lotteryApplier);
+        if(lotteryApplierParts.isEmpty()) {
+            lotteryApplierParts = Optional.of(lotteryApplierPartsRepository.save(
+                    LotteryApplierParts.createApplierParts(isFirst, lotteryApplier, parts)
+            ));
+            //만약 모든 카테고리의 파츠를 모았다면
+            if (hasAllCategoriesParts(lotteryApplier)) {
+                //파츠 응모 처리 후 저장
+                lotteryApplierService.applyPartsLotteryApplier(lotteryApplier);
+            }
         }
 
-        return lotteryApplierParts;
+        return lotteryApplierParts.get();
 
     }
 
