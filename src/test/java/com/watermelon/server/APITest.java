@@ -230,6 +230,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("name").isString())
                 .andExpect(jsonPath("description").isString())
                 .andExpect(jsonPath("imgSrc").isString())
+                .andExpect(jsonPath("thumbnailImgSrc").isString())
                 .andExpect(jsonPath("equipped").isBoolean());
     }
 
@@ -271,6 +272,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].parts[0].name").isString())
                 .andExpect(jsonPath("[0].parts[0].description").isString())
                 .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
+                .andExpect(jsonPath("[0].parts[0].thumbnailImgSrc").isString())
                 .andExpect(jsonPath("[0].parts[0].equipped").isBoolean());
     }
 
@@ -287,6 +289,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].parts[0].name").isString())
                 .andExpect(jsonPath("[0].parts[0].description").isString())
                 .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
+                .andExpect(jsonPath("[0].parts[0].thumbnailImgSrc").isString())
                 .andExpect(jsonPath("[0].parts[0].equipped").isBoolean());
     }
 
