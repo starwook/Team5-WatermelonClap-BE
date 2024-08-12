@@ -27,21 +27,23 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
     public LotteryApplierParts addPartsAndGet(LotteryApplier lotteryApplier, Parts parts) {
 
         boolean isFirst = isFirstPartsInCategory(lotteryApplier, parts);
-        Optional<LotteryApplierParts> lotteryApplierParts = lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidAndPartsId(
+        Optional<LotteryApplierParts> lotteryApplierPartsOptional = lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidAndPartsId(
                 lotteryApplier.getUid(), parts.getId());
 
-        if(lotteryApplierParts.isEmpty()) {
-            lotteryApplierParts = Optional.of(lotteryApplierPartsRepository.save(
+        LotteryApplierParts lotteryApplierParts;
+
+        if(lotteryApplierPartsOptional.isEmpty()) {
+            lotteryApplierParts = lotteryApplierPartsRepository.save(
                     LotteryApplierParts.createApplierParts(isFirst, lotteryApplier, parts)
-            ));
+            );
             //만약 모든 카테고리의 파츠를 모았다면
             if (hasAllCategoriesParts(lotteryApplier)) {
                 //파츠 응모 처리 후 저장
                 lotteryApplierService.applyPartsLotteryApplier(lotteryApplier);
             }
-        }
+        }else lotteryApplierParts = lotteryApplierPartsOptional.get();
 
-        return lotteryApplierParts.get();
+        return lotteryApplierParts;
 
     }
 

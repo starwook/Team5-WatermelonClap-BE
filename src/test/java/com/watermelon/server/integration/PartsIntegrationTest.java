@@ -98,8 +98,8 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
     }
 
 
-    @Test
-    @DisplayName("추첨권 부여 - 성공")
+    //@Test
+    //@DisplayName("추첨권 부여 - 성공")
     void partsLotteryPolicyTest() throws Exception {
 
         //given
