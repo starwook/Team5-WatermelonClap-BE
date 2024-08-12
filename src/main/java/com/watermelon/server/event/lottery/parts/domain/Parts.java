@@ -27,6 +27,8 @@ public class Parts {
 
     private String imgSrc;
 
+    private String thumbnailImgSrc;
+
     @OneToMany(mappedBy = "parts")
     private List<LotteryApplierParts> lotteryApplierParts;
 
