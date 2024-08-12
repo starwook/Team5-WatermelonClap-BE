@@ -34,7 +34,6 @@ class LotteryControllerTest extends ControllerTest {
                                         .build()
                         )
                 ));
-
     }
 
     @Test
@@ -74,7 +73,6 @@ class LotteryControllerTest extends ControllerTest {
                                         .description("당첨자 정보 입력")
                                         .build()
                         )));
-
     }
 
     @Test
@@ -95,7 +93,6 @@ class LotteryControllerTest extends ControllerTest {
                                         .description("응모 정보 조회")
                                         .build()
                         )));
-
     }
 
     @Test
