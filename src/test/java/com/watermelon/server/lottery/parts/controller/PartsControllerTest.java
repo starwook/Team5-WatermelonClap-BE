@@ -1,5 +1,6 @@
 package com.watermelon.server.lottery.parts.controller;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.DocumentConstants;
 import com.watermelon.server.event.lottery.parts.controller.PartsController;
