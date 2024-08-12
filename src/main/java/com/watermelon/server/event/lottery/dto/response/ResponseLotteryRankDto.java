@@ -15,7 +15,7 @@ public class ResponseLotteryRankDto {
     public static ResponseLotteryRankDto from(LotteryApplier lotteryApplier) {
         return ResponseLotteryRankDto.builder()
                 .rank(lotteryApplier.getLotteryRank())
-                .isApplied(true)
+                .isApplied(lotteryApplier.isLotteryApplier())
                 .build();
     }
 

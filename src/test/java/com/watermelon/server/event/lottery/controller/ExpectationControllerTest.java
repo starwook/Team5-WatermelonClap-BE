@@ -1,6 +1,7 @@
 package com.watermelon.server.event.lottery.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.event.lottery.domain.Expectation;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.watermelon.server.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,7 +41,7 @@ class ExpectationControllerTest extends ControllerTest {
         final String PATH = "/expectations";
         final String DOCUMENT_NAME ="expectations/create";
 
-        mockMvc.perform(
+        mvc.perform(
                 RestDocumentationRequestBuilders.post(PATH)
                         .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,10 +50,12 @@ class ExpectationControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("기대평 생성")));
-
-
-
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_EXPECTATION)
+                                        .description("기대평 생성")
+                                        .build()
+                        )));
 
     }
 
@@ -74,11 +78,16 @@ class ExpectationControllerTest extends ControllerTest {
                 .collect(Collectors.toList());
 
         Mockito.when(expectationService.getExpectationsForUser()).thenReturn(expectationDtoList);
-        mockMvc.perform(RestDocumentationRequestBuilders.get(PATH))
+        mvc.perform(RestDocumentationRequestBuilders.get(PATH))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("사용자 기대평 목록 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_EXPECTATION)
+                                        .description("사용자 기대평 목록 조회")
+                                        .build()
+                        )));
     }
 
 }

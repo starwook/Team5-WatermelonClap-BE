@@ -1,4 +1,4 @@
-package com.watermelon.server.event.lottery.link;
+package com.watermelon.server.integration;
 
 import com.watermelon.server.BaseIntegrationTest;
 import org.junit.jupiter.api.DisplayName;

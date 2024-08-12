@@ -1,5 +1,6 @@
 package com.watermelon.server;
 
+import com.watermelon.server.event.lottery.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.auth.service.TokenVerifier;
 import com.watermelon.server.event.lottery.link.service.LinkService;
 import com.watermelon.server.event.lottery.service.LotteryService;
@@ -7,8 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import static com.watermelon.server.Constants.TEST_TOKEN;
-import static com.watermelon.server.Constants.TEST_UID;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 
 @TestConfiguration
 public class MockLoginInterceptorConfig {
@@ -16,7 +16,7 @@ public class MockLoginInterceptorConfig {
     @Bean
     public TokenVerifier mockTokenVerifier() {
         TokenVerifier tokenVerifier = Mockito.mock(TokenVerifier.class);
-        Mockito.when(tokenVerifier.verify(TEST_TOKEN)).thenReturn(TEST_UID);
+        Mockito.when(tokenVerifier.verify(TestTokenVerifier.TEST_VALID_TOKEN)).thenReturn(TEST_UID);
         return tokenVerifier;
     }
 

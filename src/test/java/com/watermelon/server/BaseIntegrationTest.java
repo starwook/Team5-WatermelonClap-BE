@@ -3,28 +3,43 @@ package com.watermelon.server;
 
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.event.lottery.domain.LotteryApplier;
+import com.watermelon.server.event.lottery.domain.LotteryReward;
+import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.lottery.parts.domain.Parts;
+import com.watermelon.server.event.lottery.parts.domain.PartsCategory;
+import com.watermelon.server.event.lottery.parts.repository.LotteryApplierPartsRepository;
+import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
+import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
+import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 
 @SpringBootTest
 @Disabled
-@AutoConfigureMockMvc
 @Transactional
-public class BaseIntegrationTest {
+@Import(PartsRegistrationConfig.class)
+public class BaseIntegrationTest extends APITest {
+
     @Autowired
-    protected MockMvc mvc;
+    protected LotteryApplierRepository lotteryApplierRepository;
+
     @Autowired
-    protected ObjectMapper objectMapper;
+    protected PartsRepository partsRepository;
+
+    @Autowired
+    protected LotteryApplierPartsRepository lotteryApplierPartsRepository;
+    @Autowired
+    private LotteryRewardRepository lotteryRewardRepository;
+
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(
                 ResourceSnippetParameters.builder()
@@ -33,7 +48,7 @@ public class BaseIntegrationTest {
         );
     }
 
-    protected ResourceSnippet resourceSnippetAuthed(String description){
+    protected ResourceSnippet resourceSnippetAuthed(String description) {
 
         return resource(
                 ResourceSnippetParameters.builder()
@@ -45,6 +60,114 @@ public class BaseIntegrationTest {
 
     }
 
+    private LotteryApplier saveTestLotteryWinner(){
+        return lotteryApplierRepository.save(LotteryApplier.createTestLotteryWinner(TEST_UID));
+    }
+
+    private LotteryApplier saveTestLotteryApplierApplied(){
+        LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
+        lotteryApplier.applyLottery();
+        return lotteryApplierRepository.save(lotteryApplier);
+    }
+
+    private LotteryApplier saveTestLotteryApplier() {
+        return lotteryApplierRepository.save(LotteryApplier.createLotteryApplier(TEST_UID));
+    }
+
+    private Parts saveTestParts() {
+        return partsRepository.save(Parts.createTestCategoryParts(PartsCategory.COLOR));
+    }
+
+    private LotteryApplierParts saveLotteryApplierParts(boolean isEquipped) {
+        return lotteryApplierPartsRepository.save(
+                LotteryApplierParts.createApplierParts(
+                        isEquipped, saveTestLotteryApplier(), saveTestParts())
+        );
+    }
+
+    private void saveTestLotteryReward() {
+        lotteryRewardRepository.save(LotteryReward.createTestLotteryReward());
+    }
+
+    @Override
+    protected void givenLotteryRewardInfo() {
+        saveTestLotteryReward();
+    }
 
 
+
+    @Override
+    protected void givenLotteryWinners() {
+        saveTestLotteryWinner();
+    }
+
+    @Override
+    protected void givenLotteryWinnersForAdmin() {
+
+    }
+
+    @Override
+    protected void givenLotteryWinnerInfo() {
+        saveTestLotteryWinner();
+    }
+
+    @Override
+    protected void givenLotteryApplierNotExist() {
+        saveTestLotteryApplier();
+    }
+
+    @Override
+    protected void givenLotteryApplierApplied() {
+        saveTestLotteryApplierApplied();
+    }
+
+    @Override
+    protected void givenLotteryWinner() {
+        saveTestLotteryWinner();
+    }
+
+    @Override
+    protected void givenPartsListForUri() {
+        saveLotteryApplierParts(true);
+    }
+
+    @Override
+    protected void givenPartsNotEquipped() {
+        saveLotteryApplierParts(false);
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoHasNoRemainChance() {
+        LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
+        while (lotteryApplier.getRemainChance() > 0) {
+            lotteryApplier.drawParts();
+        }
+        Assertions.assertThat(lotteryApplier.getRemainChance()).isZero();
+        lotteryApplierRepository.save(lotteryApplier);
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoDrawsPartsFirst() {
+
+    }
+
+    @Override
+    protected void givenLotteryApplierWhoHasRemainChance() {
+
+    }
+
+    @Override
+    protected void givenMyPartsList() {
+        saveLotteryApplierParts(true);
+    }
+
+    @Override
+    protected void givenLink() {
+
+    }
+
+    @Override
+    protected void givenOriginUri() {
+
+    }
 }

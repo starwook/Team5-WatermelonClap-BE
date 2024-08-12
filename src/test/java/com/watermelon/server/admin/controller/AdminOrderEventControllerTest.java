@@ -109,7 +109,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .thenReturn(winners.stream()
                         .map(orderEventWinner -> ResponseOrderEventWinnerDto.forAdmin(orderEventWinner))
                         .collect(Collectors.toList()));
-        mockMvc.perform(
+        mvc.perform(
                         RestDocumentationRequestBuilders
                                 .get(PATH,openOrderEvent.getId())
                                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
@@ -117,8 +117,12 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("어드민 선착순 이벤트 당첨자 반환")
-                ));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 당첨자 반환")
+                                        .build()
+                        )));
 
     }
 
@@ -129,13 +133,18 @@ class AdminOrderEventControllerTest extends ControllerTest {
         final String DOCUMENT_NAME ="admin/event/order";
         Mockito.when(adminOrderEventService.getOrderEventsForAdmin()).thenReturn(responseOrderEventDtos);
 
-        mockMvc.perform(RestDocumentationRequestBuilders.get(PATH)
+        mvc.perform(RestDocumentationRequestBuilders.get(PATH)
                         .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resourceSnippet("어드민 선착순 이벤트 목록 조회")));
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 목록 조회")
+                                        .build()
+                        )));
     }
 
     @Test
@@ -151,7 +160,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         MockMultipartFile rewardImage = new MockMultipartFile("rewardImage", "tooth.png", "multipart/form-data", "uploadFile".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile quizImage  = new MockMultipartFile("quizImage", "tooth.png", "multipart/form-data", "uploadFile".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile orderEvent  = new MockMultipartFile("orderEvent", "orderEvent", "application/json", objectMapper.writeValueAsString(requestOrderEventDto).getBytes(StandardCharsets.UTF_8));
-        mockMvc.perform(
+        mvc.perform(
                         RestDocumentationRequestBuilders
                                 .multipart(PATH)
                                 .file(quizImage)
@@ -164,6 +173,12 @@ class AdminOrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 목록 조회")
+                                        .build()
+                        ),
                         requestParts(
                                 partWithName("rewardImage").description("rewardImage"),
                                 partWithName("quizImage").description("quizImage"),

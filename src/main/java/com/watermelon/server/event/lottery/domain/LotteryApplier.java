@@ -67,14 +67,6 @@ public class LotteryApplier extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean hasRemainChance(){
-        return remainChance > 0;
-    }
-
-    public void hasRemainChanceOrThrow(){
-        if(!hasRemainChance()) throw new PartsDrawLimitExceededException();
-    }
-
     public void applyLottery(){
         this.isLotteryApplier = true;
     }
@@ -95,6 +87,18 @@ public class LotteryApplier extends BaseEntity {
         this.isPartsWinner = true;
     }
 
+    public static LotteryApplier createTestLotteryWinner(String uid){
+        return LotteryApplier.builder()
+                .uid(uid)
+                .lotteryRank(1)
+                .name("name")
+                .email("email")
+                .address("address")
+                .phoneNumber("phoneNumber")
+                .isLotteryApplier(true)
+                .build();
+    }
+
     public static LotteryApplier createLotteryApplier(String uid){
 
         LotteryApplier lotteryApplier = LotteryApplier.builder()
@@ -111,6 +115,18 @@ public class LotteryApplier extends BaseEntity {
      */
     public void applyPartsLottery(){
         this.isPartsApplier = true;
+    }
+
+    public void drawParts(){
+        if(remainChance == 0) throw new PartsDrawLimitExceededException();
+        this.remainChance--;
+    }
+
+    public static LotteryApplier createHasNoRemainChance(String uid){
+        return LotteryApplier.builder()
+                .uid(uid)
+                .remainChance(0)
+                .build();
     }
 
 }

@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.common.constants.HttpConstants.HEADER_LINK_ID;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

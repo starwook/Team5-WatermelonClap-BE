@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.watermelon.server.Constants.TEST_UID;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -74,9 +74,7 @@ class PartsServiceImplTest {
     void drawPartsFailureCase(){
 
         //given
-        LotteryApplier applier = LotteryApplier.builder()
-                .remainChance(0)
-                .build();
+        LotteryApplier applier = LotteryApplier.createHasNoRemainChance(TEST_UID);
 
         when(lotteryService.applyAndGet(TEST_UID)).thenReturn(applier);
 

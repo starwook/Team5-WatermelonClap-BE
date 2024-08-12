@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
@@ -41,7 +42,7 @@ class LotteryServiceImplTest {
 
         //given
         Mockito.when(lotteryApplierRepository.findByUid(TEST_UID)).thenReturn(
-                Optional.of(LotteryApplier.builder().lotteryRank(TEST_RANK).build())
+                Optional.of(LotteryApplier.builder().lotteryRank(TEST_RANK).isLotteryApplier(true).build())
         );
 
         //when

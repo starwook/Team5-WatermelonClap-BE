@@ -21,4 +21,15 @@ public class LotteryReward extends BaseEntity {
 
     private int winnerCount;
 
+    public static LotteryReward createTestLotteryReward(){
+
+        LotteryReward lotteryReward = new LotteryReward();
+        lotteryReward.lotteryRank = 1;
+        lotteryReward.imgSrc = "test.png";
+        lotteryReward.name = "test";
+        lotteryReward.winnerCount = 1;
+        return lotteryReward;
+
+    }
+
 }
