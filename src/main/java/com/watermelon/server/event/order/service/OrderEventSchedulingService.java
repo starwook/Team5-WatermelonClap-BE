@@ -16,9 +16,14 @@ import java.util.List;
 public class OrderEventSchedulingService {
 
     private final OrderEventRepository orderEventRepository;
+    private final OrderEventCommandService orderEventCommandService;
     @Transactional
     public void changeOrderStatusByTime(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         orderEvents.forEach(orderEvent -> {orderEvent.changeOrderEventStatusByTime(LocalDateTime.now());});
+    }
+    @Transactional
+    public Long changeCurrentOrderEvent(){
+        return orderEventCommandService.findOrderEventToMakeInProgress();
     }
 }

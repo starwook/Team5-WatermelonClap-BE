@@ -17,5 +17,7 @@ public class Scheduler {
     public void checkEventStart(){
         log.info("Checking events by scheduled");
         orderEventSchedulingService.changeOrderStatusByTime();
+        Long currentEventId = orderEventSchedulingService.changeCurrentOrderEvent();;
+        log.info("current order event id is {}", currentEventId);
     }
 }
