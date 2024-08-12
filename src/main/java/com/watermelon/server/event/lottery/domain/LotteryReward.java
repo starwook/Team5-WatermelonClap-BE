@@ -23,6 +23,15 @@ public class LotteryReward extends BaseEntity {
     @JoinColumn
     private LotteryEvent lotteryEvent;
 
+    public static LotteryReward createLotteryReward(int lotteryRank, String imgSrc, String name, int winnerCount) {
+        LotteryReward lotteryReward = new LotteryReward();
+        lotteryReward.lotteryRank = lotteryRank;
+        lotteryReward.imgSrc = imgSrc;
+        lotteryReward.name = name;
+        lotteryReward.winnerCount = winnerCount;
+        return lotteryReward;
+    }
+
     public static LotteryReward createTestLotteryReward(){
 
         LotteryReward lotteryReward = new LotteryReward();
