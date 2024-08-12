@@ -4,6 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.admin.controller.LotteryEventService;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
@@ -66,6 +67,9 @@ public class ControllerTest extends APITest{
 
     @MockBean
     private LinkService linkService;
+
+    @MockBean
+    protected LotteryEventService lotteryEventService;
 
     protected final String TAG_LOTTERY = "추첨 이벤트";
     protected final String TAG_PARTS = "파츠 이벤트";

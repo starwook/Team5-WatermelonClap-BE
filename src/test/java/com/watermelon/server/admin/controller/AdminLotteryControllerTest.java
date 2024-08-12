@@ -1,5 +1,6 @@
 package com.watermelon.server.admin.controller;
 
+import com.epages.restdocs.apispec.FieldDescriptors;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +10,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.watermelon.server.Constants.*;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @WebMvcTest(AdminLotteryController.class)
@@ -158,11 +161,24 @@ class AdminLotteryControllerTest extends ControllerTest {
     }
 
     @Test
+    @DisplayName("추첨 이벤트 생성 - 성공")
     void createLotteryEvent() throws Exception {
 
         whenLotteryEventCreate();
 
         thenLotteryEventCreate();
+
+        resultActions
+                .andDo(print())
+                .andDo(document("admin/event/lotteries/create",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .requestFields(
+                                        )
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨 이벤트 생성")
+                                        .build()
+                        )));
 
     }
 }

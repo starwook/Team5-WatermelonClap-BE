@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @WebMvcTest(LotteryController.class)
 @DisplayName("[단위] 추첨 컨트롤러")
@@ -66,6 +67,7 @@ class LotteryControllerTest extends ControllerTest {
         thenLotteryWinnerInfoIsAdded();
 
         resultActions
+                .andDo(print())
                 .andDo(document("event/lotteries/info/create",
                         resource(
                                 ResourceSnippetParameters.builder()
