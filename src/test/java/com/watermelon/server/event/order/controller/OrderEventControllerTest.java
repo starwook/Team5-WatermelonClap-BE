@@ -244,4 +244,27 @@ class OrderEventControllerTest extends ControllerTest {
                                         .build()
                         )));
     }
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
+    void makeApplyWrongCurrentEvent() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}";
+        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}/wrong-current-event";
+        String applyTicket = "applyTicket";
+        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(WrongOrderEventFormatException.class);
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(RequestAnswerDto.makeWith("answer")))
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 정답 제출")
+                                        .build()
+                        )));
+    }
 }
