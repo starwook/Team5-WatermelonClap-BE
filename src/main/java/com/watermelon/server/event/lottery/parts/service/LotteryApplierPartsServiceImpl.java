@@ -67,7 +67,7 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
                         uid,
                         lotteryApplierParts.getParts().getCategory());
 
-        if (existLAP.isPresent()) {
+        if (existLAP.isPresent()&&!lotteryApplierParts.isEquipped()) {
             existLAP.get().toggleEquipped();
             lotteryApplierPartsRepository.save(existLAP.get());
         }

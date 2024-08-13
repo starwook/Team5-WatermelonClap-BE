@@ -172,8 +172,28 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
 
     }
 
+    @Test
+    @DisplayName("파츠 장착 - 해제 케이스")
+    void partsReleaseTest() throws Exception {
 
+        //given
+        LotteryApplier lotteryApplier = saveTestLotteryApplier();
 
+        Parts parts1 = partsRepository.save(
+                Parts.builder()
+                        .category(PartsCategory.WHEEL)
+                        .build()
+        );
+
+        LotteryApplierParts lotteryApplierParts1 = lotteryApplierPartsRepository.save(
+                LotteryApplierParts.createApplierParts(true, lotteryApplier, parts1)
+        );
+
+        whenPartsEquippedStatusIsChanged(parts1.getId());
+
+        Assertions.assertThat(lotteryApplierParts1.isEquipped()).isFalse();
+
+    }
 
     private LotteryApplier saveTestLotteryApplier() {
         LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
