@@ -155,11 +155,11 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
                         .build()
         );
 
-        lotteryApplierPartsRepository.save(
+        LotteryApplierParts lotteryApplierParts1 = lotteryApplierPartsRepository.save(
                 LotteryApplierParts.createApplierParts(true, lotteryApplier, parts1)
         );
 
-        LotteryApplierParts lotteryApplierParts = lotteryApplierPartsRepository.save(
+        LotteryApplierParts lotteryApplierParts2 = lotteryApplierPartsRepository.save(
                 LotteryApplierParts.createApplierParts(false, lotteryApplier, parts2)
         );
 
@@ -167,7 +167,8 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
         whenPartsEquippedStatusIsChanged(parts2.getId());
 
         //then
-        Assertions.assertThat(lotteryApplierParts.isEquipped()).isFalse();
+        Assertions.assertThat(lotteryApplierParts1.isEquipped()).isFalse();
+        Assertions.assertThat(lotteryApplierParts2.isEquipped()).isTrue();
 
     }
 
