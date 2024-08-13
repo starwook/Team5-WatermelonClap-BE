@@ -63,7 +63,7 @@ public class OrderEventController {
     }
 
     @ExceptionHandler(WrongPhoneNumberFormatException.class)
-    public ResponseEntity<ErrorResponse> handlePhoneNumberNotExistException(WrongPhoneNumberFormatException wrongPhoneNumberFormatException){
+    public ResponseEntity<ErrorResponse> handleWrongPhoneNumberFormatException(WrongPhoneNumberFormatException wrongPhoneNumberFormatException){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ErrorResponse.of(wrongPhoneNumberFormatException.getMessage()));
     }
     @ExceptionHandler(WrongOrderEventFormatException.class)

@@ -11,6 +11,7 @@ import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
@@ -213,6 +214,31 @@ class OrderEventControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234")))
                         .header("ApplyTicket", applyTicket))
                 .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 번호 제출")
+                                        .build()
+                        )));
+    }
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 안흥ㅁ)")
+    void makeApplyTicketWrongPhoneNumberFormat() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}/apply";
+        final String DOCUMENT_NAME = "phone-number-wrong-format";
+        String applyTicket = "applyTicket";
+        Mockito.doThrow(WrongPhoneNumberFormatException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
+
+
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234")))
+                        .header("ApplyTicket", applyTicket))
+                .andExpect(status().isUnprocessableEntity())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resource(
