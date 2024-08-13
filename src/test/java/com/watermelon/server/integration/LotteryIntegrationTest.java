@@ -1,7 +1,7 @@
 package com.watermelon.server.integration;
 
 import com.watermelon.server.BaseIntegrationTest;
-import com.watermelon.server.event.lottery.auth.service.TestTokenVerifier;
+import com.watermelon.server.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.parts.domain.Parts;
 import org.assertj.core.api.Assertions;

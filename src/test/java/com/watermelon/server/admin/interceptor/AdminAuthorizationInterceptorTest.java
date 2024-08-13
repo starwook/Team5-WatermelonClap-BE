@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.watermelon.server.Constants.TEST_NOT_UID;
 import static com.watermelon.server.common.constants.HttpConstants.HEADER_UID;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 
 @SpringBootTest
 @Disabled

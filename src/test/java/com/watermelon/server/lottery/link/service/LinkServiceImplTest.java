@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.watermelon.server.Constants.TEST_URI;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)

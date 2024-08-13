@@ -1,4 +1,4 @@
-package com.watermelon.server.event.lottery.auth.utils;
+package com.watermelon.server.auth.utils;
 
 public class AuthUtils {
 

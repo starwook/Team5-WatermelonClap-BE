@@ -1,6 +1,6 @@
-package com.watermelon.server.event.lottery.auth.service;
+package com.watermelon.server.auth.service;
 
-import com.watermelon.server.event.lottery.auth.exception.InvalidTokenException;
+import com.watermelon.server.auth.exception.InvalidTokenException;
 
 /**
  * 토큰을 검사하는 인터페이스

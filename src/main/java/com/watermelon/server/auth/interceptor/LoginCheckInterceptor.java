@@ -1,9 +1,9 @@
-package com.watermelon.server.event.lottery.auth.interceptor;
+package com.watermelon.server.auth.interceptor;
 
-import com.watermelon.server.event.lottery.auth.exception.InvalidTokenException;
-import com.watermelon.server.event.lottery.auth.service.TokenVerifier;
-import com.watermelon.server.event.lottery.auth.utils.AuthUtils;
-import com.watermelon.server.event.lottery.auth.exception.AuthenticationException;
+import com.watermelon.server.auth.exception.InvalidTokenException;
+import com.watermelon.server.auth.service.TokenVerifier;
+import com.watermelon.server.auth.utils.AuthUtils;
+import com.watermelon.server.auth.exception.AuthenticationException;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,12 +1,11 @@
 package com.watermelon.server.event.lottery.controller;
 
 import com.watermelon.server.common.exception.ErrorResponse;
-import com.watermelon.server.event.lottery.auth.annotations.Uid;
+import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.lottery.dto.request.RequestExpectationDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.service.ExpectationService;
-import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

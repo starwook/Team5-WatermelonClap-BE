@@ -1,9 +1,8 @@
-package com.watermelon.server.event.lottery.auth.service;
+package com.watermelon.server.auth.service;
 
 import com.watermelon.server.admin.domain.AdminUser;
 import com.watermelon.server.admin.repository.AdminUserRepository;
-import com.watermelon.server.admin.service.AdminUserService;
-import com.watermelon.server.event.lottery.auth.exception.InvalidTokenException;
+import com.watermelon.server.auth.exception.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;

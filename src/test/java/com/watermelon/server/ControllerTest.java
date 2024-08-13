@@ -33,7 +33,7 @@ import java.util.List;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static com.watermelon.server.Constants.*;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 

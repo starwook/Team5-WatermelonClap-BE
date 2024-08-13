@@ -1,7 +1,7 @@
 package com.watermelon.server.event.parts.controller;
 
 import com.watermelon.server.common.exception.ErrorResponse;
-import com.watermelon.server.event.lottery.auth.annotations.Uid;
+import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;

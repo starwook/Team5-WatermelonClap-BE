@@ -1,6 +1,6 @@
 package com.watermelon.server.common.exception;
 
-import com.watermelon.server.event.lottery.auth.exception.AuthenticationException;
+import com.watermelon.server.auth.exception.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

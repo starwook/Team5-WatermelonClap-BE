@@ -18,10 +18,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.watermelon.server.Constants.*;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
