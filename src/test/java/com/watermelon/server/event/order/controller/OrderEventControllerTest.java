@@ -91,10 +91,10 @@ class OrderEventControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 목록을 가져온다")
+    @DisplayName("[DOC] 선착순 이벤트 목록을 가져온다 - 성공")
     void getOrderEvents() throws Exception {
         final String PATH = "/event/order";
-        final String DOCUMENT_NAME ="event/order";
+        final String DOCUMENT_NAME ="success";
         Mockito.when(orderEventQueryService.getOrderEvents()).thenReturn(responseOrderEventDtos);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH))
@@ -110,10 +110,10 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 특정 선착순 이벤트를 가져온다")
+    @DisplayName("[DOC] 특정 선착순 이벤트를 가져온다 - 성공")
     void getOrderEvent() throws Exception {
         final String PATH = "/event/order/{eventId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}";
+        final String DOCUMENT_NAME ="success}";
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenReturn(openOrderEventResponse);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
@@ -133,7 +133,7 @@ class OrderEventControllerTest extends ControllerTest {
     @DisplayName("[DOC] 존재하지 않는 선착순 이벤트를 가져온다")
     void getOrderEventNotExist() throws Exception {
         final String PATH = "/event/order/{eventId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}/not-exist";
+        final String DOCUMENT_NAME ="event-not-exist";
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenThrow(WrongOrderEventFormatException.class);
         mvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
                 .andExpect(status().isNotFound())
@@ -148,10 +148,10 @@ class OrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출")
+    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 성공 ")
     void makeApplyTicket() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
-        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}/apply";
+        final String DOCUMENT_NAME ="success";
 
 
         String applyTicket = "applyTicket";
@@ -198,10 +198,10 @@ class OrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출")
+    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 성공")
     void makeApply() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}";
+        final String DOCUMENT_NAME ="success";
         String applyTicket = "applyTicket";
         Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.applySuccess(applyTicket));
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
@@ -222,10 +222,33 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
+    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 정답 틀림")
+    void makeApplyWrongAnswer() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}";
+        final String DOCUMENT_NAME ="wrong-answer";
+        String applyTicket = "applyTicket";
+        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.wrongAnswer());
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(RequestAnswerDto.makeWith("answer")))
+                )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 정답 제출")
+                                        .build()
+                        )));
+    }
+    @Test
     @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
     void makeApplyNotDuringDuration() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}/not-during-duration";
+        final String DOCUMENT_NAME ="not-during-duration";
         String applyTicket = "applyTicket";
         Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(NotDuringEventPeriodException.class);
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
@@ -245,10 +268,10 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
+    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(현재 진행중인 이벤트 아님)")
     void makeApplyWrongCurrentEvent() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
-        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}/wrong-current-event";
+        final String DOCUMENT_NAME ="wrong-current-event";
         String applyTicket = "applyTicket";
         Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(WrongOrderEventFormatException.class);
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
