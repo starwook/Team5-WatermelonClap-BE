@@ -4,7 +4,7 @@ package com.watermelon.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
-import com.watermelon.server.event.lottery.link.utils.LinkUtils;
+import com.watermelon.server.event.link.utils.LinkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;

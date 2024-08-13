@@ -3,23 +3,14 @@ package com.watermelon.server.lottery.link.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.DocumentConstants;
-import com.watermelon.server.event.lottery.link.controller.LinkController;
-import com.watermelon.server.event.lottery.link.dto.MyLinkDto;
-import com.watermelon.server.event.lottery.link.service.LinkService;
-import com.watermelon.server.event.lottery.link.utils.LinkUtils;
+import com.watermelon.server.event.link.controller.LinkController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.watermelon.server.Constants.*;
-import static com.watermelon.server.common.constants.PathConstants.MY_LINK;
-import static com.watermelon.server.common.constants.PathConstants.SHORTED_LINK;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(LinkController.class)
 @DisplayName("[단위] 링크 컨트롤러")

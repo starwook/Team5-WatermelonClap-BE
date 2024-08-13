@@ -2,7 +2,7 @@ package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.link.service.LinkService;
+import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.parts.domain.PartsReward;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
