@@ -1,4 +1,4 @@
-package com.watermelon.server.lottery.parts.controller;
+package com.watermelon.server.event.parts.controller;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;

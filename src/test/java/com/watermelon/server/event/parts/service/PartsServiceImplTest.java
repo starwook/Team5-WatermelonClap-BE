@@ -1,4 +1,4 @@
-package com.watermelon.server.lottery.parts.service;
+package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
