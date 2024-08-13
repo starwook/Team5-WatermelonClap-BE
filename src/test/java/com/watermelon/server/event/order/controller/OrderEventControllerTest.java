@@ -249,6 +249,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
 
     }
+
     @Test
     @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(존재하지 않는 이벤트)")
     void makeApplyTicketWrongOrderEvent() throws Exception {
@@ -256,7 +257,6 @@ class OrderEventControllerTest extends ControllerTest {
         final String DOCUMENT_NAME = "phone-number-wrong-format";
         String applyTicket = "applyTicket";
         Mockito.doThrow(WrongOrderEventFormatException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
-
 
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),

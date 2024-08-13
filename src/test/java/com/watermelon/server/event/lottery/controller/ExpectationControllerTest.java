@@ -64,7 +64,7 @@ class ExpectationControllerTest extends ControllerTest {
     @DisplayName("[DOC] 사용자 기대평을 만든다")
     void makeExpectationMakeConflictError() throws Exception {
         final String PATH = "/expectations";
-        final String DOCUMENT_NAME ="expectations/create/conflict";
+        final String DOCUMENT_NAME ="expectation-conflict";
         Mockito.doThrow(ExpectationAlreadyExistError.class).when(expectationService).makeExpectation(any(),any());
 
         mvc.perform(
