@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-@Profile("!local")
+@Profile("deploy")
 public class FirebaseTokenVerifier implements TokenVerifier {
 
     private final FirebaseAuth firebaseAuth;

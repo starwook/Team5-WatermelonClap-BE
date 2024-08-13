@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 
 @Service
-@Profile("local")
+@Profile("!deploy")
 @RequiredArgsConstructor
 @Slf4j
 public class TestTokenVerifier implements TokenVerifier{
