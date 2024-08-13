@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
             stringBuilder.append(", ");
         }
         final ErrorResponse response = ErrorResponse.of( String.valueOf(stringBuilder));
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
         log.error("MissingRequestHeaderException", ex);
         final ErrorResponse response = ErrorResponse.of(ex.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -125,7 +125,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
         log.error("handleNullPointerException", e);
         final ErrorResponse response = ErrorResponse.of( e.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
         log.error("handleIOException", ex);
         final ErrorResponse response = ErrorResponse.of( ex.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -151,6 +151,6 @@ public class GlobalExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
         log.error("Exception", ex);
         final ErrorResponse response = ErrorResponse.of(ex.getMessage());
-        return new ResponseEntity<>(response, HTTP_STATUS_OK);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
