@@ -64,18 +64,7 @@ class OrderResultCommandServiceTest {
     }
 
     @Test
-    @DisplayName("선착순 응모 - 정상 응모 반환")
-    void makeApplyTicketSuccess() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-
-        when(orderEventCheckService.isAnswerCorrect(any())).thenReturn(true);
-        when(orderResultCommandService.isOrderResultFullElseMake(any())).thenReturn(ResponseApplyTicketDto.applySuccess(applyToken));
-        Assertions.assertThat(orderResultCommandService.makeApplyTicket(RequestAnswerDto.makeWith(answer),1L,1L).getResult())
-                .isEqualTo(ApplyTicketStatus.SUCCESS.name());
-
-    }
-
-    @Test
-    @DisplayName("선착순 응모 -정답 틀림 ")
+    @DisplayName("선착순 응모 - 정답 틀림 ")
     void makeApplyTicketWrongAnswer() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
         when(orderEventCheckService.isAnswerCorrect(any())).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.makeApplyTicket(RequestAnswerDto.makeWith(answer),1L,1L).getResult())

@@ -3,32 +3,33 @@ package com.watermelon.server.event.order.service;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.watermelon.server.event.order.result.domain.OrderResult;
+import lombok.*;
+import org.redisson.api.RSet;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 
 @Service
-@NoArgsConstructor
 public class OrderEventCheckService {
     private Long eventId;
     private Long quizId;
     private String answer;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
-    @Builder
-    public OrderEventCheckService(Long eventId, Long quizId, String answer, LocalDateTime startDate, LocalDateTime endDate) {
-        this.eventId = eventId;
-        this.quizId = quizId;
-        this.answer = answer;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    private int maxWinnerCount;
+    @Getter
+    private final RSet<OrderResult> orderResultRset;
+    public OrderEventCheckService(RSet<OrderResult> orderResultRset) {
+        this.orderResultRset = orderResultRset;
     }
-    public Long getCurrentOrderEventId() {
-        return eventId;
+    public boolean isOrderApplyNotFull(){
+        int count = getCurrentCount();
+        return maxWinnerCount-count>0;
+    }
+    private int getCurrentCount() {
+        return orderResultRset.size();
     }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
@@ -37,6 +38,7 @@ public class OrderEventCheckService {
         this.answer = orderEvent.getQuiz().getAnswer();
         this.startDate = orderEvent.getStartDate();
         this.endDate = orderEvent.getEndDate();
+        this.maxWinnerCount = orderEvent.getWinnerCount();
     }
     public boolean isAnswerCorrect(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;
@@ -55,4 +57,9 @@ public class OrderEventCheckService {
         if (!isEventAndQuizIdWrong(eventId, quizId)) throw new WrongOrderEventFormatException();
         if (!isTimeInEvent(LocalDateTime.now())) throw new NotDuringEventPeriodException();
     }
+    public Long getCurrentOrderEventId() {
+        return eventId;
+    }
+
+
 }
