@@ -49,9 +49,11 @@ class OrderEventControllerTest extends ControllerTest {
     private OrderEventCommandService orderEventCommandService;
     @MockBean
     private CurrentOrderEventManageService currentOrderEventManageService;
-
+    @MockBean
+    private OrderResultCommandService orderResultCommandService;
     @MockBean
     private OrderEventRepository orderEventRepository;
+
 
     private ResponseOrderEventDto openOrderEventResponse;
     private ResponseOrderEventDto soonOpenResponse;
@@ -61,8 +63,7 @@ class OrderEventControllerTest extends ControllerTest {
     private OrderEvent unOpenOrderEvent;
     private List<OrderEvent> orderEvents = new ArrayList<>();
     private List<ResponseOrderEventDto> responseOrderEventDtos = new ArrayList<>();
-    @Autowired
-    private OrderResultCommandService orderResultCommandService;
+
 
     @BeforeEach
     void setUp(){
