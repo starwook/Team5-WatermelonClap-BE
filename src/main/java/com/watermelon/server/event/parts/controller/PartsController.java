@@ -1,13 +1,12 @@
-package com.watermelon.server.event.lottery.parts.controller;
+package com.watermelon.server.event.parts.controller;
 
 import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.lottery.auth.annotations.Uid;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponseMyPartsListDto;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponsePartsDrawDto;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponseRemainChanceDto;
-import com.watermelon.server.event.lottery.parts.exception.PartsDrawLimitExceededException;
-import com.watermelon.server.event.lottery.parts.service.PartsService;
-import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
+import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
+import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
+import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
+import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
+import com.watermelon.server.event.parts.service.PartsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

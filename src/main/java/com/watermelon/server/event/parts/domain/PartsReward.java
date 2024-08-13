@@ -1,4 +1,4 @@
-package com.watermelon.server.event.lottery.parts.domain;
+package com.watermelon.server.event.parts.domain;
 
 import com.watermelon.server.BaseEntity;
 import jakarta.persistence.Entity;

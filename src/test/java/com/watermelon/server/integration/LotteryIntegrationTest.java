@@ -3,7 +3,7 @@ package com.watermelon.server.integration;
 import com.watermelon.server.BaseIntegrationTest;
 import com.watermelon.server.event.lottery.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.parts.domain.Parts;
+import com.watermelon.server.event.parts.domain.Parts;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,10 +1,12 @@
 package com.watermelon.server.event.lottery.parts.repository;
 
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
-import com.watermelon.server.event.lottery.parts.domain.Parts;
-import com.watermelon.server.event.lottery.parts.domain.PartsCategory;
+import com.watermelon.server.event.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.parts.domain.Parts;
+import com.watermelon.server.event.parts.domain.PartsCategory;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
+import com.watermelon.server.event.parts.repository.LotteryApplierPartsRepository;
+import com.watermelon.server.event.parts.repository.PartsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

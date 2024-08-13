@@ -1,10 +1,10 @@
-package com.watermelon.server.event.lottery.parts.service;
+package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
-import com.watermelon.server.event.lottery.parts.domain.Parts;
-import com.watermelon.server.event.lottery.parts.repository.LotteryApplierPartsRepository;
-import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
+import com.watermelon.server.event.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.parts.domain.Parts;
+import com.watermelon.server.event.parts.repository.LotteryApplierPartsRepository;
+import com.watermelon.server.event.parts.repository.PartsRepository;
 import com.watermelon.server.event.lottery.service.LotteryApplierService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

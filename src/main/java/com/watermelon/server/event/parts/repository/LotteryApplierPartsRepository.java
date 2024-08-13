@@ -1,8 +1,8 @@
-package com.watermelon.server.event.lottery.parts.repository;
+package com.watermelon.server.event.parts.repository;
 
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
-import com.watermelon.server.event.lottery.parts.domain.PartsCategory;
+import com.watermelon.server.event.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.parts.domain.PartsCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,17 +1,17 @@
-package com.watermelon.server.event.lottery.parts.service;
+package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.link.service.LinkService;
-import com.watermelon.server.event.lottery.parts.domain.PartsReward;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponseMyPartsListDto;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponsePartsDrawDto;
-import com.watermelon.server.event.lottery.parts.dto.response.ResponseRemainChanceDto;
-import com.watermelon.server.event.lottery.parts.exception.PartsNotExistException;
-import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
-import com.watermelon.server.event.lottery.parts.domain.Parts;
-import com.watermelon.server.event.lottery.parts.repository.PartsRepository;
-import com.watermelon.server.event.lottery.parts.repository.PartsRewardRepository;
+import com.watermelon.server.event.parts.domain.PartsReward;
+import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
+import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
+import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
+import com.watermelon.server.event.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.parts.domain.Parts;
+import com.watermelon.server.event.parts.repository.PartsRepository;
+import com.watermelon.server.event.parts.repository.PartsRewardRepository;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.transaction.Transactional;

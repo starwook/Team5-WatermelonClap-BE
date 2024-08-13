@@ -3,7 +3,7 @@ package com.watermelon.server.lottery.parts.controller;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.DocumentConstants;
-import com.watermelon.server.event.lottery.parts.controller.PartsController;
+import com.watermelon.server.event.parts.controller.PartsController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,10 +11,7 @@ import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.docume
 import static com.watermelon.server.Constants.TEST_PARTS_ID;
 import static com.watermelon.server.Constants.TEST_URI;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.watermelon.server.Constants.TEST_PARTS_ID;
-import static com.watermelon.server.Constants.TEST_URI;
 
 @WebMvcTest(PartsController.class)
 @DisplayName("[단위] 파츠 컨트롤러")
