@@ -1,17 +1,16 @@
 package com.watermelon.server.event.lottery.controller;
 
+import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.lottery.auth.annotations.Uid;
 import com.watermelon.server.event.lottery.dto.request.RequestExpectationDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.service.ExpectationService;
+import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,6 +33,11 @@ public class ExpectationController {
     @GetMapping(path ="/expectations")
     public ResponseEntity<List<ResponseExpectationDto>> getExpectationsForUser() {
         return new ResponseEntity<>(expectationService.getExpectationsForUser(),HttpStatus.OK);
+    }
+
+    @ExceptionHandler(ExpectationAlreadyExistError.class)
+    public ResponseEntity<ErrorResponse> handleNotDuringEventPeriodException(NotDuringEventPeriodException notDuringEventPeriodException){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(notDuringEventPeriodException.getMessage()));
     }
 
 }
