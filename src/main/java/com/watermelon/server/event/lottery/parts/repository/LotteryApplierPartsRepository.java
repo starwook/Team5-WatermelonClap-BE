@@ -2,6 +2,7 @@ package com.watermelon.server.event.lottery.parts.repository;
 
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.parts.domain.LotteryApplierParts;
+import com.watermelon.server.event.lottery.parts.domain.PartsCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,11 @@ public interface LotteryApplierPartsRepository extends JpaRepository<LotteryAppl
 
     @Query("SELECT COUNT(DISTINCT lap.parts.category) FROM LotteryApplierParts lap WHERE lap.lotteryApplier = :lotteryApplier")
     long countDistinctPartsCategoryByLotteryApplier(@Param("lotteryApplier") LotteryApplier lotteryApplier);
+
+    @Query("SELECT lap FROM LotteryApplierParts lap WHERE lap.parts.category = :category AND lap.lotteryApplier.uid = :lotteryApplierUid AND lap.isEquipped = true")
+    Optional<LotteryApplierParts> findEquippedLotteryApplierPartsByPartsCategoryAndLotteryApplier(
+            @Param("lotteryApplierUid") String lotteryApplierUid,
+            @Param("category") PartsCategory partsCategory
+    );
+
 }
