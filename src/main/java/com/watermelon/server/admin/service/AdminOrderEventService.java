@@ -10,6 +10,7 @@ import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
+import com.watermelon.server.event.order.service.OrderEventCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class AdminOrderEventService {
     private final OrderEventRepository orderEventRepository;
     private final S3ImageService s3ImageService;
 
+    private final OrderEventCommandService orderEventCommandService;
 
     @Transactional(readOnly = true)
     public List<ResponseOrderEventDto> getOrderEventsForAdmin() {
@@ -50,6 +52,7 @@ public class AdminOrderEventService {
         String quizImgSrc = s3ImageService.uploadImage(quizImage);
         OrderEvent newOrderEvent = OrderEvent.makeOrderEventWithImage(requestOrderEventDto,rewardImgSrc,quizImgSrc);
         orderEventRepository.save(newOrderEvent);
+        orderEventCommandService.findOrderEventToMakeInProgress();
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
 }

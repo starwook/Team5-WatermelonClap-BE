@@ -19,11 +19,11 @@ import java.util.concurrent.Executors;
 class OrderResultLockTest {
     @Autowired
     private CurrentOrderEventManageService currentOrderEventManageService;
-    @Autowired
-    RSet<OrderResult> orderResultSet;
+
+
     @BeforeEach
     void setUp() {
-       orderResultSet.clear();
+       currentOrderEventManageService.clearOrderResultRepository();
        currentOrderEventManageService.setMaxWinnerCount(100);
     }
 
@@ -47,8 +47,8 @@ class OrderResultLockTest {
         }
         latch.await();
 
-        System.out.println("OrderResult 개수: "+orderResultSet.size());
-        Assertions.assertThat(orderResultSet.size()).isEqualTo(currentOrderEventManageService.getMaxWinnerCount());
+        System.out.println("OrderResult 개수: "+currentOrderEventManageService.getCurrentCount());
+        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(currentOrderEventManageService.getMaxWinnerCount());
     }
 //    @Test
 //    void 선착순_이벤트_락_미적용_100명() throws InterruptedException {

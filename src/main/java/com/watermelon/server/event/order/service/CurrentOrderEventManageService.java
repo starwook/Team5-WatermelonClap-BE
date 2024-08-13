@@ -41,7 +41,7 @@ public class CurrentOrderEventManageService {
         int count = getCurrentCount();
         return maxWinnerCount-count>0;
     }
-    private int getCurrentCount() {
+    public int getCurrentCount() {
         return orderResultRset.size();
     }
 
@@ -55,8 +55,13 @@ public class CurrentOrderEventManageService {
         this.startDate = orderEvent.getStartDate();
         this.endDate = orderEvent.getEndDate();
         this.maxWinnerCount = orderEvent.getWinnerCount();
+        clearOrderResultRepository();
+    }
+
+    public void clearOrderResultRepository() {
         this.orderResultRset.clear();
     }
+
     public boolean isAnswerCorrect(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;
         return false;
