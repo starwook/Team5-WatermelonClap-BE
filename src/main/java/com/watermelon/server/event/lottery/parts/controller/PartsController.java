@@ -1,11 +1,13 @@
 package com.watermelon.server.event.lottery.parts.controller;
 
+import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.lottery.auth.annotations.Uid;
 import com.watermelon.server.event.lottery.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.lottery.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.lottery.parts.dto.response.ResponseRemainChanceDto;
 import com.watermelon.server.event.lottery.parts.exception.PartsDrawLimitExceededException;
 import com.watermelon.server.event.lottery.parts.service.PartsService;
+import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,8 @@ public class PartsController {
     @PostMapping
     public ResponseEntity<ResponsePartsDrawDto> drawParts(
             @Uid String uid
-    ){
-        try {
-            return new ResponseEntity<>(partsService.drawParts(uid), HttpStatus.OK);
-        }catch (PartsDrawLimitExceededException e){
-            return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
-        }
+    ) throws PartsDrawLimitExceededException {
+        return new ResponseEntity<>(partsService.drawParts(uid), HttpStatus.OK);
     }
 
     @PatchMapping("/{partsId}")
@@ -64,5 +62,10 @@ public class PartsController {
     ){
         return new ResponseEntity<>(partsService.getPartsList(link_key), HttpStatus.OK);
     }
+    @ExceptionHandler(PartsDrawLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handlePartsDrawLimitExceedException(PartsDrawLimitExceededException partsDrawLimitExceededException){
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ErrorResponse.of(partsDrawLimitExceededException.getMessage()));
+    }
+
 
 }

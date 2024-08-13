@@ -130,12 +130,7 @@ class PartsControllerTest extends ControllerTest {
 
         resultActions
                 .andDo(document(DocumentConstants.PARTS_LINK_LIST,
-                        resource(
-                                ResourceSnippetParameters.builder()
-                                        .tag(TAG_PARTS)
-                                        .description("링크 키의 주인에 대한 파츠 목록 조회")
-                                        .build()
-                        )));
+                        resourceSnippetAuthed("description")));
     }
 
 }

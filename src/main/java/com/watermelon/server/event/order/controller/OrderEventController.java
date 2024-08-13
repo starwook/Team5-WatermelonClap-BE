@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.controller;
 
 
+import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.dto.request.OrderEventWinnerRequestDto;
 import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
@@ -62,20 +63,20 @@ public class OrderEventController {
     }
 
     @ExceptionHandler(WrongPhoneNumberFormatException.class)
-    public ResponseEntity<String> handlePhoneNumberNotExistException(WrongPhoneNumberFormatException wrongPhoneNumberFormatException){
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(wrongPhoneNumberFormatException.getMessage());
+    public ResponseEntity<ErrorResponse> handleWrongPhoneNumberFormatException(WrongPhoneNumberFormatException wrongPhoneNumberFormatException){
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ErrorResponse.of(wrongPhoneNumberFormatException.getMessage()));
     }
     @ExceptionHandler(WrongOrderEventFormatException.class)
-    public ResponseEntity<String> handleWrongOrderEventFormatException(WrongOrderEventFormatException wrongOrderEventFormatException){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(wrongOrderEventFormatException.getMessage());
+    public ResponseEntity<ErrorResponse> handleWrongOrderEventFormatException(WrongOrderEventFormatException wrongOrderEventFormatException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(wrongOrderEventFormatException.getMessage()));
     }
     @ExceptionHandler(ApplyTicketWrongException.class)
-    public ResponseEntity<String> handleApplyTicketWrongException(ApplyTicketWrongException applyTicketWrongException){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(applyTicketWrongException.getMessage());
+    public ResponseEntity<ErrorResponse> handleApplyTicketWrongException(ApplyTicketWrongException applyTicketWrongException){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorResponse.of(applyTicketWrongException.getMessage()));
     }
     @ExceptionHandler(NotDuringEventPeriodException.class)
-    public ResponseEntity<String> handleNotDuringEventPeriodException(NotDuringEventPeriodException notDuringEventPeriodException){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(notDuringEventPeriodException.getMessage());
+    public ResponseEntity<ErrorResponse> handleNotDuringEventPeriodException(NotDuringEventPeriodException notDuringEventPeriodException){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.of(notDuringEventPeriodException.getMessage()));
     }
 
 }
