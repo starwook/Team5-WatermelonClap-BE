@@ -8,6 +8,7 @@ import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.dto.request.*;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
+import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
@@ -112,12 +113,29 @@ class OrderEventControllerTest extends ControllerTest {
     void getOrderEvent() throws Exception {
         final String PATH = "/event/order/{eventId}";
         final String DOCUMENT_NAME ="event/order/{eventId}";
-        System.out.println(openOrderEventResponse);
         Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenReturn(openOrderEventResponse);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(openOrderEventResponse)))
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("특정 선착순 이벤트 조회")
+                                        .build()
+                        )));
+    }
+
+    @Test
+    @DisplayName("[DOC] 존재하지 않는 선착순 이벤트를 가져온다")
+    void getOrderEventNotExist() throws Exception {
+        final String PATH = "/event/order/{eventId}";
+        final String DOCUMENT_NAME ="event/order/{eventId}/not-exist";
+        Mockito.when(orderEventQueryService.getOrderEvent(openOrderEventResponse.getEventId())).thenThrow(WrongOrderEventFormatException.class);
+        mvc.perform(RestDocumentationRequestBuilders.get(PATH, openOrderEventResponse.getEventId()))
+                .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resource(
