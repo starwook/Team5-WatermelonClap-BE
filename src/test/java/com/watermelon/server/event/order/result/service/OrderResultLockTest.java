@@ -1,7 +1,9 @@
 package com.watermelon.server.event.order.result.service;
 
 import com.watermelon.server.event.order.result.domain.OrderResult;
+import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import org.assertj.core.api.Assertions;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RSet;
@@ -15,29 +17,27 @@ import java.util.concurrent.Executors;
 
 @SpringBootTest
 class OrderResultLockTest {
-
     @Autowired
-    OrderResultQueryService orderResultQueryService;
-    @Autowired
-    OrderResultCommandService orderResultCommandService;
+    private CurrentOrderEventManageService currentOrderEventManageService;
     @Autowired
     RSet<OrderResult> orderResultSet;
     @BeforeEach
     void setUp() {
        orderResultSet.clear();
+       currentOrderEventManageService.setMaxWinnerCount(100);
     }
 
     @Test
     void 선착순_이벤트_락_적용_100명() throws InterruptedException {
-        int numberOfThreads = orderResultQueryService.getAvailableTicket()*10;
+        int numberOfThreads = 300;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){
             int finalI = i;
             executorService.submit(()->{
                 try{
-                    orderResultCommandService
-                            .saveResponseResultWithLock(
+                    currentOrderEventManageService
+                            .saveOrderResult(
                                     OrderResult.makeOrderEventApply(String.valueOf(finalI)));
                 }
                 finally {
@@ -48,7 +48,7 @@ class OrderResultLockTest {
         latch.await();
 
         System.out.println("OrderResult 개수: "+orderResultSet.size());
-        Assertions.assertThat(orderResultSet.size()).isEqualTo(orderResultQueryService.getAvailableTicket());
+        Assertions.assertThat(orderResultSet.size()).isEqualTo(currentOrderEventManageService.getMaxWinnerCount());
     }
 //    @Test
 //    void 선착순_이벤트_락_미적용_100명() throws InterruptedException {

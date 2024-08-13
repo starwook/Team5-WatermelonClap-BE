@@ -1,28 +1,19 @@
 package com.watermelon.server.event.order.service;
 
-import com.watermelon.server.event.order.domain.ApplyTicketStatus;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.Quiz;
-import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
-import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
-import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.result.service.OrderResultCommandService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +22,7 @@ class OrderEventCommandServiceTest {
     @Mock
     private OrderEventRepository orderEventRepository;
     @Mock
-    private OrderEventCheckService orderEventCheckService;
+    private CurrentOrderEventManageService currentOrderEventManageService;
     @Mock
     private OrderResultCommandService orderResultCommandService;
     @InjectMocks

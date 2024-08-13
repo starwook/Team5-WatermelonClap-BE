@@ -2,14 +2,12 @@ package com.watermelon.server.event.order.result.service;
 
 import com.watermelon.server.event.order.domain.ApplyTicketStatus;
 import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
-import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
-import com.watermelon.server.event.order.service.OrderEventCheckService;
+import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +32,7 @@ class OrderResultCommandServiceTest {
     @Mock
     private RSet<OrderResult> orderResultSet;
     @Mock
-    private OrderEventCheckService orderEventCheckService;
+    private CurrentOrderEventManageService currentOrderEventManageService;
     @InjectMocks
     private OrderResultCommandService orderResultCommandService;
 
@@ -48,8 +46,8 @@ class OrderResultCommandServiceTest {
     @DisplayName("선착순 응모 결과 생성(선착순 꽉차지 않을시))")
     public void makeOrderResult() {
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
-        when(orderResultSet.add(any())).thenReturn(true);
-        when(orderResultQueryService.isOrderApplyNotFull()).thenReturn(true);
+
+        when(currentOrderEventManageService.saveOrderResult(any())).thenReturn(true);
         Assertions.assertThat(orderResultCommandService.isOrderResultFullElseMake(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.SUCCESS.name());
     }
@@ -58,7 +56,7 @@ class OrderResultCommandServiceTest {
     public void makeOrderResultFull() {
 
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
-        when(orderResultQueryService.isOrderApplyNotFull()).thenReturn(false);
+        when(currentOrderEventManageService.saveOrderResult(any())).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.isOrderResultFullElseMake(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.CLOSED.name());
     }
@@ -66,7 +64,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 정답 틀림 ")
     void makeApplyTicketWrongAnswer() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        when(orderEventCheckService.isAnswerCorrect(any())).thenReturn(false);
+        when(currentOrderEventManageService.isAnswerCorrect(any())).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.makeApplyTicket(RequestAnswerDto.makeWith(answer),1L,1L).getResult())
                 .isEqualTo(ApplyTicketStatus.WRONG.name());
     }
@@ -75,7 +73,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 에러(존재하지 않음) ")
     void makeApplyTicketIdError() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        Mockito.doThrow(WrongOrderEventFormatException.class).when(orderEventCheckService).checkingInfoErrors(any(),any());
+        Mockito.doThrow(WrongOrderEventFormatException.class).when(currentOrderEventManageService).checkingInfoErrors(any(),any());
         Assertions.assertThatThrownBy(()->
                 orderResultCommandService.makeApplyTicket(RequestAnswerDto.builder()
                         .answer(answer)
@@ -85,7 +83,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 에러(기간 오류)")
     void makeApplyTicketTimeError() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        Mockito.doThrow(NotDuringEventPeriodException.class).when(orderEventCheckService).checkingInfoErrors(any(),any());
+        Mockito.doThrow(NotDuringEventPeriodException.class).when(currentOrderEventManageService).checkingInfoErrors(any(),any());
         Assertions.assertThatThrownBy(()->
                 orderResultCommandService.makeApplyTicket(RequestAnswerDto.builder()
                         .answer(answer)

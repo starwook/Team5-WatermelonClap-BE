@@ -15,7 +15,7 @@ import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.result.service.OrderResultCommandService;
-import com.watermelon.server.event.order.service.OrderEventCheckService;
+import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class OrderEventControllerTest extends ControllerTest {
     @MockBean
     private OrderEventCommandService orderEventCommandService;
     @MockBean
-    private OrderEventCheckService orderEventCheckService;
+    private CurrentOrderEventManageService currentOrderEventManageService;
 
     @MockBean
     private OrderEventRepository orderEventRepository;
