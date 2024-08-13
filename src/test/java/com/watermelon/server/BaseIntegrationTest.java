@@ -26,7 +26,6 @@ import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier
 @SpringBootTest
 @Disabled
 @Transactional
-@Import(PartsRegistrationConfig.class)
 public class BaseIntegrationTest extends APITest {
 
     @Autowired
