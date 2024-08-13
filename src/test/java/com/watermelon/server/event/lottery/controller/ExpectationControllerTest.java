@@ -7,6 +7,7 @@ import com.watermelon.server.event.lottery.domain.Expectation;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.dto.request.RequestExpectationDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
+import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.service.ExpectationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import java.util.stream.IntStream;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.watermelon.server.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,6 +50,30 @@ class ExpectationControllerTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(RequestExpectationDto.makeExpectation("기개돼요")))
                 )
                 .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_EXPECTATION)
+                                        .description("기대평 생성")
+                                        .build()
+                        )));
+
+    }
+    @Test
+    @DisplayName("[DOC] 사용자 기대평을 만든다")
+    void makeExpectationMakeConflictError() throws Exception {
+        final String PATH = "/expectations";
+        final String DOCUMENT_NAME ="expectations/create/conflict";
+        Mockito.doThrow(ExpectationAlreadyExistError.class).when(expectationService).makeExpectation(any(),any());
+
+        mvc.perform(
+                        RestDocumentationRequestBuilders.post(PATH)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_TOKEN)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(RequestExpectationDto.makeExpectation("기개돼요")))
+                )
+                .andExpect(status().isConflict())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resource(

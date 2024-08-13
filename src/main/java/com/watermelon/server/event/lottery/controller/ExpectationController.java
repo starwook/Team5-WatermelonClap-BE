@@ -36,8 +36,8 @@ public class ExpectationController {
     }
 
     @ExceptionHandler(ExpectationAlreadyExistError.class)
-    public ResponseEntity<ErrorResponse> handleNotDuringEventPeriodException(NotDuringEventPeriodException notDuringEventPeriodException){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(notDuringEventPeriodException.getMessage()));
+    public ResponseEntity<ErrorResponse> handleNotDuringEventPeriodException(ExpectationAlreadyExistError expectationAlreadyExistError){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(expectationAlreadyExistError.getMessage()));
     }
 
 }
