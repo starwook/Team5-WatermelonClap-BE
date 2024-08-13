@@ -3,6 +3,7 @@ package com.watermelon.server.event.order.controller;
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
+import com.watermelon.server.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.dto.request.*;
@@ -196,8 +197,33 @@ class OrderEventControllerTest extends ControllerTest {
 //                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
 //                        resourceSnippet("선착순 퀴즈 번호 제출")));
     }
-
     @Test
+    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(apply 토큰 유효하지 않음)")
+    void makeApplyTicketApplyTokenNotVerified() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}/apply";
+        final String DOCUMENT_NAME = "apply-ticket-not-verified";
+        String applyTicket = "applyTicket";
+        Mockito.doThrow(ApplyTicketWrongException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
+
+
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234")))
+                        .header("ApplyTicket", applyTicket))
+                .andExpect(status().isUnauthorized())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 번호 제출")
+                                        .build()
+                        )));
+
+    }
+        @Test
     @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 성공")
     void makeApply() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
