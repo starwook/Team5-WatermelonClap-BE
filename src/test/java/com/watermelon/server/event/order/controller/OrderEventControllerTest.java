@@ -8,6 +8,7 @@ import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.dto.request.*;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
+import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
@@ -211,6 +212,29 @@ class OrderEventControllerTest extends ControllerTest {
                          )
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$").value(objectMapper.writeValueAsString(ResponseApplyTicketDto.class)))
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 정답 제출")
+                                        .build()
+                        )));
+    }
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
+    void makeApplyNotDuringDuration() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}";
+        final String DOCUMENT_NAME ="event/order/{eventId}/{quizId}/not-during-duration";
+        String applyTicket = "applyTicket";
+        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(NotDuringEventPeriodException.class);
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(RequestAnswerDto.makeWith("answer")))
+                )
+                .andExpect(status().isForbidden())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resource(
