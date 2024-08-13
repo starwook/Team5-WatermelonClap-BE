@@ -6,6 +6,8 @@ import com.watermelon.server.admin.controller.LotteryEventService;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.config.MockAdminAuthorizationInterceptorConfig;
+import com.watermelon.server.config.MockLoginInterceptorConfig;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInfoDto;
@@ -32,7 +34,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import java.util.List;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;

@@ -1,6 +1,5 @@
 package com.watermelon.server.integration;
 
-import com.watermelon.server.BaseIntegrationTest;
 import com.watermelon.server.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.parts.domain.Parts;
@@ -9,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.PARTS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 

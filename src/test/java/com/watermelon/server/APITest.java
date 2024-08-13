@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.nio.charset.StandardCharsets;
 
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;

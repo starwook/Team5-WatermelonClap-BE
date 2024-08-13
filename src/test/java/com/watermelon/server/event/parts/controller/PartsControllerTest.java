@@ -2,14 +2,13 @@ package com.watermelon.server.event.parts.controller;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
-import com.watermelon.server.DocumentConstants;
-import com.watermelon.server.event.parts.controller.PartsController;
+import com.watermelon.server.constants.DocumentConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
-import static com.watermelon.server.Constants.TEST_PARTS_ID;
-import static com.watermelon.server.Constants.TEST_URI;
+import static com.watermelon.server.constants.Constants.TEST_PARTS_ID;
+import static com.watermelon.server.constants.Constants.TEST_URI;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 

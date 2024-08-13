@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

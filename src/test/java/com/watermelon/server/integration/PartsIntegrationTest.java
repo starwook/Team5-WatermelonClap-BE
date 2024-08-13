@@ -1,6 +1,5 @@
 package com.watermelon.server.integration;
 
-import com.watermelon.server.BaseIntegrationTest;
 import com.watermelon.server.auth.service.TestTokenVerifier;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
@@ -10,7 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.PARTS;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

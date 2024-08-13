@@ -6,7 +6,6 @@ import com.watermelon.server.event.parts.domain.Parts;
 import com.watermelon.server.event.parts.domain.PartsCategory;
 import com.watermelon.server.event.parts.repository.LotteryApplierPartsRepository;
 import com.watermelon.server.event.parts.repository.PartsRepository;
-import com.watermelon.server.event.parts.service.LotteryApplierPartsServiceImpl;
 import com.watermelon.server.event.lottery.service.LotteryApplierService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static com.watermelon.server.Constants.TEST_PARTS_ID;
+import static com.watermelon.server.constants.Constants.TEST_PARTS_ID;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
