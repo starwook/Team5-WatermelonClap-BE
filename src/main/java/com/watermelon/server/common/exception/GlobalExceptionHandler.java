@@ -139,6 +139,7 @@ public class GlobalExceptionHandler {
         log.error("handleIOException", ex);
         final ErrorResponse response = ErrorResponse.of( ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
     /**
