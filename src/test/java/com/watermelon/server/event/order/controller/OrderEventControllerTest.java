@@ -249,6 +249,32 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
 
     }
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(존재하지 않는 이벤트)")
+    void makeApplyTicketWrongOrderEvent() throws Exception {
+        final String Path = "/event/order/{eventId}/{quizId}/apply";
+        final String DOCUMENT_NAME = "phone-number-wrong-format";
+        String applyTicket = "applyTicket";
+        Mockito.doThrow(WrongOrderEventFormatException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
+
+
+        mvc.perform(RestDocumentationRequestBuilders.post(Path,
+                                openOrderEventResponse.getEventId(),
+                                openOrderEventResponse.getQuiz().getQuizId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234")))
+                        .header("ApplyTicket", applyTicket))
+                .andExpect(status().isNotFound())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("선착순 퀴즈 번호 제출")
+                                        .build()
+                        )));
+
+    }
         @Test
     @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 성공")
     void makeApply() throws Exception {
