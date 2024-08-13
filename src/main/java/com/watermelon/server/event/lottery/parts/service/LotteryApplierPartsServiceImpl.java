@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsService{
+public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsService {
 
     private final LotteryApplierPartsRepository lotteryApplierPartsRepository;
     private final PartsRepository partsRepository;
@@ -27,12 +27,14 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
     public LotteryApplierParts addPartsAndGet(LotteryApplier lotteryApplier, Parts parts) {
 
         boolean isFirst = isFirstPartsInCategory(lotteryApplier, parts);
-        Optional<LotteryApplierParts> lotteryApplierPartsOptional = lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidAndPartsId(
-                lotteryApplier.getUid(), parts.getId());
+        Optional<LotteryApplierParts> lotteryApplierPartsOptional = lotteryApplierPartsRepository
+                .findLotteryApplierPartsByLotteryApplierUidAndPartsId(
+                        lotteryApplier.getUid(), parts.getId()
+                );
 
         LotteryApplierParts lotteryApplierParts;
 
-        if(lotteryApplierPartsOptional.isEmpty()) {
+        if (lotteryApplierPartsOptional.isEmpty()) {
             lotteryApplierParts = lotteryApplierPartsRepository.save(
                     LotteryApplierParts.createApplierParts(isFirst, lotteryApplier, parts)
             );
@@ -41,13 +43,13 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
                 //파츠 응모 처리 후 저장
                 lotteryApplierService.applyPartsLotteryApplier(lotteryApplier);
             }
-        }else lotteryApplierParts = lotteryApplierPartsOptional.get();
+        } else lotteryApplierParts = lotteryApplierPartsOptional.get();
 
         return lotteryApplierParts;
 
     }
 
-    boolean hasAllCategoriesParts(LotteryApplier lotteryApplier){
+    boolean hasAllCategoriesParts(LotteryApplier lotteryApplier) {
         long partsCount = partsRepository.countCategoryDistinct();
         long lotteryApplierDistinctCount = lotteryApplierPartsRepository.countDistinctPartsCategoryByLotteryApplier(lotteryApplier);
         return lotteryApplierDistinctCount == partsCount;
@@ -59,10 +61,22 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
         LotteryApplierParts lotteryApplierParts = lotteryApplierPartsRepository
                 .findLotteryApplierPartsByLotteryApplierUidAndPartsId(uid, partsId).orElseThrow();
 
+        //상태 변경 전, 해당 카테고리의 장착된 파츠 해제
+        Optional<LotteryApplierParts> existLAP = lotteryApplierPartsRepository
+                .findEquippedLotteryApplierPartsByPartsCategoryAndLotteryApplier(
+                        uid,
+                        lotteryApplierParts.getParts().getCategory());
+
+        if (existLAP.isPresent()) {
+            existLAP.get().toggleEquipped();
+            lotteryApplierPartsRepository.save(existLAP.get());
+        }
+
         lotteryApplierParts.toggleEquipped();
 
         lotteryApplierPartsRepository.save(lotteryApplierParts);
     }
+
     @Override
     public List<LotteryApplierParts> getListByApplier(String uid) {
         return lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUid(uid);
