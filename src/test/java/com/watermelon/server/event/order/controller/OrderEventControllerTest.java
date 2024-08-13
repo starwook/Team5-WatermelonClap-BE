@@ -14,12 +14,15 @@ import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
+import com.watermelon.server.event.order.result.service.OrderResultCommandService;
+import com.watermelon.server.event.order.service.OrderEventCheckService;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -44,6 +47,8 @@ class OrderEventControllerTest extends ControllerTest {
     private OrderEventQueryService orderEventQueryService;
     @MockBean
     private OrderEventCommandService orderEventCommandService;
+    @MockBean
+    private OrderEventCheckService orderEventCheckService;
 
     @MockBean
     private OrderEventRepository orderEventRepository;
@@ -56,6 +61,8 @@ class OrderEventControllerTest extends ControllerTest {
     private OrderEvent unOpenOrderEvent;
     private List<OrderEvent> orderEvents = new ArrayList<>();
     private List<ResponseOrderEventDto> responseOrderEventDtos = new ArrayList<>();
+    @Autowired
+    private OrderResultCommandService orderResultCommandService;
 
     @BeforeEach
     void setUp(){
@@ -264,7 +271,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="success";
         String applyTicket = "applyTicket";
-        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.applySuccess(applyTicket));
+        Mockito.when(orderResultCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.applySuccess(applyTicket));
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())
@@ -288,7 +295,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="full-apply";
         String applyTicket = "applyTicket";
-        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.fullApply());
+        Mockito.when(orderResultCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.fullApply());
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())
@@ -311,7 +318,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="wrong-answer";
         String applyTicket = "applyTicket";
-        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.wrongAnswer());
+        Mockito.when(orderResultCommandService.makeApplyTicket(any(),any(),any())).thenReturn(ResponseApplyTicketDto.wrongAnswer());
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())
@@ -334,7 +341,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="not-during-duration";
         String applyTicket = "applyTicket";
-        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(NotDuringEventPeriodException.class);
+        Mockito.when(orderResultCommandService.makeApplyTicket(any(),any(),any())).thenThrow(NotDuringEventPeriodException.class);
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())
@@ -357,7 +364,7 @@ class OrderEventControllerTest extends ControllerTest {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="wrong-current-event";
         String applyTicket = "applyTicket";
-        Mockito.when(orderEventCommandService.makeApplyTicket(any(),any(),any())).thenThrow(WrongOrderEventFormatException.class);
+        Mockito.when(orderResultCommandService.makeApplyTicket(any(),any(),any())).thenThrow(WrongOrderEventFormatException.class);
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                                 openOrderEventResponse.getEventId(),
                                 openOrderEventResponse.getQuiz().getQuizId())

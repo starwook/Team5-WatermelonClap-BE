@@ -1,8 +1,12 @@
 package com.watermelon.server.event.order.result.service;
 
 
+import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
+import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
+import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
+import com.watermelon.server.event.order.service.OrderEventCheckService;
 import com.watermelon.server.redis.annotation.RedisDistributedLock;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -14,10 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class OrderResultCommandService {
-//    private final OrderResultRepository orderResultRepository;
     private final OrderResultQueryService orderResultQueryService;
+    private final OrderEventCheckService orderEventCheckService;
     private final ApplyTokenProvider applyTokenProvider;
     private final RSet<OrderResult> orderResultSet;
+
+    @Transactional
+    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException {
+        orderEventCheckService.checkingInfoErrors(orderEventId,quizId);
+        // 퀴즈 틀릴 시에
+        if(!orderEventCheckService.isAnswerCorrect(requestAnswerDto.getAnswer()))
+        {
+            return ResponseApplyTicketDto.wrongAnswer();
+        }
+        return isOrderResultFullElseMake(orderEventId);
+    }
 
     @Transactional
     public ResponseApplyTicketDto isOrderResultFullElseMake(Long orderEventId){
@@ -29,14 +44,6 @@ public class OrderResultCommandService {
         return ResponseApplyTicketDto.fullApply();
     }
 
-    @Transactional
-    public boolean saveResponseResultWithOutLock(OrderResult orderResult){
-        if(orderResultQueryService.isOrderApplyNotFull()){
-            orderResultSet.add(orderResult);
-            return true;
-        }
-        return false;
-    }
     @RedisDistributedLock(key = "orderResultLock")
     public boolean saveResponseResultWithLock(OrderResult orderResult){
         if(orderResultQueryService.isOrderApplyNotFull()){
@@ -45,8 +52,15 @@ public class OrderResultCommandService {
         }
         return false;
     }
-
-
     //저장 할시에 확실하게 돌려주어야함 - 하지만 돌려주지 못 할시에는 어떻게?( 로그인이 안 되어있음)
+
+    @Transactional
+    public boolean saveResponseResultWithOutLock(OrderResult orderResult){
+        if(orderResultQueryService.isOrderApplyNotFull()){
+            orderResultSet.add(orderResult);
+            return true;
+        }
+        return false;
+    }
 
 }

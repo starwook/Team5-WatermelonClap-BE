@@ -22,30 +22,16 @@ public class OrderEventCommandService {
 
     private final OrderEventRepository orderEventRepository;
     private final OrderEventWinnerService orderEventWinnerService;
-    private final OrderResultCommandService orderResultCommandService;
     private final OrderEventCheckService orderEventCheckService;
 
     public OrderEventCommandService(
             OrderEventRepository orderEventRepository,
             OrderEventWinnerService orderEventWinnerService,
-            OrderResultCommandService orderResultCommandService,
             OrderEventCheckService orderEventCheckService) {
         this.orderEventRepository = orderEventRepository;
         this.orderEventWinnerService = orderEventWinnerService;
-        this.orderResultCommandService = orderResultCommandService;
         this.orderEventCheckService = orderEventCheckService;
         findOrderEventToMakeInProgress();
-    }
-
-    @Transactional
-    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto , Long orderEventId, Long quizId) throws WrongOrderEventFormatException, NotDuringEventPeriodException {
-        orderEventCheckService.checkingInfoErrors(orderEventId,quizId);
-        // 퀴즈 틀릴 시에
-        if(!orderEventCheckService.isAnswerCorrect(requestAnswerDto.getAnswer()))
-        {
-            return ResponseApplyTicketDto.wrongAnswer();
-        }
-        return orderResultCommandService.isOrderResultFullElseMake(orderEventId);
     }
     @Transactional
     public void makeOrderEventWinner(String applyTicket, Long eventId, OrderEventWinnerRequestDto orderEventWinnerRequestDto) throws ApplyTicketWrongException, WrongOrderEventFormatException, WrongPhoneNumberFormatException {
