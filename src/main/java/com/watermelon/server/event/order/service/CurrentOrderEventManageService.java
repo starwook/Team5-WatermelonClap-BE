@@ -46,6 +46,9 @@ public class CurrentOrderEventManageService {
     }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
+        if(orderEvent.getId().equals(this.eventId)){
+            return;
+        }
         this.eventId = orderEvent.getId();
         this.quizId =orderEvent.getQuiz().getId();
         this.answer = orderEvent.getQuiz().getAnswer();

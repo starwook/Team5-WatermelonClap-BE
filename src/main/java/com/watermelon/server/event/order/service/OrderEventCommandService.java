@@ -45,7 +45,6 @@ public class OrderEventCommandService {
             //현재 이벤트중 시간에 맞는 이벤트가 있다면 현재 이벤트로 설정한다
             if(orderEvent.isTimeInEventTime(LocalDateTime.now())){
                 this.currentOrderEventManageService.refreshOrderEventInProgress(orderEvent);
-                return orderEvent.getId();
             }
         }
         return currentOrderEventManageService.getCurrentOrderEventId();
