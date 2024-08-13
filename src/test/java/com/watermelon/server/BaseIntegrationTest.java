@@ -75,14 +75,21 @@ public class BaseIntegrationTest extends APITest {
     }
 
     private Parts saveTestParts() {
-        return partsRepository.save(Parts.createTestCategoryParts(PartsCategory.COLOR));
+        return saveTestParts(PartsCategory.COLOR);
+    }
+
+    private Parts saveTestParts(PartsCategory category) {
+        return partsRepository.save(Parts.createTestCategoryParts(category));
     }
 
     private LotteryApplierParts saveLotteryApplierParts(boolean isEquipped) {
+        return saveLotteryApplierParts(isEquipped, saveTestLotteryApplier(), saveTestParts());
+    }
+
+    private LotteryApplierParts saveLotteryApplierParts(boolean isEquipped, LotteryApplier lotteryApplier, Parts parts) {
         return lotteryApplierPartsRepository.save(
                 LotteryApplierParts.createApplierParts(
-                        isEquipped, saveTestLotteryApplier(), saveTestParts())
-        );
+                        isEquipped, lotteryApplier, parts));
     }
 
     private void saveTestLotteryReward() {
