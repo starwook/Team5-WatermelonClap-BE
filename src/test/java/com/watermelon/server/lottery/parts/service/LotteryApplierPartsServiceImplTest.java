@@ -11,18 +11,17 @@ import com.watermelon.server.event.lottery.service.LotteryApplierService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.watermelon.server.Constants.TEST_PARTS_ID;
+import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 //TODO 구현필요
 @ExtendWith(MockitoExtension.class)
@@ -143,6 +142,32 @@ class LotteryApplierPartsServiceImplTest {
 
         //then
         verify(lotteryApplierService, never()).applyPartsLotteryApplier(lotteryApplier);
+
+    }
+
+    @Test
+    @DisplayName("이미 같은 파츠가 존재하면 저장하지 않는다.")
+    void partsAlreadyExist(){
+
+        //given
+        LotteryApplier lotteryApplier = Mockito.mock(LotteryApplier.class);
+        when(lotteryApplier.getUid()).thenReturn(TEST_UID);
+
+        Parts parts = Mockito.mock(Parts.class);
+        when(parts.getId()).thenReturn(TEST_PARTS_ID);
+
+        Mockito.when(
+                lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidAndPartsId(
+                        TEST_UID, TEST_PARTS_ID
+                )
+        ).thenReturn(Optional.of(Mockito.mock(LotteryApplierParts.class)));
+
+        //when
+        lotteryApplierPartsService.addPartsAndGet(lotteryApplier, parts);
+
+        //then
+        ArgumentCaptor<LotteryApplierParts> captor = ArgumentCaptor.forClass(LotteryApplierParts.class);
+        verify(lotteryApplierPartsRepository, never()).save(captor.capture());
 
     }
 
