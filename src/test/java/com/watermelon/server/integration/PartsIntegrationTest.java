@@ -136,6 +136,44 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
 
     }
 
+    @Test
+    @DisplayName("파츠 장착 - 파츠를 장착하면 해당 카테고리의 다른 파츠 장착 해제되어야 함")
+    void partsLotteryPartsEquippedTest() throws Exception {
+
+        //given
+        LotteryApplier lotteryApplier = saveTestLotteryApplier();
+
+        Parts parts1 = partsRepository.save(
+                Parts.builder()
+                        .category(PartsCategory.WHEEL)
+                        .build()
+        );
+
+        Parts parts2 = partsRepository.save(
+                Parts.builder()
+                        .category(PartsCategory.WHEEL)
+                        .build()
+        );
+
+        lotteryApplierPartsRepository.save(
+                LotteryApplierParts.createApplierParts(true, lotteryApplier, parts1)
+        );
+
+        LotteryApplierParts lotteryApplierParts = lotteryApplierPartsRepository.save(
+                LotteryApplierParts.createApplierParts(false, lotteryApplier, parts2)
+        );
+
+        //when
+        whenPartsEquippedStatusIsChanged(parts2.getId());
+
+        //then
+        Assertions.assertThat(lotteryApplierParts.isEquipped()).isFalse();
+
+    }
+
+
+
+
     private LotteryApplier saveTestLotteryApplier() {
         LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
         lotteryApplierRepository.save(lotteryApplier);
