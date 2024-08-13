@@ -13,6 +13,7 @@ public class ResponsePartsDrawDto {
     private String name;
     private String description;
     private String imgSrc;
+    private String thumbnailImgSrc;
     private boolean isEquipped;
 
     public static ResponsePartsDrawDto createResponsePartsDrawDtoTest(){
@@ -21,6 +22,7 @@ public class ResponsePartsDrawDto {
                 .partsId(1L)
                 .name("Test")
                 .imgSrc("Test")
+                .thumbnailImgSrc("thumbnailImgSrc")
                 .description("Test")
                 .isEquipped(true)
                 .build();
@@ -32,6 +34,7 @@ public class ResponsePartsDrawDto {
                 .partsId(parts.getId())
                 .name(parts.getName())
                 .imgSrc(parts.getImgSrc())
+                .thumbnailImgSrc(parts.getThumbnailImgSrc())
                 .description(parts.getDescription())
                 .isEquipped(isEquipped)
                 .build();
