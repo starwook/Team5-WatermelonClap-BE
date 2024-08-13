@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
+import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.ControllerTest;
 import com.watermelon.server.error.ApplyTicketWrongException;
@@ -27,6 +28,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -161,18 +163,15 @@ class OrderEventControllerTest extends ControllerTest {
         mvc.perform(RestDocumentationRequestBuilders.post(Path,
                 openOrderEventResponse.getEventId(),
                 openOrderEventResponse.getQuiz().getQuizId())
+                        .header("ApplyTicket",applyTicket)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234")))
-                                .header("ApplyTicket",applyTicket))
+
+                )
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resource(
-                                ResourceSnippetParameters.builder()
-                                        .tag(TAG_ORDER)
-                                        .description("선착순 퀴즈 번호 제출")
-                                        .build()
-                        )));
+                        orderNumberSubmitResource()));
 
 //        Mockito.doThrow(WrongPhoneNumberFormatException.class).when(orderEventCommandService).makeOrderEventWinner(any(),any(),any());
 //        mockMvc.perform(RestDocumentationRequestBuilders.post(Path,
@@ -216,12 +215,7 @@ class OrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resource(
-                                ResourceSnippetParameters.builder()
-                                        .tag(TAG_ORDER)
-                                        .description("선착순 퀴즈 번호 제출")
-                                        .build()
-                        )));
+                        orderNumberSubmitResource()));
     }
     @Test
     @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 안흥ㅁ)")
@@ -241,12 +235,7 @@ class OrderEventControllerTest extends ControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resource(
-                                ResourceSnippetParameters.builder()
-                                        .tag(TAG_ORDER)
-                                        .description("선착순 퀴즈 번호 제출")
-                                        .build()
-                        )));
+                        orderNumberSubmitResource()));
 
     }
 
@@ -266,13 +255,7 @@ class OrderEventControllerTest extends ControllerTest {
                         .header("ApplyTicket", applyTicket))
                 .andExpect(status().isNotFound())
                 .andDo(print())
-                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
-                        resource(
-                                ResourceSnippetParameters.builder()
-                                        .tag(TAG_ORDER)
-                                        .description("선착순 퀴즈 번호 제출")
-                                        .build()
-                        )));
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME, orderNumberSubmitResource()));
 
     }
         @Test
@@ -390,5 +373,17 @@ class OrderEventControllerTest extends ControllerTest {
                                         .description("선착순 퀴즈 정답 제출")
                                         .build()
                         )));
+    }
+
+    private ResourceSnippet orderNumberSubmitResource(){
+        return resource(
+                ResourceSnippetParameters.builder()
+                        .tag(TAG_ORDER)
+                        .requestHeaders(
+                                headerWithName("ApplyTicket").description("applyTicket")
+                        )
+                        .description("선착순 퀴즈 번호 제출")
+                        .build()
+        );
     }
 }
