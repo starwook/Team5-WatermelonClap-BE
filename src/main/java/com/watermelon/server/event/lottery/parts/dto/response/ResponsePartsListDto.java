@@ -13,6 +13,7 @@ public class ResponsePartsListDto {
     private String name;
     private String description;
     private String imgSrc;
+    private String thumbnailImgSrc;
     private boolean isEquipped;
 
     public static ResponsePartsListDto any(){
@@ -22,6 +23,7 @@ public class ResponsePartsListDto {
                 .name("any")
                 .description("any")
                 .imgSrc("any")
+                .thumbnailImgSrc("any")
                 .isEquipped(false)
                 .build();
     }
@@ -33,6 +35,7 @@ public class ResponsePartsListDto {
                 .name(parts.getName())
                 .description(parts.getDescription())
                 .imgSrc(parts.getImgSrc())
+                .thumbnailImgSrc(parts.getThumbnailImgSrc())
                 .isEquipped(isEquipped)
                 .build();
     }

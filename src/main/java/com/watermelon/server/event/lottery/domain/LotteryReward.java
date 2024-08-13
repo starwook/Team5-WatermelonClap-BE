@@ -1,9 +1,7 @@
 package com.watermelon.server.event.lottery.domain;
 
 import com.watermelon.server.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -20,6 +18,19 @@ public class LotteryReward extends BaseEntity {
     private String name;
 
     private int winnerCount;
+
+    @ManyToOne
+    @JoinColumn
+    private LotteryEvent lotteryEvent;
+
+    public static LotteryReward createLotteryReward(int lotteryRank, String imgSrc, String name, int winnerCount) {
+        LotteryReward lotteryReward = new LotteryReward();
+        lotteryReward.lotteryRank = lotteryRank;
+        lotteryReward.imgSrc = imgSrc;
+        lotteryReward.name = name;
+        lotteryReward.winnerCount = winnerCount;
+        return lotteryReward;
+    }
 
     public static LotteryReward createTestLotteryReward(){
 

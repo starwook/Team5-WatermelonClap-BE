@@ -3,6 +3,8 @@ package com.watermelon.server.admin.controller;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.admin.exception.S3ImageFormatException;
+import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.parts.service.PartsService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import com.watermelon.server.event.lottery.service.LotteryWinnerService;
@@ -11,10 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ public class AdminLotteryController {
     private final LotteryService lotteryService;
     private final LotteryWinnerService lotteryWinnerService;
     private final PartsService partsService;
+    private final LotteryEventService lotteryEventService;
 
     @GetMapping("admin/event/applier")
     public Page<ResponseLotteryApplierDto> getLotteryAppliers(
@@ -71,4 +72,14 @@ public class AdminLotteryController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/admin/event/lotteries/create")
+    public ResponseEntity<Void> createLotteryEvent(
+            @RequestPart("event") RequestLotteryEventDto lotteryEventDto,
+            @RequestPart("files") List<MultipartFile> files
+    ) throws S3ImageFormatException {
+
+        lotteryEventService.createLotteryEvent(lotteryEventDto, files);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
 }

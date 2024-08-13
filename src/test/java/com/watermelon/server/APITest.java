@@ -2,14 +2,19 @@ package com.watermelon.server;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.link.utils.LinkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+import java.nio.charset.StandardCharsets;
 
 import static com.watermelon.server.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
@@ -225,6 +230,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("name").isString())
                 .andExpect(jsonPath("description").isString())
                 .andExpect(jsonPath("imgSrc").isString())
+                .andExpect(jsonPath("thumbnailImgSrc").isString())
                 .andExpect(jsonPath("equipped").isBoolean());
     }
 
@@ -266,6 +272,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].parts[0].name").isString())
                 .andExpect(jsonPath("[0].parts[0].description").isString())
                 .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
+                .andExpect(jsonPath("[0].parts[0].thumbnailImgSrc").isString())
                 .andExpect(jsonPath("[0].parts[0].equipped").isBoolean());
     }
 
@@ -282,6 +289,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].parts[0].name").isString())
                 .andExpect(jsonPath("[0].parts[0].description").isString())
                 .andExpect(jsonPath("[0].parts[0].imgSrc").isString())
+                .andExpect(jsonPath("[0].parts[0].thumbnailImgSrc").isString())
                 .andExpect(jsonPath("[0].parts[0].equipped").isBoolean());
     }
 
@@ -305,5 +313,19 @@ public abstract class APITest {
                 .andExpect(header().string(HEADER_NAME_LOCATION, LinkUtils.makeUrl(TEST_URI)));
     }
 
+    protected void whenLotteryEventCreate() throws Exception {
+
+        resultActions = mvc.perform(authedRequest(multipart("/admin/event/lotteries/create")
+                .part(new MockPart("event", "event", objectMapper.writeValueAsString(RequestLotteryEventDto.createTest()).getBytes(StandardCharsets.UTF_8), MediaType.APPLICATION_JSON))
+                .file(new MockMultipartFile("files", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "image1 content".getBytes()))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.APPLICATION_JSON)));
+
+    }
+
+    protected void thenLotteryEventCreate() throws Exception {
+        resultActions
+                .andExpect(status().isOk());
+    }
 
 }
