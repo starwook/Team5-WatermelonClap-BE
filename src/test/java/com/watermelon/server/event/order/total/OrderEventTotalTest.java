@@ -1,6 +1,6 @@
 package com.watermelon.server.event.order.total;
 
-import com.watermelon.server.BaseIntegrationTest;
+import com.watermelon.server.integration.BaseIntegrationTest;
 import com.watermelon.server.event.order.domain.ApplyTicketStatus;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventStatus;

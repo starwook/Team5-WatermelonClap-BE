@@ -1,6 +1,6 @@
 package com.watermelon.server.event.lottery.controller;
 
-import com.watermelon.server.event.lottery.auth.annotations.Uid;
+import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
