@@ -205,6 +205,6 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    void handlePhoneNumberNotExistException() {
+    void handleWrongPhoneNumberFormatException() {
     }
 }

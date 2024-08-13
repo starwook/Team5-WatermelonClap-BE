@@ -59,7 +59,7 @@ class AdminExpectationControllerTest extends ControllerTest {
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag(TAG_EXPECTATION)
-                                        .description("기대평 목록 조회")
+                                        .description("어드민 기대평 목록 조회")
                                         .build()
                         )));
     }
