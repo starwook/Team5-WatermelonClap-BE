@@ -4,7 +4,7 @@ package com.watermelon.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
-import com.watermelon.server.event.lottery.link.utils.LinkUtils;
+import com.watermelon.server.event.link.utils.LinkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -16,10 +16,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.nio.charset.StandardCharsets;
 
-import static com.watermelon.server.Constants.*;
+import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_UID;
-import static com.watermelon.server.event.lottery.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

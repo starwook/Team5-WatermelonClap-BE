@@ -5,7 +5,7 @@ import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
-import com.watermelon.server.event.lottery.parts.service.PartsService;
+import com.watermelon.server.event.parts.service.PartsService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import com.watermelon.server.event.lottery.service.LotteryWinnerService;
 import lombok.RequiredArgsConstructor;
