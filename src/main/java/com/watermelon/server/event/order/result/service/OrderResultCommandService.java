@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class OrderResultCommandService {
-    private final OrderResultQueryService orderResultQueryService;
+
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
 

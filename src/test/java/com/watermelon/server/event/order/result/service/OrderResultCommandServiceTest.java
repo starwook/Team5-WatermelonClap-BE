@@ -27,8 +27,7 @@ class OrderResultCommandServiceTest {
 
     @Mock
     private ApplyTokenProvider applyTokenProvider;
-    @Mock
-    private OrderResultQueryService orderResultQueryService;
+
     @Mock
     private RSet<OrderResult> orderResultSet;
     @Mock

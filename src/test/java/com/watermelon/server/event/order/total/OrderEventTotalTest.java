@@ -7,7 +7,6 @@ import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.domain.Quiz;
 import com.watermelon.server.event.order.dto.request.*;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
-import com.watermelon.server.event.order.result.service.OrderResultQueryService;
 import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -31,8 +30,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     private OrderEventRepository orderEventRepository;
     @Autowired
     private CurrentOrderEventManageService currentOrderEventManageService;
-    @Autowired
-    private OrderResultQueryService orderResultQueryService;
+
 
     @Autowired
     private ApplyTokenProvider applyTokenProvider;
@@ -68,7 +66,6 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @AfterEach
     void tearDown(){
         orderEventRepository.deleteAll();
-        orderResultQueryService.getOrderResultRset().clear();
     }
 
 
@@ -268,7 +265,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         /**
          * 선착순 최대 인원 수만큼 응모 추가
          */
-        for(int i=0;i<orderResultQueryService.getAvailableTicket();i++){
+        for(int i=0;i<currentOrderEventManageService.getMaxWinnerCount();i++){
             mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestAnswerDto)))
@@ -278,7 +275,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         }
 
 
-        Assertions.assertThat(orderResultQueryService.getOrderResultRset().size()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getOrderResultRset().size()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))

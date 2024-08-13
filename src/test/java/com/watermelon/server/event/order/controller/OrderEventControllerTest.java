@@ -47,12 +47,10 @@ class OrderEventControllerTest extends ControllerTest {
     private OrderEventQueryService orderEventQueryService;
     @MockBean
     private OrderEventCommandService orderEventCommandService;
-    @MockBean
-    private CurrentOrderEventManageService currentOrderEventManageService;
+
     @MockBean
     private OrderResultCommandService orderResultCommandService;
-    @MockBean
-    private OrderEventRepository orderEventRepository;
+
 
 
     private ResponseOrderEventDto openOrderEventResponse;

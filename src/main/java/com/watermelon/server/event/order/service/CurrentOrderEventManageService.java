@@ -52,6 +52,7 @@ public class CurrentOrderEventManageService {
         this.startDate = orderEvent.getStartDate();
         this.endDate = orderEvent.getEndDate();
         this.maxWinnerCount = orderEvent.getWinnerCount();
+        this.orderResultRset.clear();
     }
     public boolean isAnswerCorrect(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;
