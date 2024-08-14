@@ -3,7 +3,7 @@ package com.watermelon.server.admin.controller;
 
 import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.admin.service.AdminOrderEventService;
-import com.watermelon.server.admin.service.S3ImageService;
+import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
@@ -32,6 +32,11 @@ public class AdminOrderEventController {
 
         return adminOrderEventService.makeOrderEvent(requestOrderEventDto,rewardImage,quizImage);
     }
+    @DeleteMapping("/event/order/{eventId}")
+    public ResponseEntity<Void> deleteOrderEvent(@PathVariable("eventId") Long eventId) throws WrongOrderEventFormatException {
+        adminOrderEventService.deleteOrderEvent(eventId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/event/order")
     public List<ResponseOrderEventDto> getOrderEventForAdmin(){
@@ -42,9 +47,15 @@ public class AdminOrderEventController {
     public List<ResponseOrderEventWinnerDto> getOrderEventWinnersForAdmin(@PathVariable("eventId") Long eventId) throws WrongOrderEventFormatException {
         return adminOrderEventService.getOrderEventWinnersForAdmin(eventId);
     }
+
+
     @ExceptionHandler(S3ImageFormatException.class)
-    public ResponseEntity<String> handlePhoneNumberNotExistException(S3ImageFormatException s3ImageFormatException){
+    public ResponseEntity<String> handleS3ImageFormatException(S3ImageFormatException s3ImageFormatException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(s3ImageFormatException.getMessage());
+    }
+    @ExceptionHandler(WrongOrderEventFormatException.class)
+    public ResponseEntity<ErrorResponse> handleWrongOrderEventFormatException(WrongOrderEventFormatException wrongOrderEventFormatException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(wrongOrderEventFormatException.getMessage()));
     }
 
 }

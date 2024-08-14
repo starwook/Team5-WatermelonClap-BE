@@ -56,4 +56,10 @@ public class AdminOrderEventService {
         scheduler.checkOrderEvent();
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
+
+    @Transactional
+    public void deleteOrderEvent(Long eventId) throws WrongOrderEventFormatException {
+        OrderEvent orderEvent = orderEventRepository.findById(eventId).orElseThrow(WrongOrderEventFormatException::new);
+        orderEventRepository.delete(orderEvent);
+    }
 }

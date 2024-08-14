@@ -62,8 +62,6 @@ public class CurrentOrderEventManageService {
         this.applyTickets.clear();
     }
 
-
-
     public boolean isAnswerCorrect(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;
         return false;
