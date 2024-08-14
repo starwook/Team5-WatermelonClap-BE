@@ -6,6 +6,7 @@ import com.watermelon.server.event.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.parts.domain.Parts;
 import com.watermelon.server.event.parts.domain.PartsCategory;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("[통합] 파츠 통합 테스트")
 public class PartsIntegrationTest extends BaseIntegrationTest {
 
+    @BeforeEach
+    void setUp(){
+        partsRepository.saveAll(
+                Parts.createAllParts()
+        );
+    }
 
     @Test
     @DisplayName("파츠 뽑기 결과 반환 - 성공")
