@@ -10,7 +10,7 @@ public interface LinkService {
      * @param uid 응모자의 uid
      * @return 링크 정보
      */
-    MyLinkDto getMyLink(String uid);
+    MyLinkDto getShortedLink(String uid);
 
     /**
      * 링크 키에 대한 뷰 카운트를 증가시킨다.
@@ -26,4 +26,6 @@ public interface LinkService {
      * @return 원래 uri
      */
     String getUrl(String shortedUri);
+
+    String getRedirectUrl(String shortedUri);
 }

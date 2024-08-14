@@ -12,8 +12,10 @@ public class Constants {
     public static final String TEST_IMGSRC = "imgsrc";
     public static final int TEST_PAGE_NUMBER = 1;
     public static final int TEST_PAGE_SIZE = 2;
-    public static final String TEST_URI = "link";
-    public static final String TEST_SHORTED_URI = "shortedUri";
+    public static final String TEST_URI = "aa1d363b-b749-4180-9fe9-c7d21e7631c4";
+    public static final String TEST_SHARE_URL = "http://localhost:8080/link/5B02ofbDBtzznrRrZWy7wS";
+    public static final String TEST_REDIRECTION_URL = "https://watermelon-clap.web.app/share/aa1d363b-b749-4180-9fe9-c7d21e7631c4";
+    public static final String TEST_SHORTED_URI = "5B02ofbDBtzznrRrZWy7wS";
 
     public static final String HEADER_NAME_AUTHORIZATION = "Authorization";
     public static final String HEADER_NAME_LOCATION = "Location";

@@ -22,7 +22,7 @@ public class LinkController {
     public ResponseEntity<MyLinkDto> getMyLink(
             @Uid String uid
     ){
-        return new ResponseEntity<>(linkService.getMyLink(uid), HttpStatus.OK);
+        return new ResponseEntity<>(linkService.getShortedLink(uid), HttpStatus.OK);
     }
 
     @GetMapping("/link/{shortedUri}")
@@ -32,7 +32,7 @@ public class LinkController {
         HttpHeaders headers = new HttpHeaders();
 
         // 현재 서버의 URL을 기반으로 새로운 경로를 생성
-        headers.add(HttpHeaders.LOCATION, LinkUtils.makeUrl(linkService.getUrl(shortedUri)));
+        headers.add(HttpHeaders.LOCATION, linkService.getRedirectUrl(shortedUri));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 

@@ -310,7 +310,7 @@ public abstract class APITest {
     protected void thenRedirect() throws Exception {
         resultActions
                 .andExpect(status().isFound())
-                .andExpect(header().string(HEADER_NAME_LOCATION, LinkUtils.makeUrl(TEST_URI)));
+                .andExpect(header().string(HEADER_NAME_LOCATION, TEST_REDIRECTION_URL));
     }
 
     protected void whenLotteryEventCreate() throws Exception {
