@@ -25,6 +25,7 @@ derby.log
 /src/main/resources/application-deploy-db.yml
 /src/main/resources/application-deploy.yml
 /src/main/resources/application-test.yml
+
 # Gradle artifacts
 .gradle
 .gradletasknamecache

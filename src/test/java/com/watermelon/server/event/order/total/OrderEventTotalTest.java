@@ -7,8 +7,7 @@ import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.domain.Quiz;
 import com.watermelon.server.event.order.dto.request.*;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
-import com.watermelon.server.event.order.result.service.OrderResultQueryService;
-import com.watermelon.server.event.order.service.OrderEventCheckService;
+import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +29,8 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Autowired
     private OrderEventRepository orderEventRepository;
     @Autowired
-    private OrderEventCheckService orderEventCheckService;
-    @Autowired
-    private OrderResultQueryService orderResultQueryService;
+    private CurrentOrderEventManageService currentOrderEventManageService;
+
 
     @Autowired
     private ApplyTokenProvider applyTokenProvider;
@@ -68,7 +66,6 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @AfterEach
     void tearDown(){
         orderEventRepository.deleteAll();
-        orderResultQueryService.getOrderResultRset().clear();
     }
 
 
@@ -199,7 +196,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @DisplayName("[통합] 선착순 퀴즈 제출 - 성공")
     public void orderEventApply() throws Exception {
         orderEventRepository.save(openOrderEvent);
-        orderEventCheckService.refreshOrderEventInProgress(openOrderEvent);
+        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
@@ -215,7 +212,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
     public void orderEventApplyWrongEventId() throws Exception {
         orderEventRepository.save(openOrderEvent);
-        orderEventCheckService.refreshOrderEventInProgress(openOrderEvent);
+        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId()+1L,quiz.getId())
@@ -229,7 +226,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 기간이 틀림)")
     public void orderEventApplyWrongDuration() throws Exception {
         orderEventRepository.save(unOpenOrderEvent);
-        orderEventCheckService.refreshOrderEventInProgress(unOpenOrderEvent);
+        currentOrderEventManageService.refreshOrderEventInProgress(unOpenOrderEvent);
         Quiz quiz = unOpenOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
         mvc.perform(post("/event/order/{eventId}/{quizId}",unOpenOrderEvent.getId(),quiz.getId())
@@ -243,7 +240,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(정답이 틀림)")
     public void orderEventApplyWrongAnswer() throws Exception {
         orderEventRepository.save(openOrderEvent);
-        orderEventCheckService.refreshOrderEventInProgress(openOrderEvent);
+        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
@@ -259,7 +256,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(선착순 마감)")
     public void orderEventApplyClosed() throws Exception {
         orderEventRepository.save(openOrderEvent);
-        orderEventCheckService.refreshOrderEventInProgress(openOrderEvent);
+        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
 
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
@@ -268,7 +265,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         /**
          * 선착순 최대 인원 수만큼 응모 추가
          */
-        for(int i=0;i<orderResultQueryService.getAvailableTicket();i++){
+        for(int i=0;i<currentOrderEventManageService.getMaxWinnerCount();i++){
             mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestAnswerDto)))
@@ -278,7 +275,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         }
 
 
-        Assertions.assertThat(orderResultQueryService.getOrderResultRset().size()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))

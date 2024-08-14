@@ -10,6 +10,7 @@ import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.result.service.OrderResultCommandService;
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class OrderEventController {
 
     private final OrderEventQueryService orderEventQueryService;
     private final OrderEventCommandService orderEventCommandService;
+    private final OrderResultCommandService orderResultCommandService;
 
     @GetMapping(path = "/event/order")
     public List<ResponseOrderEventDto> getOrderEvents(){
@@ -47,7 +49,7 @@ public class OrderEventController {
                                                   @PathVariable("quizId") Long quizId)
             throws WrongOrderEventFormatException, NotDuringEventPeriodException {
 
-        return orderEventCommandService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
+        return orderResultCommandService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
     }
 
 
