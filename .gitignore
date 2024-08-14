@@ -71,6 +71,7 @@ node_modules
 
 # xml
 *.xml
+!lottery/pinpoint-agent-2.5.3/profiles/release/log4j2.xml
 
 # bin
 *.bin
