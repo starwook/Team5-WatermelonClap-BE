@@ -86,7 +86,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     @DisplayName("[DOC] 선착순 이벤트 당첨자를 가져온다.")
     void getOrderEventWinners() throws Exception {
         final String PATH = "/admin/event/order/{eventId}/winner";
-        final String DOCUMENT_NAME ="admin/event/order/{eventId}/winner";
+        final String DOCUMENT_NAME ="event-winner";
 
         List<OrderEventWinner>  winners = new ArrayList<>();
         for(int i=0;i<=10;i++){
@@ -175,6 +175,26 @@ class AdminOrderEventControllerTest extends ControllerTest {
                                 partWithName("orderEvent").description("orderEvent")
                         )
                 ));
+
+    }
+
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    void deleteOrderEvent() throws Exception {
+        final String PATH = "/admin/event/order";
+        final String DOCUMENT_NAME ="delete-order-event";
+
+        mvc.perform(RestDocumentationRequestBuilders.post(PATH)
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 삭제")
+                                        .build()
+                        )));
 
     }
 
