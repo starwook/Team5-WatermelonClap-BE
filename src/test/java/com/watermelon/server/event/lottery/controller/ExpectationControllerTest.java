@@ -17,15 +17,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.watermelon.server.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,7 +32,6 @@ class ExpectationControllerTest extends ControllerTest {
 
     @MockBean
     private ExpectationService expectationService;
-
 
     @Test
     @DisplayName("[DOC] 사용자 기대평을 만든다")
