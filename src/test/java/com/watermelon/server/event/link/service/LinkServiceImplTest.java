@@ -35,7 +35,7 @@ class LinkServiceImplTest {
 
     @Test
     @DisplayName("응모자에 대한 링크를 반환한다.")
-    void getMyLink() {
+    void getShortedLink() {
 
         //given
         LotteryApplier lotteryApplier = LotteryApplier.builder()
@@ -53,7 +53,7 @@ class LinkServiceImplTest {
         MyLinkDto expected = MyLinkDto.create(TEST_URI);
 
         //when
-        MyLinkDto actual = linkService.getMyLink(TEST_UID);
+        MyLinkDto actual = linkService.getShortedLink(TEST_UID);
 
         //then
         assertEquals(expected, actual);

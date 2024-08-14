@@ -192,7 +192,7 @@ public class ControllerTest extends APITest{
     }
 
     protected void givenLink(){
-        Mockito.when(linkService.getMyLink(TEST_UID))
+        Mockito.when(linkService.getShortedLink(TEST_UID))
                 .thenReturn(MyLinkDto.createTestDto());
     }
 

@@ -20,7 +20,7 @@ public class LinkServiceImpl implements LinkService{
 
     @Transactional
     @Override
-    public MyLinkDto getMyLink(String uid) {
+    public MyLinkDto getShortedLink(String uid) {
         LotteryApplier lotteryApplier =  lotteryService.findLotteryApplierByUid(uid);
         return MyLinkDto.create(
                 lotteryApplier

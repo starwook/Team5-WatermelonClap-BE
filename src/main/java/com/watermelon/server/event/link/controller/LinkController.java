@@ -22,7 +22,7 @@ public class LinkController {
     public ResponseEntity<MyLinkDto> getMyLink(
             @Uid String uid
     ){
-        return new ResponseEntity<>(linkService.getMyLink(uid), HttpStatus.OK);
+        return new ResponseEntity<>(linkService.getShortedLink(uid), HttpStatus.OK);
     }
 
     @GetMapping("/link/{shortedUri}")
