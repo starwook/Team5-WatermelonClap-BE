@@ -83,7 +83,7 @@ public class OrderEventController {
     }
     @ExceptionHandler(WinnerAlreadyParticipateException.class)
     public ResponseEntity<ErrorResponse> handleWinnerAlreadyParticipateException(WinnerAlreadyParticipateException winnerAlreadyParticipateException){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.of(winnerAlreadyParticipateException.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(winnerAlreadyParticipateException.getMessage()));
     }
 
 }

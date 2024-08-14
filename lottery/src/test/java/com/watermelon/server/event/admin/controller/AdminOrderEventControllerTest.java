@@ -94,7 +94,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         List<OrderEventWinner>  winners = new ArrayList<>();
         for(int i=0;i<=10;i++){
             winners.add(
-                    OrderEventWinner.makeWinner(openOrderEvent,OrderEventWinnerRequestDto.makeWithPhoneNumber(Integer.toString(i)),"answer")
+                    OrderEventWinner.makeWinner(openOrderEvent,OrderEventWinnerRequestDto.makeWithPhoneNumber(Integer.toString(i)),"answer","applyTicket")
             );
         }
         Mockito
