@@ -1,7 +1,6 @@
 package com.watermelon.server.integration;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.watermelon.server.constants.DocumentConstants;
 import com.watermelon.server.event.link.utils.LinkUtils;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import org.junit.jupiter.api.DisplayName;
