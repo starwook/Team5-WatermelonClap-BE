@@ -1,10 +1,14 @@
 package com.watermelon.server.integration;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.watermelon.server.constants.DocumentConstants;
 import com.watermelon.server.event.link.utils.LinkUtils;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -39,6 +43,18 @@ public class LinkIntegrationTest extends BaseIntegrationTest {
         resultActions.andExpect(
                 jsonPath("link").value("http://43.202.54.29:8080/link/"+shortedUrl)
         );
+
+    }
+
+    @Test
+    @DisplayName("Uri 포함 주소 리디렉션 - 성공")
+    void redirect() throws Exception {
+
+        givenOriginUri();
+
+        whenRedirect();
+
+        thenRedirect();
 
     }
 
