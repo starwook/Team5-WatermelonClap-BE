@@ -35,7 +35,7 @@ jobs:
 
       - name: Set YML
         run: |
-          mkdir -p lottery/src/main/resources
+          mkdir -p ./lottery/src/main/resources
           echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > lottery/src/main/resources/application-local.yml
           echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > lottery/src/main/resources/application-local-db.yml
           echo "${{ secrets.APPLICATION_LOCAL_TOKEN }}" | base64 --decode > lottery/src/main/resources/application-local-token.yml
