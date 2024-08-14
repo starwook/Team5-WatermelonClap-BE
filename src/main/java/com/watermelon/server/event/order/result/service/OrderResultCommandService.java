@@ -42,6 +42,7 @@ public class OrderResultCommandService {
         return ResponseApplyTicketDto.fullApply();
     }
 
+
     @RedisDistributedLock(key = "orderResultLock")
     public boolean saveOrderResultWithLock(OrderResult orderResult){
         if(currentOrderEventManageService.isOrderApplyNotFullThenSave(orderResult)){

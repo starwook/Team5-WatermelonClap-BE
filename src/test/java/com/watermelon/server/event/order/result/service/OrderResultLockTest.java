@@ -20,25 +20,26 @@ class OrderResultLockTest {
     @Autowired
     private CurrentOrderEventManageService currentOrderEventManageService;
 
+    @Autowired
+    private OrderResultCommandService orderResultCommandService;
 
     @BeforeEach
     void setUp() {
        currentOrderEventManageService.clearOrderResultRepository();
-       currentOrderEventManageService.setMaxWinnerCount(100);
+       currentOrderEventManageService.setMaxWinnerCount(200);
     }
 
     @Test
     void 선착순_이벤트_락_적용_100명() throws InterruptedException {
-        int numberOfThreads = currentOrderEventManageService.getMaxWinnerCount();
+        int numberOfThreads = currentOrderEventManageService.getMaxWinnerCount()*5;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){
             int finalI = i;
             executorService.submit(()->{
                 try{
-                    currentOrderEventManageService
-                            .saveOrderResult(
-                                    OrderResult.makeOrderEventApply(String.valueOf(finalI)));
+                    orderResultCommandService.
+                            saveOrderResultWithLock(OrderResult.makeOrderEventApply(String.valueOf(finalI)));
                 }
                 finally {
                     latch.countDown();
