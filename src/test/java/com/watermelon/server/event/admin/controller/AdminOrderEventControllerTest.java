@@ -14,6 +14,8 @@ import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.event.order.dto.request.RequestQuizDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
+import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import org.hibernate.WrongClassException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminOrderEventController.class)
+@DisplayName("[DOC] 선착순 이벤트 ")
 class AdminOrderEventControllerTest extends ControllerTest {
 
 
@@ -181,12 +184,32 @@ class AdminOrderEventControllerTest extends ControllerTest {
     @Test
     @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
     void deleteOrderEvent() throws Exception {
-        final String PATH = "/admin/event/order";
-        final String DOCUMENT_NAME ="delete-order-event";
+        final String PATH = "/admin/event/order/{eventId}";
+        final String DOCUMENT_NAME ="success";
 
-        mvc.perform(RestDocumentationRequestBuilders.post(PATH)
+        mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
                         .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
                 .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_ORDER)
+                                        .description("어드민 선착순 이벤트 삭제")
+                                        .build()
+                        )));
+
+    }
+    @Test
+    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    void deleteOrderEventThrowError() throws Exception {
+        final String PATH = "/admin/event/order/{eventId}";
+        final String DOCUMENT_NAME ="not-exist";
+        Mockito.doThrow(WrongOrderEventFormatException.class).when(adminOrderEventService).deleteOrderEvent(1L);
+
+        mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
                         resource(
