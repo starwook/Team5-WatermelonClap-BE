@@ -26,4 +26,6 @@ public interface LinkService {
      * @return 원래 uri
      */
     String getUrl(String shortedUri);
+
+    String getRedirectUrl(String shortedUri);
 }

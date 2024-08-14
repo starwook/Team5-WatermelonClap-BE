@@ -32,7 +32,7 @@ public class LinkController {
         HttpHeaders headers = new HttpHeaders();
 
         // 현재 서버의 URL을 기반으로 새로운 경로를 생성
-        headers.add(HttpHeaders.LOCATION, LinkUtils.makeUrl(linkService.getUrl(shortedUri)));
+        headers.add(HttpHeaders.LOCATION, linkService.getRedirectUrl(shortedUri));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 

@@ -19,6 +19,9 @@ public class LinkServiceImpl implements LinkService {
     private final LotteryService lotteryService;
     private final LinkRepository linkRepository;
 
+    @Value("${server.parts-share-url}")
+    private String partsShareUrl;
+
     @Value("${server.base-url}")
     private String baseUrl;
 
@@ -52,6 +55,11 @@ public class LinkServiceImpl implements LinkService {
     @Override
     public String getUrl(String shortedUri) {
         return LinkUtils.fromBase62(shortedUri);
+    }
+
+    @Override
+    public String getRedirectUrl(String shortedUri) {
+        return partsShareUrl+"/"+getUrl(shortedUri);
     }
 
     private Link findLink(String uri) {
