@@ -35,6 +35,8 @@ jobs:
 
       - name: Set YML
         run: |
+          cd lottery
+          ls -l
           mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > src/main/resources/application-local.yml
           echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > src/main/resources/application-local-db.yml
@@ -57,7 +59,7 @@ jobs:
       - name: JaCoCo Report
         uses: Madrapps/jacoco-report@v1.6.1
         with:
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          paths: ${{ github.workspace }}build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "테스트 커버리지 측정"
           min-coverage-overall: 70
@@ -77,7 +79,7 @@ jobs:
 
       - name: Docker build
         run: |
-          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE
+          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/lottery
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
           docker build --no-cache -t app .
           

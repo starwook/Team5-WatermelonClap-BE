@@ -18,13 +18,13 @@ derby.log
 
 #properties
 
-/src/main/resources/application-local.yml
-/src/main/resources/application-local-db.yml
-/src/main/resources/application-local-token.yml
-/src/main/resources/application-deploy-token.yml
-/src/main/resources/application-deploy-db.yml
-/src/main/resources/application-deploy.yml
-/src/main/resources/application-test.yml
+/lottery/src/main/resources/application-local.yml
+/lottery/src/main/resources/application-local-db.yml
+/lottery/src/main/resources/application-local-token.yml
+/lottery/src/main/resources/application-deploy-token.yml
+/lottery/src/main/resources/application-deploy-db.yml
+/lottery/src/main/resources/application-deploy.yml
+/lottery/src/main/resources/application-test.yml
 
 # Gradle artifacts
 .gradle
@@ -34,7 +34,7 @@ buildSrc/build
 /spring-*/build
 /framework-*/build
 /integration-tests/build
-/src/asciidoc/build
+/lottery/src/asciidoc/build
 spring-test/test-output/
 
 # Maven artifacts
