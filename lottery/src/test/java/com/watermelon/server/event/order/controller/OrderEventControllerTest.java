@@ -245,7 +245,7 @@ class OrderEventControllerTest extends ControllerTest {
                         orderNumberSubmitResource()));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 안흥ㅁ)")
+    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 않음)")
     void makeApplyTicketWrongPhoneNumberFormat() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME = "phone-number-wrong-format";
