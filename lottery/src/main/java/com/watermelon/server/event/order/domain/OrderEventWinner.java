@@ -16,24 +16,27 @@ public class OrderEventWinner extends BaseEntity {
     private Long id;
 
     private String applyAnswer;
+    private String applyToken;
     private String phoneNumber;
     @ManyToOne
     @JoinColumn
     private OrderEvent orderEvent;
 
     @Builder
-    public OrderEventWinner(String phoneNumber,OrderEvent orderEvent,String applyAnswer) {
+    public OrderEventWinner(String phoneNumber,OrderEvent orderEvent,String applyAnswer,String applyToken) {
         this.phoneNumber = phoneNumber;
         this.orderEvent = orderEvent;
         this.applyAnswer = applyAnswer;
+        this.applyToken = applyToken;
     }
     public static OrderEventWinner makeWinner(OrderEvent orderEvent
             , OrderEventWinnerRequestDto orderEventWinnerRequestDto
-    ,String applyAnswer) {
+    ,String applyAnswer,String applyTicket) {
         return OrderEventWinner.builder()
                 .phoneNumber(orderEventWinnerRequestDto.getPhoneNumber())
                 .orderEvent(orderEvent)
                 .applyAnswer(applyAnswer)
+                .applyToken(applyTicket)
                 .build();
     }
 

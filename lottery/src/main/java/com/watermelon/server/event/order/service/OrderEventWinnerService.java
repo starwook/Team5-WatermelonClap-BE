@@ -6,6 +6,7 @@ import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventWinner;
 import com.watermelon.server.event.order.dto.request.OrderEventWinnerRequestDto;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
+import com.watermelon.server.event.order.repository.OrderEventRepository;
 import com.watermelon.server.event.order.repository.OrderEventWinnerRepository;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -15,12 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class OrderEventWinnerService {
     private static final Logger log = LoggerFactory.getLogger(OrderEventWinnerService.class);
     private final OrderEventWinnerRepository orderEventWinnerRepository;
     private final ApplyTokenProvider applyTokenProvider;
+    private final OrderEventRepository orderEventRepository;
 
     @Transactional
     public OrderEventWinner makeWinner(
@@ -33,7 +37,8 @@ public class OrderEventWinnerService {
         JwtPayload payload = applyTokenProvider.verifyToken(applyTicket, String.valueOf(orderEvent.getId()));
         OrderEventWinner orderEventWinner = OrderEventWinner.makeWinner(orderEvent
                 , orderEventWinnerRequestDto
-        ,applyAnswer);
+        ,applyAnswer,applyTicket);
+//        Optional<OrderEventWinner> savedOrderEventWinner = orderEventRepository.findBy
         //ApplyTicket  payload에서 applyAnswer를 담도록 하여야함
         return orderEventWinnerRepository.save(orderEventWinner);
     }

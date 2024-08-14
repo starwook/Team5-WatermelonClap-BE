@@ -32,7 +32,7 @@ public class OrderEventCommandService {
     @Transactional
     public void makeOrderEventWinner(String applyTicket, Long eventId, OrderEventWinnerRequestDto orderEventWinnerRequestDto) throws ApplyTicketWrongException, WrongOrderEventFormatException, WrongPhoneNumberFormatException {
         OrderEvent orderEvent = orderEventRepository.findById(eventId).orElseThrow(WrongOrderEventFormatException::new);
-        orderEventWinnerService.makeWinner(orderEvent, orderEventWinnerRequestDto,"payLoad.applyAnswer",applyTicket);
+        orderEventWinnerService.makeWinner(orderEvent, orderEventWinnerRequestDto,orderEvent.getQuiz().getAnswer(),applyTicket);
     }
 
     @Transactional
