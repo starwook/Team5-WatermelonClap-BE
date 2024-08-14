@@ -34,22 +34,22 @@ public class OrderResultCommandService {
 
     @Transactional
     public ResponseApplyTicketDto isOrderResultFullElseMake(Long orderEventId){
-        String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId )));
+        String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
         OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
-        if(currentOrderEventManageService.saveOrderResult(orderResult)){
+        if(saveOrderResultWithLock(orderResult)){
             return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
     }
 
-//    @RedisDistributedLock(key = "orderResultLock")
-//    public boolean saveOrderResultWithLock(OrderResult orderResult){
-//        if(currentOrderEventManageService.isOrderApplyNotFull()){
-//            orderResultSet.add(orderResult);
-//            return true;
-//        }
-//        return false;
-//    }
+    @RedisDistributedLock(key = "orderResultLock")
+    public boolean saveOrderResultWithLock(OrderResult orderResult){
+        if(currentOrderEventManageService.isOrderApplyNotFull()){
+            currentOrderEventManageService.saveOrderResult(orderResult);
+            return true;
+        }
+        return false;
+    }
 //    //저장 할시에 확실하게 돌려주어야함 - 하지만 돌려주지 못 할시에는 어떻게?( 로그인이 안 되어있음)
 //
 //    @Transactional

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 
 @Service
+@RequiredArgsConstructor
 public class CurrentOrderEventManageService {
     private Long eventId;
     private Long quizId;
@@ -24,25 +25,22 @@ public class CurrentOrderEventManageService {
     private int maxWinnerCount;
     @Getter
     private final RSet<OrderResult> orderResultRset;
+    private final RSet<String> applyTickets;
 
-    public CurrentOrderEventManageService(RSet<OrderResult> orderResultRset) {
-        this.orderResultRset = orderResultRset;
-    }
-
-    @RedisDistributedLock(key = "orderResultLock")
     public boolean saveOrderResult(OrderResult orderResult){
         if(isOrderApplyNotFull()){
-            orderResultRset.add(orderResult);
+            applyTickets.add(orderResult.getApplyToken());
             return true;
         }
         return false;
     }
+
     public boolean isOrderApplyNotFull(){
         int count = getCurrentCount();
         return maxWinnerCount-count>0;
     }
     public int getCurrentCount() {
-        return orderResultRset.size();
+        return applyTickets.size();
     }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
@@ -57,10 +55,11 @@ public class CurrentOrderEventManageService {
         this.maxWinnerCount = orderEvent.getWinnerCount();
         clearOrderResultRepository();
     }
-
     public void clearOrderResultRepository() {
-        this.orderResultRset.clear();
+        this.applyTickets.clear();
     }
+
+
 
     public boolean isAnswerCorrect(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;

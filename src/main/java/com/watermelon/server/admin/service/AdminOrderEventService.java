@@ -1,6 +1,7 @@
 package com.watermelon.server.admin.service;
 
 
+import com.watermelon.server.Scheduler;
 import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 
@@ -26,7 +27,7 @@ public class AdminOrderEventService {
     private final OrderEventRepository orderEventRepository;
     private final S3ImageService s3ImageService;
 
-    private final OrderEventCommandService orderEventCommandService;
+    private final Scheduler scheduler;
 
     @Transactional(readOnly = true)
     public List<ResponseOrderEventDto> getOrderEventsForAdmin() {
@@ -52,7 +53,7 @@ public class AdminOrderEventService {
         String quizImgSrc = s3ImageService.uploadImage(quizImage);
         OrderEvent newOrderEvent = OrderEvent.makeOrderEventWithImage(requestOrderEventDto,rewardImgSrc,quizImgSrc);
         orderEventRepository.save(newOrderEvent);
-        orderEventCommandService.findOrderEventToMakeInProgress();
+        scheduler.checkOrderEvent();
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
 }
