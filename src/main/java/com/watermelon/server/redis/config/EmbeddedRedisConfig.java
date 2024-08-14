@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 
-@Profile("local")
+@Profile("!deploy")
 @Configuration
 public class EmbeddedRedisConfig {
     private RedisServer redisServer;
@@ -54,5 +54,9 @@ public class EmbeddedRedisConfig {
     @Bean
     public RSet<OrderResult> orderResultSet(RedissonClient redissonClient) {
         return redissonClient.getSet("order-result");
+    }
+    @Bean
+    public RSet<String> orderResultApplyTickets(RedissonClient redissonClient) {
+        return redissonClient.getSet("order-result-apply-tickets");
     }
 }

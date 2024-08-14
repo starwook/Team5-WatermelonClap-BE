@@ -35,5 +35,9 @@ public class RedissonConfig {
     public RSet<OrderResult> orderResultSet(RedissonClient redissonClient) {
         return redissonClient.getSet("order-result");
     }
+    @Bean
+    public RSet<String> orderResultApplyTickets(RedissonClient redissonClient) {
+        return redissonClient.getSet("order-result-apply-tickets");
+    }
 
 }

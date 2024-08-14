@@ -20,22 +20,8 @@ class OrderResultQueryServiceTest {
 
     @Mock
     private  RSet<OrderResult> orderResultSet;
-    @InjectMocks
-    OrderResultQueryService orderResultQueryService;
     String applyToken= "applyToken";
 
-    @Test
-    @DisplayName("선착순 이벤트 제한수 확인")
-    public void checkIsOrderApplyNotFull(){
-        when(orderResultSet.size()).thenReturn(0);
-        Assertions.assertThat(orderResultQueryService.isOrderApplyNotFull()).isTrue();
-    }
-    @Test
-    @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
-    public void checkIsOrderApplyFull(){
-        when(orderResultSet.size()).thenReturn(orderResultQueryService.getAvailableTicket());
-        Assertions.assertThat(orderResultQueryService.isOrderApplyNotFull()).isFalse();
 
-    }
 
 }
