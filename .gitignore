@@ -30,6 +30,7 @@ derby.log
 .gradle
 .gradletasknamecache
 /build
+/lottery/build
 buildSrc/build
 /spring-*/build
 /framework-*/build
