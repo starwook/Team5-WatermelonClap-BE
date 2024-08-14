@@ -4,7 +4,6 @@ import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
-import com.watermelon.server.redis.annotation.RedisDistributedLock;
 import lombok.*;
 import org.redisson.api.RSet;
 import org.springframework.stereotype.Service;
@@ -27,17 +26,15 @@ public class CurrentOrderEventManageService {
     private final RSet<OrderResult> orderResultRset;
     private final RSet<String> applyTickets;
 
-    public boolean saveOrderResult(OrderResult orderResult){
-        if(isOrderApplyNotFull()){
-            applyTickets.add(orderResult.getApplyToken());
+    public void saveOrderResult(OrderResult orderResult){
+        applyTickets.add(orderResult.getApplyToken());
+    }
+    public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
+        if(maxWinnerCount-getCurrentCount()>0){
+            saveOrderResult(orderResult);
             return true;
         }
         return false;
-    }
-
-    public boolean isOrderApplyNotFull(){
-        int count = getCurrentCount();
-        return maxWinnerCount-count>0;
     }
     public int getCurrentCount() {
         return applyTickets.size();

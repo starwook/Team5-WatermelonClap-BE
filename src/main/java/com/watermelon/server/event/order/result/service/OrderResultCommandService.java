@@ -44,8 +44,7 @@ public class OrderResultCommandService {
 
     @RedisDistributedLock(key = "orderResultLock")
     public boolean saveOrderResultWithLock(OrderResult orderResult){
-        if(currentOrderEventManageService.isOrderApplyNotFull()){
-            currentOrderEventManageService.saveOrderResult(orderResult);
+        if(currentOrderEventManageService.isOrderApplyNotFullThenSave(orderResult)){
             return true;
         }
         return false;

@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.redisson.api.RSet;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,16 +26,16 @@ class CurrentOrderEventManageServiceTest {
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인")
-    public void checkIsOrderApplyNotFull() {
+    public void checkIsOrderApplyNotFullThenSave() {
         when(orderResultSet.size()).thenReturn(0);
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFull()).isTrue();
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave()).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
     public void checkIsOrderApplyFull() {
         when(orderResultSet.size()).thenReturn(currentOrderEventManageService.getMaxWinnerCount());
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFull()).isFalse();
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave()).isFalse();
 
     }
 }
