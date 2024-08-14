@@ -7,6 +7,7 @@ import com.watermelon.server.event.order.result.domain.OrderResult;
 import lombok.*;
 import org.redisson.api.RSet;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -22,13 +23,16 @@ public class CurrentOrderEventManageService {
     @Setter
     @Getter
     private int maxWinnerCount;
-    @Getter
-    private final RSet<OrderResult> orderResultRset;
+//    @Getter
+//    private final RSet<OrderResult> orderResultRset;
     private final RSet<String> applyTickets;
 
+
+    @Transactional
     public void saveOrderResult(OrderResult orderResult){
         applyTickets.add(orderResult.getApplyToken());
     }
+    @Transactional
     public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
         if(maxWinnerCount-getCurrentCount()>0){
             saveOrderResult(orderResult);

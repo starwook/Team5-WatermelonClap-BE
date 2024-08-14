@@ -275,7 +275,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         }
 
 
-        Assertions.assertThat(currentOrderEventManageService.getOrderResultRset().size()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))

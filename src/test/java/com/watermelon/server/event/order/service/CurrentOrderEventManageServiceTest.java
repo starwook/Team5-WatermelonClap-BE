@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.service;
 
 import com.watermelon.server.event.order.result.domain.OrderResult;
+import org.aspectj.weaver.ast.Or;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +16,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CurrentOrderEventManageServiceTest {
+
     @Mock
-    private RSet<OrderResult> orderResultSet;
+    private RSet<String> applyTickets;
     @InjectMocks
     private CurrentOrderEventManageService currentOrderEventManageService;
     @BeforeEach
@@ -27,15 +29,15 @@ class CurrentOrderEventManageServiceTest {
     @Test
     @DisplayName("선착순 이벤트 제한수 확인")
     public void checkIsOrderApplyNotFullThenSave() {
-        when(orderResultSet.size()).thenReturn(0);
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave()).isTrue();
+        when(applyTickets.size()).thenReturn(0);
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave(new OrderResult())).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
     public void checkIsOrderApplyFull() {
-        when(orderResultSet.size()).thenReturn(currentOrderEventManageService.getMaxWinnerCount());
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave()).isFalse();
+        when(applyTickets.size()).thenReturn(currentOrderEventManageService.getMaxWinnerCount());
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave(new OrderResult())).isFalse();
 
     }
 }

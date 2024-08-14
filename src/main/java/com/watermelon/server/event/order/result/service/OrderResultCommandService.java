@@ -29,11 +29,11 @@ public class OrderResultCommandService {
         {
             return ResponseApplyTicketDto.wrongAnswer();
         }
-        return isOrderResultFullElseMake(orderEventId);
+        return createTokenAndMakeTicket(orderEventId);
     }
 
     @Transactional
-    public ResponseApplyTicketDto isOrderResultFullElseMake(Long orderEventId){
+    public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId){
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
         OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
         if(saveOrderResultWithLock(orderResult)){
