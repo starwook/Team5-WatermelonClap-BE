@@ -33,7 +33,6 @@ class ExpectationControllerTest extends ControllerTest {
     @MockBean
     private ExpectationService expectationService;
 
-
     @Test
     @DisplayName("[DOC] 사용자 기대평을 만든다")
     void makeExpectation() throws Exception {

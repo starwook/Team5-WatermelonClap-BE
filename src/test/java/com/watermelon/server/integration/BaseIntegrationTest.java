@@ -4,7 +4,6 @@ package com.watermelon.server.integration;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.APITest;
-import com.watermelon.server.config.PartsRegistrationConfig;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
@@ -18,7 +17,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
@@ -28,7 +26,6 @@ import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 @SpringBootTest
 @Disabled
 @Transactional
-@Import(PartsRegistrationConfig.class)
 public class BaseIntegrationTest extends APITest {
 
     @Autowired
