@@ -12,10 +12,13 @@ public class ResponseLotteryRankDto {
 
     private boolean isApplied;
 
+    private boolean miniature;
+
     public static ResponseLotteryRankDto from(LotteryApplier lotteryApplier) {
         return ResponseLotteryRankDto.builder()
                 .rank(lotteryApplier.getLotteryRank())
                 .isApplied(lotteryApplier.isLotteryApplier())
+                .miniature(lotteryApplier.isPartsWinner())
                 .build();
     }
 
@@ -23,13 +26,39 @@ public class ResponseLotteryRankDto {
         return ResponseLotteryRankDto.builder()
                 .rank(-1)
                 .isApplied(false)
+                .miniature(false)
                 .build();
     }
 
-    public static ResponseLotteryRankDto createAppliedTest(){
+    public static ResponseLotteryRankDto createLotteryWinnerTest(){
         return ResponseLotteryRankDto.builder()
                 .rank(1)
                 .isApplied(true)
+                .miniature(false)
+                .build();
+    }
+
+    public static ResponseLotteryRankDto createAppliedButNotWinnerTest(){
+        return ResponseLotteryRankDto.builder()
+                .rank(-1)
+                .isApplied(true)
+                .miniature(false)
+                .build();
+    }
+
+    public static ResponseLotteryRankDto createPartsWinnerTest(){
+        return ResponseLotteryRankDto.builder()
+                .rank(-1)
+                .isApplied(true)
+                .miniature(true)
+                .build();
+    }
+
+    public static ResponseLotteryRankDto createPartsAndLotteryWinnerTest(){
+        return ResponseLotteryRankDto.builder()
+                .rank(1)
+                .isApplied(true)
+                .miniature(true)
                 .build();
     }
 
