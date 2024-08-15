@@ -8,6 +8,7 @@ import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,8 @@ public class OrderEventCommandService {
     private final OrderEventWinnerService orderEventWinnerService;
     private final CurrentOrderEventManageService currentOrderEventManageService;
 
+
+
     public OrderEventCommandService(
             OrderEventRepository orderEventRepository,
             OrderEventWinnerService orderEventWinnerService,
@@ -30,6 +33,8 @@ public class OrderEventCommandService {
         this.currentOrderEventManageService = currentOrderEventManageService;
         findOrderEventToMakeInProgress();
     }
+
+
     @Transactional
     public void makeOrderEventWinner(String applyTicket, Long eventId, OrderEventWinnerRequestDto orderEventWinnerRequestDto) throws ApplyTicketWrongException, WrongOrderEventFormatException, WrongPhoneNumberFormatException, WinnerAlreadyParticipateException {
         OrderEvent orderEvent = orderEventRepository.findById(eventId).orElseThrow(WrongOrderEventFormatException::new);

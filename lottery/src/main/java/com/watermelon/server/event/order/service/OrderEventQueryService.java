@@ -9,6 +9,7 @@ import com.watermelon.server.event.order.repository.OrderEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class OrderEventQueryService {
     private final OrderEventRepository orderEventRepository;
     // OSIV로 요청이 끝날떄까지 데이터베이스 커넥션을 유지하기에 실시간 트래픽이 몰릴 때 커넥션이 모자랄 수 있음
     // (짧으면 괜찮을 수도..하지만 Transcation 밖에서 외부 API를 호출한다면?
+
     @Transactional(readOnly = true)
     public List<ResponseOrderEventDto> getOrderEvents(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();

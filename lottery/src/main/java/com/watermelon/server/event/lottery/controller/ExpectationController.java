@@ -7,6 +7,7 @@ import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.service.ExpectationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class ExpectationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Cacheable("expectations")
     @GetMapping(path ="/expectations")
     public ResponseEntity<List<ResponseExpectationDto>> getExpectationsForUser() {
         return new ResponseEntity<>(expectationService.getExpectationsForUser(),HttpStatus.OK);

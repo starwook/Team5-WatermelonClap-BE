@@ -15,6 +15,7 @@ import com.watermelon.server.event.order.result.service.OrderResultCommandServic
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +30,17 @@ public class OrderEventController {
     private final OrderEventCommandService orderEventCommandService;
     private final OrderResultCommandService orderResultCommandService;
 
+
+    @Cacheable(value = "orderEvents")
     @GetMapping(path = "/event/order")
     public List<ResponseOrderEventDto> getOrderEvents(){
-
         return orderEventQueryService.getOrderEvents();
     }
 //    @PostMapping(path = "/apply")
 //    public ResponseQuizResultDto applyFifoEvent(@RequestBody RequestAnswerDto requestAnswerDto){
 //        return fifoEventService.applyFifoEvent(requestAnswerDto);
 //    }
+
 
     @GetMapping(path = "/event/order/{eventId}")
     public ResponseOrderEventDto getOrderEvent(@PathVariable("eventId") Long orderEventId) throws WrongOrderEventFormatException {
@@ -52,7 +55,6 @@ public class OrderEventController {
 
         return orderResultCommandService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
     }
-
 
     @PostMapping(path = "/event/order/{eventId}/{quizId}/apply")
     public void makeApply(@RequestHeader("ApplyTicket") String applyTicket,

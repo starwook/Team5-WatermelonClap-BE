@@ -1,8 +1,10 @@
 package com.watermelon.server;
 
+import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.event.order.service.OrderEventSchedulingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Scheduler {
     private final OrderEventSchedulingService orderEventSchedulingService;
-    @Scheduled(fixedRate = 60000)
+    private final CurrentOrderEventManageService currentOrderEventManageService;
+    @Scheduled(fixedRate = 1000)
     public void checkOrderEvent(){
-        log.info("Checking events by scheduled");
+        Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         orderEventSchedulingService.changeOrderStatusByTime();
-        Long currentEventId = orderEventSchedulingService.changeCurrentOrderEvent();;
+        Long newCurrentEventId = orderEventSchedulingService.changeCurrentOrderEvent();
+        if(currentEventId!=null && !currentEventId.equals(newCurrentEventId)){
+            log.info("changed current order event id is {}", newCurrentEventId);
+        }
+    }
+    @Scheduled(fixedRate = 300000)
+    public void checkCurrentOrderEvent(){
+        Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         log.info("current order event id is {}", currentEventId);
     }
 }
