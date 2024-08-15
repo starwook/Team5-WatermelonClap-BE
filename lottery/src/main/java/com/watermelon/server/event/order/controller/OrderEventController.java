@@ -8,6 +8,7 @@ import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
+import com.watermelon.server.event.order.error.WinnerAlreadyParticipateException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.service.OrderResultCommandService;
@@ -60,7 +61,7 @@ public class OrderEventController {
                           @RequestBody OrderEventWinnerRequestDto orderEventWinnerRequestDto)
             throws ApplyTicketWrongException
             , WrongOrderEventFormatException
-            , WrongPhoneNumberFormatException {
+            , WrongPhoneNumberFormatException, WinnerAlreadyParticipateException {
         orderEventCommandService.makeOrderEventWinner(applyTicket,eventId,orderEventWinnerRequestDto);
     }
 
@@ -79,6 +80,10 @@ public class OrderEventController {
     @ExceptionHandler(NotDuringEventPeriodException.class)
     public ResponseEntity<ErrorResponse> handleNotDuringEventPeriodException(NotDuringEventPeriodException notDuringEventPeriodException){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.of(notDuringEventPeriodException.getMessage()));
+    }
+    @ExceptionHandler(WinnerAlreadyParticipateException.class)
+    public ResponseEntity<ErrorResponse> handleWinnerAlreadyParticipateException(WinnerAlreadyParticipateException winnerAlreadyParticipateException){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(winnerAlreadyParticipateException.getMessage()));
     }
 
 }

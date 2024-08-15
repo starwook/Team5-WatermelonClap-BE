@@ -3,6 +3,7 @@ package com.watermelon.server.event.order.service;
 
 import com.watermelon.server.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.dto.request.OrderEventWinnerRequestDto;
+import com.watermelon.server.event.order.error.WinnerAlreadyParticipateException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.domain.OrderEvent;
@@ -30,9 +31,9 @@ public class OrderEventCommandService {
         findOrderEventToMakeInProgress();
     }
     @Transactional
-    public void makeOrderEventWinner(String applyTicket, Long eventId, OrderEventWinnerRequestDto orderEventWinnerRequestDto) throws ApplyTicketWrongException, WrongOrderEventFormatException, WrongPhoneNumberFormatException {
+    public void makeOrderEventWinner(String applyTicket, Long eventId, OrderEventWinnerRequestDto orderEventWinnerRequestDto) throws ApplyTicketWrongException, WrongOrderEventFormatException, WrongPhoneNumberFormatException, WinnerAlreadyParticipateException {
         OrderEvent orderEvent = orderEventRepository.findById(eventId).orElseThrow(WrongOrderEventFormatException::new);
-        orderEventWinnerService.makeWinner(orderEvent, orderEventWinnerRequestDto,"payLoad.applyAnswer",applyTicket);
+        orderEventWinnerService.makeWinner(orderEvent, orderEventWinnerRequestDto,orderEvent.getQuiz().getAnswer(),applyTicket);
     }
 
     @Transactional

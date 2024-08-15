@@ -16,7 +16,7 @@ public class RequestQuizDto {
 
     public static RequestQuizDto makeForTest(){
         return RequestQuizDto.builder()
-                .answer("testAnswer")
+                .answer("퍼포먼스")
                 .build();
     }
 

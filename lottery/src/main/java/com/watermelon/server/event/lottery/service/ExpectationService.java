@@ -25,6 +25,9 @@ public class ExpectationService {
         LotteryApplier lotteryApplier = lotteryService.findLotteryApplierByUid(uid);
         if(isExpectationAlreadyExist(lotteryApplier)) throw new ExpectationAlreadyExistError();
         Expectation expectation = Expectation.makeExpectation(requestExpectationDto,lotteryApplier);
+        saveExpectation(expectation);
+    }
+    public void saveExpectation(Expectation expectation) {
         expectationRepository.save(expectation);
     }
 

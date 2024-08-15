@@ -191,6 +191,31 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
     }
+    @Test
+    @DisplayName("[통합] 선착순 퀴즈 번호 제출 - 이미 참여함)")
+    public void orderEventApplyTicketAlreadyParticipate() throws Exception {
+        orderEventRepository.save(openOrderEvent);
+        String applyTicket = applyTokenProvider.createTokenByOrderEventId(
+                JwtPayload.from(String.valueOf(openOrderEvent.getId()))
+        );
+
+        OrderEventWinnerRequestDto emptyPhoneNumberDto =
+                OrderEventWinnerRequestDto.makeWithPhoneNumber("01012341234");
+        mvc.perform(post("/event/order/{eventId}/{quizId}/apply",openOrderEvent.getId(),1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emptyPhoneNumberDto))
+                        .header("ApplyTicket",applyTicket))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        //두번째엔 에러 발생
+        mvc.perform(post("/event/order/{eventId}/{quizId}/apply",openOrderEvent.getId(),1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emptyPhoneNumberDto))
+                        .header("ApplyTicket",applyTicket))
+                .andExpect(status().isConflict())
+                .andDo(print());
+    }
 
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 성공")
