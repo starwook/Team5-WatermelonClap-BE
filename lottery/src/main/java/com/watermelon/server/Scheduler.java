@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Scheduler {
     private final OrderEventSchedulingService orderEventSchedulingService;
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 1000)
     public void checkOrderEvent(){
-        log.info("Checking events by scheduled");
         orderEventSchedulingService.changeOrderStatusByTime();
         Long currentEventId = orderEventSchedulingService.changeCurrentOrderEvent();;
         log.info("current order event id is {}", currentEventId);
     }
+
 }

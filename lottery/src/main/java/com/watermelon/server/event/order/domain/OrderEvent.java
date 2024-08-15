@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class OrderEvent extends BaseEntity {
 
 
 
+    @Transactional
     public void changeOrderEventStatusByTime(LocalDateTime now){
         if(orderEventStatus.equals(OrderEventStatus.END)||orderEventStatus.equals(OrderEventStatus.CLOSED)) return;
         if(orderEventStatus.equals(OrderEventStatus.UPCOMING)){

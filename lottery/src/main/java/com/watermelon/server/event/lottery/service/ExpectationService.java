@@ -36,7 +36,7 @@ public class ExpectationService {
         return lotteryApplier.getExpectation() != null;
     }
 
-    @Cacheable("currentExpectations")
+
     public List<ResponseExpectationDto> getExpectationsForUser() {
         return expectationRepository.findTop30ByIsApprovedTrueOrderByCreatedAtDesc().stream()
                 .map(expectation -> ResponseExpectationDto.forUser(expectation))

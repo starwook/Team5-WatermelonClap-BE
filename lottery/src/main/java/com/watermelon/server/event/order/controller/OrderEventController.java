@@ -15,6 +15,7 @@ import com.watermelon.server.event.order.result.service.OrderResultCommandServic
 import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.event.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,7 @@ public class OrderEventController {
 //        return fifoEventService.applyFifoEvent(requestAnswerDto);
 //    }
 
+    @Cacheable("orderEvents")
     @GetMapping(path = "/event/order/{eventId}")
     public ResponseOrderEventDto getOrderEvent(@PathVariable("eventId") Long orderEventId) throws WrongOrderEventFormatException {
         return orderEventQueryService.getOrderEvent(orderEventId);
