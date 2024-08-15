@@ -37,6 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(PARTS_EQUIP)
                 .addPathPatterns(PARTS_REMAIN)
                 .addPathPatterns(MY_LINK)
+                .addPathPatterns(EXPECTATIONS)
                 .addPathPatterns("/admin/**");
         registry.addInterceptor(adminAuthorizationInterceptor)
                 .order(2)
