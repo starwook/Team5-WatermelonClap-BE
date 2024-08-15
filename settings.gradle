@@ -1,4 +1,5 @@
 rootProject.name = 'server'
 include 'lottery'
 include 'gateway'
+include 'order'
 

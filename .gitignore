@@ -32,7 +32,7 @@ derby.log
 /build
 /gateway/build
 /lottery/build
-
+/order/build
 buildSrc/build
 /spring-*/build
 /framework-*/build
