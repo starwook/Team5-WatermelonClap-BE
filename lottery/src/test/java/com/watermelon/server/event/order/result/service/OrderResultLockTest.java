@@ -31,7 +31,7 @@ class OrderResultLockTest {
 
     @Test
     void 선착순_이벤트_락_적용_100명() throws InterruptedException {
-        int numberOfThreads = currentOrderEventManageService.getMaxWinnerCount()*5;
+        int numberOfThreads = currentOrderEventManageService.getMaxWinnerCount()*10;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){
