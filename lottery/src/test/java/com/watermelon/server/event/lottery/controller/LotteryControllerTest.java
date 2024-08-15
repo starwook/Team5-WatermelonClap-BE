@@ -76,7 +76,7 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("응모 정보 반환 - 정보 없음")
+    @DisplayName("응모 정보 반환 - 응모 안했을 경우")
     void testGetLotteryRankNotAppliedCase() throws Exception {
 
         givenLotteryApplierNotExist();
@@ -86,7 +86,7 @@ class LotteryControllerTest extends ControllerTest {
         thenLotteryAppliersRankIsRetrievedWithNoInfo();
 
         resultActions
-                .andDo(document("event/lotteries/rank/success",
+                .andDo(document("응모 안했을 경우",
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag(TAG_LOTTERY)
@@ -96,17 +96,81 @@ class LotteryControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("응모 정보 반환 - 성공")
-    void testGetLotteryRankAppliedCase() throws Exception {
+    @DisplayName("응모 정보 반환 - 추첨 이벤트만 당첨된 경우")
+    void testGetLotteryRankWinnerCase() throws Exception {
 
         givenLotteryWinner();
 
         whenLotteryAppliersRankIsRetrieved();
 
-        thenLotteryAppliersRankIsRetrievedForWinner();
+        thenLotteryAppliersRankIsRetrievedForLotteryWinner();
 
         resultActions
-                .andDo(document("event/lotteries/rank/failure",
+                .andDo(document("추첨 이벤트만 당첨된 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("응모 정보 조회")
+                                        .build()
+                        )));
+
+    }
+
+
+    @Test
+    @DisplayName("응모 정보 반환 - 응모했지만 당첨되지 않은 경우")
+    void testGetLotteryRankAppliedButNotWinnerCase() throws Exception {
+
+        givenLotteryApplierApplied();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedForApplier();
+
+        resultActions
+                .andDo(document("응모했지만 당첨되지 않은 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("응모 정보 조회")
+                                        .build()
+                        )));
+
+    }
+
+    @Test
+    @DisplayName("응모 정보 반환 - 파츠 이벤트만 당첨된 경우")
+    void testGetLotteryRankPartsWinnerCase() throws Exception {
+
+        givenOnlyPartsWinner();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedForPartsWinner();
+
+        resultActions
+                .andDo(document("파츠 이벤트만 당첨된 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("응모 정보 조회")
+                                        .build()
+                        )));
+
+    }
+
+    @Test
+    @DisplayName("응모 정보 반환 - 추첨, 파츠 둘다 당첨된 경우")
+    void testGetLotteryRankBothWinnerCase() throws Exception {
+
+        givenLotteryAndPartsWinner();
+
+        whenLotteryAppliersRankIsRetrieved();
+
+        thenLotteryAppliersRankIsRetrievedForBothWinner();
+
+        resultActions
+                .andDo(document("추첨, 파츠 둘다 당첨된 경우",
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag(TAG_LOTTERY)
