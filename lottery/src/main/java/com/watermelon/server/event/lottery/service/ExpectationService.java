@@ -8,6 +8,7 @@ import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.error.ExpectationNotExist;
 import com.watermelon.server.event.lottery.repository.ExpectationRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,8 @@ public class ExpectationService {
                 .map(expectation -> ResponseExpectationDto.forAdmin(expectation))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
     public ResponseAdminExpectationApprovedDto toggleExpectation(Long expectationId) throws ExpectationNotExist {
         Expectation expectation = expectationRepository.findById(expectationId).orElseThrow(ExpectationNotExist::new);
         expectation.toggleApproved();
