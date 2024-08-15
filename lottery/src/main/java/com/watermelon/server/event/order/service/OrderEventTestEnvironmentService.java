@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class OrderEventTestEnvironmentService {
         orderEventRepository.save(openedOrderEvent);
         for(int i=0;i<4;i++){
             OrderEvent unOpenedOrderEvent = OrderEvent.makeOrderEventWithImage(
+
                     RequestOrderEventDto.makeWithTime(
                             LocalDateTime.now().plusMonths(1),LocalDateTime.now().plusMonths(1),
                             RequestQuizDto.makeForTest(),RequestOrderRewardDto.makeForTest()
