@@ -111,7 +111,8 @@ public class OrderEvent extends BaseEntity {
             }
         }
     }
-    @CacheEvict("orderEvents")
+
+
     public void changeOrderEventStatus(OrderEventStatus orderEventStatus){
         this.orderEventStatus = orderEventStatus;
     }

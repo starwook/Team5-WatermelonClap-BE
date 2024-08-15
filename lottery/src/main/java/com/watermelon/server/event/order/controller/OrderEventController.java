@@ -34,7 +34,6 @@ public class OrderEventController {
     @Cacheable("orderEvents")
     @GetMapping(path = "/event/order")
     public List<ResponseOrderEventDto> getOrderEvents(){
-
         return orderEventQueryService.getOrderEvents();
     }
 //    @PostMapping(path = "/apply")
