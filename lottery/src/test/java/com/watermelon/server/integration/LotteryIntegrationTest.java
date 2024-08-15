@@ -74,7 +74,7 @@ public class LotteryIntegrationTest extends BaseIntegrationTest {
 
         whenLotteryAppliersRankIsRetrieved();
 
-        thenLotteryAppliersRankIsRetrievedForWinner();
+        thenLotteryAppliersRankIsRetrievedForLotteryWinner();
 
     }
 
