@@ -40,7 +40,7 @@ public class OrderEventController {
 //        return fifoEventService.applyFifoEvent(requestAnswerDto);
 //    }
 
-    @Cacheable("orderEvents")
+//    @Cacheable("orderEvents")
     @GetMapping(path = "/event/order/{eventId}")
     public ResponseOrderEventDto getOrderEvent(@PathVariable("eventId") Long orderEventId) throws WrongOrderEventFormatException {
         return orderEventQueryService.getOrderEvent(orderEventId);
