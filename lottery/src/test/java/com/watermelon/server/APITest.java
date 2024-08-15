@@ -4,7 +4,6 @@ package com.watermelon.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
-import com.watermelon.server.event.link.utils.LinkUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -64,24 +63,41 @@ public abstract class APITest {
         resultActions = mvc.perform(authedRequest(get("/event/lotteries/rank")));
     }
 
-    protected void thenLotteryAppliersRankIsRetrievedForWinner() throws Exception {
+    protected void thenLotteryAppliersRankIsRetrievedForLotteryWinner() throws Exception {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("rank").value(TEST_RANK))
-                .andExpect(jsonPath("applied").value(true));
+                .andExpect(jsonPath("applied").value(true))
+                .andExpect(jsonPath("miniature").value(false));
     }
 
     protected void thenLotteryAppliersRankIsRetrievedForApplier() throws Exception {
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("rank").value(-1))
-                .andExpect(jsonPath("applied").value(true));
+                .andExpect(jsonPath("applied").value(true))
+                .andExpect(jsonPath("miniature").value(false));
     }
 
     protected void thenLotteryAppliersRankIsRetrievedWithNoInfo() throws Exception {
         resultActions
                 .andExpect(jsonPath("rank").value(-1))
-                .andExpect(jsonPath("applied").value(false));
+                .andExpect(jsonPath("applied").value(false))
+                .andExpect(jsonPath("miniature").value(false));
+    }
+
+    protected void thenLotteryAppliersRankIsRetrievedForPartsWinner() throws Exception {
+        resultActions
+                .andExpect(jsonPath("rank").value(-1))
+                .andExpect(jsonPath("applied").value(true))
+                .andExpect(jsonPath("miniature").value(true));
+    }
+
+    protected void thenLotteryAppliersRankIsRetrievedForBothWinner() throws Exception {
+        resultActions
+                .andExpect(jsonPath("rank").value(1))
+                .andExpect(jsonPath("applied").value(true))
+                .andExpect(jsonPath("miniature").value(true));
     }
 
     protected void whenLotteryRewardInfoIsRetrieved() throws Exception {

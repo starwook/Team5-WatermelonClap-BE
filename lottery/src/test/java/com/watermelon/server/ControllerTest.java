@@ -149,12 +149,26 @@ public class ControllerTest extends APITest{
 
     @Override
     protected void givenLotteryApplierApplied() {
-
+        Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
+                ResponseLotteryRankDto.createAppliedButNotWinnerTest()
+        );
     }
 
     protected void givenLotteryWinner(){
         Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
-                ResponseLotteryRankDto.createAppliedTest()
+                ResponseLotteryRankDto.createLotteryWinnerTest()
+        );
+    }
+
+    protected void givenLotteryAndPartsWinner(){
+        Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
+                ResponseLotteryRankDto.createPartsAndLotteryWinnerTest()
+        );
+    }
+
+    protected void givenOnlyPartsWinner(){
+        Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
+                ResponseLotteryRankDto.createPartsWinnerTest()
         );
     }
 
