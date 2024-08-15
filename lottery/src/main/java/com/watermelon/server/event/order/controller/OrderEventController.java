@@ -30,6 +30,8 @@ public class OrderEventController {
     private final OrderEventCommandService orderEventCommandService;
     private final OrderResultCommandService orderResultCommandService;
 
+
+    @Cacheable("orderEvents")
     @GetMapping(path = "/event/order")
     public List<ResponseOrderEventDto> getOrderEvents(){
 
@@ -40,7 +42,7 @@ public class OrderEventController {
 //        return fifoEventService.applyFifoEvent(requestAnswerDto);
 //    }
 
-//    @Cacheable("orderEvents")
+
     @GetMapping(path = "/event/order/{eventId}")
     public ResponseOrderEventDto getOrderEvent(@PathVariable("eventId") Long orderEventId) throws WrongOrderEventFormatException {
         return orderEventQueryService.getOrderEvent(orderEventId);

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -99,16 +100,20 @@ public class OrderEvent extends BaseEntity {
         if(orderEventStatus.equals(OrderEventStatus.END)||orderEventStatus.equals(OrderEventStatus.CLOSED)) return;
         if(orderEventStatus.equals(OrderEventStatus.UPCOMING)){
             if(now.isAfter(startDate)) {
-                this.orderEventStatus = OrderEventStatus.OPEN;
+                changeOrderEventStatus(OrderEventStatus.OPEN);
                 log.info("EVENT OPEN");
             }
         }
         if(orderEventStatus.equals(OrderEventStatus.OPEN)){
             if(now.isAfter(endDate)){
-                this.orderEventStatus = OrderEventStatus.END;
+                changeOrderEventStatus(OrderEventStatus.END);
                 log.info("EVENT END");
             }
         }
+    }
+    @CacheEvict("orderEvents")
+    public void changeOrderEventStatus(OrderEventStatus orderEventStatus){
+        this.orderEventStatus = orderEventStatus;
     }
 
     public boolean isTimeInEventTime(LocalDateTime time){
