@@ -1,0 +1,6 @@
+server:
+  port: 9091 # port number
+
+spring:
+  main:
+    web-application-type: reactive
