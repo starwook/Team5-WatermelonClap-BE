@@ -9,6 +9,7 @@ import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.error.ExpectationNotExist;
 import com.watermelon.server.event.lottery.repository.ExpectationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ExpectationService {
         return lotteryApplier.getExpectation() != null;
     }
 
+    @Cacheable("currentExpectations")
     public List<ResponseExpectationDto> getExpectationsForUser() {
         return expectationRepository.findTop30ByIsApprovedTrueOrderByCreatedAtDesc().stream()
                 .map(expectation -> ResponseExpectationDto.forUser(expectation))

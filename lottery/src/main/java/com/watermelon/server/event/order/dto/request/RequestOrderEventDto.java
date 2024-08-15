@@ -27,6 +27,15 @@ public class RequestOrderEventDto {
 
 
 
+    public static RequestOrderEventDto makeWithTime(LocalDateTime startDate,LocalDateTime endDate, RequestQuizDto requestQuizDto, RequestOrderRewardDto requestOrderRewardDto){
+        return RequestOrderEventDto.builder()
+                .reward(requestOrderRewardDto)
+                .quiz(requestQuizDto)
+                .startDate(startDate)
+                .endDate(endDate)
+                .winnerCount(100)
+                .build();
+    }
     public static RequestOrderEventDto makeForTestOpen10HoursLater(RequestQuizDto requestQuizDto, RequestOrderRewardDto requestOrderRewardDto){
         return RequestOrderEventDto.builder()
                 .reward(requestOrderRewardDto)

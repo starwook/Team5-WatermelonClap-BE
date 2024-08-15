@@ -53,7 +53,6 @@ public class OrderEventController {
         return orderResultCommandService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
     }
 
-
     @PostMapping(path = "/event/order/{eventId}/{quizId}/apply")
     public void makeApply(@RequestHeader("ApplyTicket") String applyTicket,
                           @PathVariable("eventId") Long eventId,
