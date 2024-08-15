@@ -131,4 +131,19 @@ public class OrderEvent extends BaseEntity {
     public void addWinner(){
         this.currentWinnerCount++;
     }
+
+    @Override
+    public String toString() {
+        return "OrderEvent{" +
+                "id=" + id +
+                ", orderEventReward=" + orderEventReward +
+                ", quiz=" + quiz +
+                ", orderEventWinner=" + orderEventWinner +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", winnerCount=" + winnerCount +
+                ", currentWinnerCount=" + currentWinnerCount +
+                ", orderEventStatus=" + orderEventStatus +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package com.watermelon.server.event.order.total;
 
+import com.watermelon.server.admin.service.AdminOrderEventService;
+import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.integration.BaseIntegrationTest;
 import com.watermelon.server.event.order.domain.ApplyTicketStatus;
 import com.watermelon.server.event.order.domain.OrderEvent;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,6 +32,8 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Autowired
     private OrderEventRepository orderEventRepository;
     @Autowired
+    private AdminOrderEventService adminOrderEventService;
+    @Autowired
     private CurrentOrderEventManageService currentOrderEventManageService;
 
 
@@ -39,14 +44,17 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     private OrderEvent unOpenOrderEvent;
 
 
+
+    @CacheEvict(value = "orderEvents",allEntries = true)
     @BeforeEach
-    void setUp(){
+    public void setUp(){
         openOrderEvent = OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(),
                         RequestOrderRewardDto.makeForTest()
                 )
         );
+        openOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
         soonOpenOrderEvent = OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpenAfter1SecondCloseAfter3Second
                                 (
@@ -61,19 +69,18 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                                 RequestOrderRewardDto.makeForTest()
                         )
         );
-
-    }
-    @AfterEach
-    void tearDown(){
         orderEventRepository.deleteAll();
     }
-
+    @CacheEvict(value = "orderEvents",allEntries = true)
+    @AfterEach
+    public void deleteAll(){
+        orderEventRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("[통합] 선착순 이벤트 오픈된 이벤트 가져오기 - quiz = not exist")
     public void getOpenOrderEvent() throws Exception {
-        orderEventRepository.save(openOrderEvent);
-        openOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
+        adminOrderEventService.saveOrderEvent(openOrderEvent);
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -82,6 +89,20 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$[0].endDate").value(openOrderEvent.getEndDate().toString()))
                 .andExpect(jsonPath("$[0].status").value(openOrderEvent.getOrderEventStatus().toString()))
                 .andExpect(jsonPath("$[0].quiz").exists())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("[통합] 선착순 이벤트 캐싱된지 확인 ")
+    public void isOrderEventCached() throws Exception {
+        orderEventRepository.save(openOrderEvent);
+        mvc.perform(get("/event/order"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andDo(print());
+        orderEventRepository.save(unOpenOrderEvent);
+        mvc.perform(get("/event/order"))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
     @Test
@@ -97,7 +118,8 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 이벤트 오픈 안 된 이벤트 가져오기")
     public void getUnOpenOrderEvent() throws Exception {
-        orderEventRepository.save(unOpenOrderEvent);
+        adminOrderEventService.saveOrderEvent(unOpenOrderEvent);
+
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())

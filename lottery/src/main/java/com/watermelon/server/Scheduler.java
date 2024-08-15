@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 public class Scheduler {
     private final OrderEventSchedulingService orderEventSchedulingService;
     private final CurrentOrderEventManageService currentOrderEventManageService;
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void checkOrderEvent(){
         Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         orderEventSchedulingService.changeOrderStatusByTime();
         Long newCurrentEventId = orderEventSchedulingService.changeCurrentOrderEvent();
-        if(!currentEventId.equals(newCurrentEventId)){
+        if(currentEventId!=null && !currentEventId.equals(newCurrentEventId)){
             log.info("changed current order event id is {}", newCurrentEventId);
         }
     }

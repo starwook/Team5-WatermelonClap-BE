@@ -20,7 +20,7 @@ public class OrderEventSchedulingService {
     private final OrderEventCommandService orderEventCommandService;
 
     @Transactional
-    @CacheEvict("orderEvents")
+    @CacheEvict(value = "orderEvents",allEntries = true)
     public void changeOrderStatusByTime(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         orderEvents.forEach(orderEvent -> {orderEvent.changeOrderEventStatusByTime(LocalDateTime.now());});

@@ -31,7 +31,7 @@ public class OrderEventController {
     private final OrderResultCommandService orderResultCommandService;
 
 
-    @Cacheable("orderEvents")
+    @Cacheable(value = "orderEvents")
     @GetMapping(path = "/event/order")
     public List<ResponseOrderEventDto> getOrderEvents(){
         return orderEventQueryService.getOrderEvents();
