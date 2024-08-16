@@ -1,7 +1,6 @@
 package com.watermelon.server.event.order.total;
 
 import com.watermelon.server.admin.service.AdminOrderEventService;
-import com.watermelon.server.event.order.service.OrderEventCommandService;
 import com.watermelon.server.integration.BaseIntegrationTest;
 import com.watermelon.server.event.order.domain.ApplyTicketStatus;
 import com.watermelon.server.event.order.domain.OrderEvent;
@@ -16,9 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -80,7 +77,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 이벤트 오픈된 이벤트 가져오기 - quiz = not exist")
     public void getOpenOrderEvent() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -95,12 +92,12 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 이벤트 캐싱 Evict 되는지 확인 ")
     public void isOrderEventCached() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andDo(print());
-        adminOrderEventService.saveOrderEvent(unOpenOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -109,7 +106,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 이벤트 퀴즈 - answer = null")
     public void getOpenOrderEventQuizAnswerNotExit() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
 
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
@@ -119,7 +116,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 이벤트 오픈 안 된 이벤트 가져오기")
     public void getUnOpenOrderEvent() throws Exception {
-        adminOrderEventService.saveOrderEvent(unOpenOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
 
         mvc.perform(get("/event/order"))
                 .andExpect(status().isOk())
@@ -135,7 +132,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 존재하는 선착순 이벤트 가져오기")
     public void getExistOpenOrderEvent() throws Exception {
-        adminOrderEventService.saveOrderEvent(unOpenOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
         mvc.perform(get("/event/order/{eventId}",unOpenOrderEvent.getId()))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -152,7 +149,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 번호 제출 - 성공")
     public void orderEventApplyTicketNotWrong() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
                 JwtPayload.from(String.valueOf(openOrderEvent.getId()))
         );
@@ -170,7 +167,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 번호 제출-  전화 번호 형식 잘못됨 (에러)")
     public void orderEventApplyPhoneNumberFormatWrong() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         OrderEventWinnerRequestDto emptyPhoneNumberDto =
                 OrderEventWinnerRequestDto.makeWithPhoneNumber("");
         OrderEventWinnerRequestDto notStartWith010PhoneNumberDto =
@@ -200,7 +197,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 번호 제출 - ApplyTicket 형식 맞지 않음(다른 Claim key)")
     public void orderEventApplyTicketEventIdWrong() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
                 JwtPayload.from(String.valueOf(openOrderEvent.getId()+1))
         );
@@ -217,7 +214,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 번호 제출 - 이미 참여함)")
     public void orderEventApplyTicketAlreadyParticipate() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
                 JwtPayload.from(String.valueOf(openOrderEvent.getId()))
         );
@@ -243,7 +240,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 성공")
     public void orderEventApply() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
@@ -259,7 +256,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
     public void orderEventApplyWrongEventId() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
@@ -273,7 +270,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 기간이 틀림)")
     public void orderEventApplyWrongDuration() throws Exception {
-        adminOrderEventService.saveOrderEvent(unOpenOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(unOpenOrderEvent);
         Quiz quiz = unOpenOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
@@ -287,7 +284,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(정답이 틀림)")
     public void orderEventApplyWrongAnswer() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
@@ -303,7 +300,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     @Test
     @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(선착순 마감)")
     public void orderEventApplyClosed() throws Exception {
-        adminOrderEventService.saveOrderEvent(openOrderEvent);
+        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
 
         Quiz quiz = openOrderEvent.getQuiz();

@@ -11,7 +11,6 @@ import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
-import com.watermelon.server.event.order.service.OrderEventCommandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -53,14 +52,14 @@ public class AdminOrderEventService {
         String rewardImgSrc = s3ImageService.uploadImage(rewardImage);
         String quizImgSrc = s3ImageService.uploadImage(quizImage);
         OrderEvent newOrderEvent = OrderEvent.makeOrderEventWithImage(requestOrderEventDto,rewardImgSrc,quizImgSrc);
-        saveOrderEvent(newOrderEvent);
+        saveOrderEventWithCacheEvict(newOrderEvent);
         scheduler.checkOrderEvent();
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
 
     @CacheEvict(cacheNames = "orderEvents", allEntries = true)
     @Transactional
-    public void saveOrderEvent(OrderEvent orderEvent){
+    public void saveOrderEventWithCacheEvict(OrderEvent orderEvent){
         orderEventRepository.save(orderEvent);
     }
 
