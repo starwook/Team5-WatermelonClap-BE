@@ -68,8 +68,9 @@ public class OrderEventTestEnvironmentService {
     private void makeOrderEvent() {
         if(orderEventRepository.findAll().size()>5) return;
         OrderEvent openedOrderEvent = OrderEvent.makeOrderEventWithImage(
-                RequestOrderEventDto.makeForTestOpened(
-                        RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
+                RequestOrderEventDto.makeWithTime(
+                        LocalDateTime.now(), LocalDateTime.now().plusWeeks(1),
+                        RequestQuizDto.makeForTest(),RequestOrderRewardDto.makeForTest()
                 ), testImageSrc,testImageSrc
         );
         orderEventRepository.save(openedOrderEvent);
