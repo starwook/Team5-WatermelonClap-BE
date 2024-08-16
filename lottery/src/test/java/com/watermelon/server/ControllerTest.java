@@ -14,6 +14,7 @@ import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInf
 import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
 import com.watermelon.server.event.link.dto.MyLinkDto;
 import com.watermelon.server.event.link.service.LinkService;
+import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundException;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
@@ -112,6 +113,11 @@ public class ControllerTest extends APITest{
         Mockito.when(lotteryRewardService.getRewardInfo(TEST_RANK)).thenReturn(
                 new ResponseRewardInfoDto(TEST_IMGSRC, TEST_NAME)
         );
+    }
+
+    protected void givenLotteryRewardInfoNotExists(){
+        Mockito.doThrow(new LotteryRewardNotFoundException())
+                .when(lotteryRewardService).getRewardInfo(TEST_RANK);
     }
 
     protected void givenLotteryWinners() {

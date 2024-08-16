@@ -200,4 +200,25 @@ class LotteryControllerTest extends ControllerTest {
                         )));
     }
 
+    @Test
+    @DisplayName("추첨이벤트 경품 정보 반환 - 경품 정보 없을 시")
+    void getRewardInfoNotExistCase() throws Exception {
+
+        givenLotteryRewardInfoNotExists();
+
+        whenLotteryRewardInfoIsRetrieved();
+
+        thenClientError();
+
+        resultActions
+                .andDo(document("경품 정보 없는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨이벤트 경품 정보 조회")
+                                        .build()
+                        )));
+
+    }
+
 }

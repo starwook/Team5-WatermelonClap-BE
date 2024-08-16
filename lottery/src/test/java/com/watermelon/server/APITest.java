@@ -344,4 +344,16 @@ public abstract class APITest {
                 .andExpect(status().isOk());
     }
 
+    protected void thenClientError() throws Exception {
+        resultActions
+                .andExpect(status().is4xxClientError())
+                .andExpect(jsonPath("reason").isString());
+    }
+
+    protected void thenServerError() throws Exception {
+        resultActions
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath("reason").isString());
+    }
+
 }

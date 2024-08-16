@@ -9,6 +9,7 @@ import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInf
 import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.exception.LotteryApplierNotFoundException;
+import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundException;
 import com.watermelon.server.event.lottery.service.LotteryRewardService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import com.watermelon.server.event.lottery.service.LotteryWinnerService;
@@ -66,6 +67,11 @@ public class LotteryController {
     @ExceptionHandler(LotteryApplierNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleLotteryApplierNotFoundException(LotteryApplierNotFoundException lotteryApplierNotFoundException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(lotteryApplierNotFoundException.getMessage()));
+    }
+
+    @ExceptionHandler(LotteryRewardNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLotteryRewardNotFoundException(LotteryRewardNotFoundException lotteryRewardNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(lotteryRewardNotFoundException.getMessage()));
     }
 
 }
