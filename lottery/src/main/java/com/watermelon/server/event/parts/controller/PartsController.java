@@ -74,7 +74,7 @@ public class PartsController {
 
     private void makeLinkCookie(HttpServletResponse response, String link_key){
         // SameSite=None 설정을 위해 수동으로 헤더 추가
-        response.addHeader("Set-Cookie", String.format("%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None",
+        response.addHeader("Set-Cookie", String.format("%s=%s; Path=/; Max-Age=%d; HttpOnly;",
                 HEADER_LINK_ID, link_key, 7 * 24 * 60 * 60));
     }
 
