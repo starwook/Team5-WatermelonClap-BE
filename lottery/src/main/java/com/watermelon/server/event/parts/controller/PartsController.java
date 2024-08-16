@@ -73,17 +73,9 @@ public class PartsController {
     }
 
     private void makeLinkCookie(HttpServletResponse response, String link_key){
-        // 쿠키 생성
-        Cookie cookie = new Cookie(HEADER_LINK_ID, link_key);
-
-        // 쿠키 설정
-        cookie.setHttpOnly(true); // 클라이언트 측 JavaScript에서 접근 불가
-        //cookie.setSecure(true);   // HTTPS에서만 전송
-        cookie.setMaxAge(7 * 24 * 60 * 60); // 쿠키의 유효 기간 (7일)
-        cookie.setPath("/");      // 모든 경로에서 유효
-        //cookie.setDomain("example.com"); // 쿠키를 설정할 도메인
-
-        response.addCookie(cookie);
+        // SameSite=None 설정을 위해 수동으로 헤더 추가
+        response.addHeader("Set-Cookie", String.format("%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None",
+                HEADER_LINK_ID, link_key, 7 * 24 * 60 * 60));
     }
 
 }
