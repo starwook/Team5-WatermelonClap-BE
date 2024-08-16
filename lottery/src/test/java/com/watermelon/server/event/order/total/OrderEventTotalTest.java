@@ -46,7 +46,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
 
 
 
-    @CacheEvict(value = "orderEvents",allEntries = true)
+
     @BeforeEach
     public void setUp(){
         openOrderEvent = OrderEvent.makeOrderEventWithOutImage(
@@ -72,7 +72,6 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         );
         orderEventRepository.deleteAll();
     }
-    @CacheEvict(value = "orderEvents",allEntries = true)
     @AfterEach
     public void deleteAll(){
         orderEventRepository.deleteAll();

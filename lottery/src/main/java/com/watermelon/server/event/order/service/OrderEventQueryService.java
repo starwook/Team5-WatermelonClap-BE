@@ -26,6 +26,7 @@ public class OrderEventQueryService {
     // (짧으면 괜찮을 수도..하지만 Transcation 밖에서 외부 API를 호출한다면?
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "orderEvents")
     public List<ResponseOrderEventDto> getOrderEvents(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         List<ResponseOrderEventDto> responseOrderEventDtos = new ArrayList<>();

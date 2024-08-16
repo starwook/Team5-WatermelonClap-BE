@@ -58,7 +58,7 @@ public class AdminOrderEventService {
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
 
-    @CacheEvict(value = "orderEvents", allEntries = true)
+    @CacheEvict(cacheNames = "orderEvents", allEntries = true)
     @Transactional
     public void saveOrderEvent(OrderEvent orderEvent){
         orderEventRepository.save(orderEvent);

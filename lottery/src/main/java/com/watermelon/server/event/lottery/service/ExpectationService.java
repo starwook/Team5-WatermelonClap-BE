@@ -38,6 +38,7 @@ public class ExpectationService {
     }
 
 
+    @Cacheable(cacheNames = "expectations")
     public List<ResponseExpectationDto> getExpectationsForUser() {
         return expectationRepository.findTop30ByIsApprovedTrueOrderByCreatedAtDesc().stream()
                 .map(expectation -> ResponseExpectationDto.forUser(expectation))
