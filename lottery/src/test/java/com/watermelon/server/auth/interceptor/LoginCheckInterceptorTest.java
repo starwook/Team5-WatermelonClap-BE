@@ -27,12 +27,6 @@ class LoginCheckInterceptorTest {
     @Mock
     private TokenVerifier tokenVerifier;
 
-    @Mock
-    private LotteryService lotteryService;
-
-    @Mock
-    private LinkService linkService;
-
     @InjectMocks
     private LoginCheckInterceptor loginCheckInterceptor;
 
@@ -72,46 +66,14 @@ class LoginCheckInterceptorTest {
 
     }
 
-    @Test
-    @DisplayName("처음 로그인할 경우 회원가입한다.")
-    void preHandleFirstLoginCaseRegistrationTest(){
-
-        //given
-        mockVerifyForUser();
-        Mockito.when(lotteryService.isExist(TEST_UID)).thenReturn(false);
-
-        //when
-        loginCheckInterceptor.preHandle(request, response, null);
-
-        //then
-        verify(lotteryService).registration(TEST_UID);
-
-    }
-
-    @Test
-    @DisplayName("처음 로그인하고, 특정 링크로 부터 접속했을 경우 해당 링크의 조회수를 증가시킨다.")
-    void preHandleFirstLoginCaseLinkViewTest(){
-
-        //given
-        mockVerifyForUser();
-        Mockito.when(request.getHeader(HEADER_LINK_ID)).thenReturn(TEST_URI);
-
-        //when
-        loginCheckInterceptor.preHandle(request, response, null);
-
-        //then
-        verify(linkService).addLinkViewCount(TEST_URI);
-
+    private void mockNotVerifyForUser(){
+        Mockito.doThrow(AuthenticationException.class).when(tokenVerifier).verify(TEST_TOKEN);
+        Mockito.when(request.getHeader(HEADER_NAME_AUTHORIZATION)).thenReturn(HEADER_VALUE_BEARER+HEADER_VALUE_SPACE+TEST_TOKEN);
     }
 
     private void mockVerifyForUser(){
         Mockito.when(request.getHeader(HEADER_NAME_AUTHORIZATION)).thenReturn(HEADER_VALUE_BEARER+HEADER_VALUE_SPACE+TEST_TOKEN);
         Mockito.when(tokenVerifier.verify(TEST_TOKEN)).thenReturn(TEST_UID);
-    }
-
-    private void mockNotVerifyForUser(){
-        Mockito.doThrow(AuthenticationException.class).when(tokenVerifier).verify(TEST_TOKEN);
-        Mockito.when(request.getHeader(HEADER_NAME_AUTHORIZATION)).thenReturn(HEADER_VALUE_BEARER+HEADER_VALUE_SPACE+TEST_TOKEN);
     }
 
 }
