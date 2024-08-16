@@ -6,6 +6,7 @@ import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
 import com.watermelon.server.event.parts.service.PartsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,10 +62,15 @@ public class PartsController {
     ){
         return new ResponseEntity<>(partsService.getPartsList(link_key), HttpStatus.OK);
     }
+
     @ExceptionHandler(PartsDrawLimitExceededException.class)
     public ResponseEntity<ErrorResponse> handlePartsDrawLimitExceedException(PartsDrawLimitExceededException partsDrawLimitExceededException){
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ErrorResponse.of(partsDrawLimitExceededException.getMessage()));
     }
 
+    @ExceptionHandler(PartsNotExistException.class)
+    public ResponseEntity<ErrorResponse> handlePartsDrawLimitExceedException(PartsNotExistException partsNotExistException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(partsNotExistException.getMessage()));
+    }
 
 }

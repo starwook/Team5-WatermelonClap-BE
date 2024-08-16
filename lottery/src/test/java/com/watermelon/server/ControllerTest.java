@@ -19,6 +19,7 @@ import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
 import com.watermelon.server.event.parts.service.PartsService;
 import com.watermelon.server.event.lottery.service.LotteryRewardService;
 import com.watermelon.server.event.lottery.service.LotteryService;
@@ -187,6 +188,11 @@ public class ControllerTest extends APITest{
     @Override
     protected void givenPartsNotEquipped() {
 
+    }
+
+    protected void givenEquipPartsNotExist(){
+        Mockito.doThrow(new PartsNotExistException()).when(partsService)
+                .toggleParts(TEST_UID, TEST_PARTS_ID);
     }
 
     protected void givenLotteryApplierWhoHasNoRemainChance(){

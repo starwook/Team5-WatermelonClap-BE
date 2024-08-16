@@ -3,6 +3,7 @@ package com.watermelon.server.event.parts.service;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.parts.domain.Parts;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
 import com.watermelon.server.event.parts.repository.LotteryApplierPartsRepository;
 import com.watermelon.server.event.parts.repository.PartsRepository;
 import com.watermelon.server.event.lottery.service.LotteryApplierService;
@@ -59,7 +60,7 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
     @Override
     public void toggleEquipped(String uid, Long partsId) {
         LotteryApplierParts lotteryApplierParts = lotteryApplierPartsRepository
-                .findLotteryApplierPartsByLotteryApplierUidAndPartsId(uid, partsId).orElseThrow();
+                .findLotteryApplierPartsByLotteryApplierUidAndPartsId(uid, partsId).orElseThrow(PartsNotExistException::new);
 
         //상태 변경 전, 해당 카테고리의 장착된 파츠 해제
         Optional<LotteryApplierParts> existLAP = lotteryApplierPartsRepository
