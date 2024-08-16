@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -105,7 +106,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         mvc.perform(
                         RestDocumentationRequestBuilders
                                 .get(PATH,openOrderEvent.getId())
-                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN)
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -127,7 +128,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         Mockito.when(adminOrderEventService.getOrderEventsForAdmin()).thenReturn(responseOrderEventDtos);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
@@ -159,7 +160,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
                                 .file(quizImage)
                                 .file(rewardImage)
                                 .file(orderEvent)
-                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
@@ -188,7 +189,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         final String DOCUMENT_NAME ="success";
 
         mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
@@ -208,7 +209,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
         Mockito.doThrow(WrongOrderEventFormatException.class).when(adminOrderEventService).deleteOrderEvent(1L);
 
         mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
                 .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
