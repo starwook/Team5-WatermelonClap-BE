@@ -18,6 +18,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -93,7 +94,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 이벤트 캐싱된지 확인 ")
+    @DisplayName("[통합] 선착순 이벤트 캐싱 Evict 되는지 확인 ")
     public void isOrderEventCached() throws Exception {
         adminOrderEventService.saveOrderEvent(openOrderEvent);
         mvc.perform(get("/event/order"))
@@ -105,6 +106,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
     @Test
     @DisplayName("[통합] 선착순 이벤트 퀴즈 - answer = null")
     public void getOpenOrderEventQuizAnswerNotExit() throws Exception {
