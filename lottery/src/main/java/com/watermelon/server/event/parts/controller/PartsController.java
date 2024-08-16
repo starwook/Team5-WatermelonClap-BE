@@ -6,6 +6,7 @@ import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
 import com.watermelon.server.event.parts.service.PartsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -67,11 +68,17 @@ public class PartsController {
         makeLinkCookie(response, link_key);
         return new ResponseEntity<>(partsService.getPartsList(link_key), HttpStatus.OK);
     }
+
     @ExceptionHandler(PartsDrawLimitExceededException.class)
     public ResponseEntity<ErrorResponse> handlePartsDrawLimitExceedException(PartsDrawLimitExceededException partsDrawLimitExceededException){
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ErrorResponse.of(partsDrawLimitExceededException.getMessage()));
     }
 
+    @ExceptionHandler(PartsNotExistException.class)
+    public ResponseEntity<ErrorResponse> handlePartsDrawLimitExceedException(PartsNotExistException partsNotExistException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(partsNotExistException.getMessage()));
+    }
+  
     private void makeLinkCookie(HttpServletResponse response, String link_key){
         // SameSite=None 설정을 위해 수동으로 헤더 추가
         response.addHeader("Set-Cookie", String.format("%s=%s; Path=/; Max-Age=%d; HttpOnly; SameSite=None;",

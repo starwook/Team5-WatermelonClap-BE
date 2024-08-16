@@ -1,11 +1,15 @@
 package com.watermelon.server.event.lottery.controller;
 
 import com.watermelon.server.auth.annotations.Uid;
+import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
+import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
+import com.watermelon.server.event.lottery.exception.LotteryApplierNotFoundException;
+import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundException;
 import com.watermelon.server.event.lottery.service.LotteryRewardService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import com.watermelon.server.event.lottery.service.LotteryWinnerService;
@@ -58,6 +62,16 @@ public class LotteryController {
             @PathVariable int rank
     ){
         return new ResponseEntity<>(lotteryRewardService.getRewardInfo(rank), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(LotteryApplierNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLotteryApplierNotFoundException(LotteryApplierNotFoundException lotteryApplierNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(lotteryApplierNotFoundException.getMessage()));
+    }
+
+    @ExceptionHandler(LotteryRewardNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleLotteryRewardNotFoundException(LotteryRewardNotFoundException lotteryRewardNotFoundException){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(lotteryRewardNotFoundException.getMessage()));
     }
 
 }
