@@ -48,9 +48,13 @@ public class CurrentOrderEventManageService {
     }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
-        if(orderEvent.getId().equals(this.eventId)){
+        if(orderEvent.getId().equals(this.eventId)){ //이미 같은 이벤트라면
+            if(this.applyTickets.size()<maxWinnerCount){
+                applyFull = false;
+            }
             return;
         }
+        //이벤트 ID가 바꼈다면
         this.eventId = orderEvent.getId();
         this.quizId =orderEvent.getQuiz().getId();
         this.answer = orderEvent.getQuiz().getAnswer();
