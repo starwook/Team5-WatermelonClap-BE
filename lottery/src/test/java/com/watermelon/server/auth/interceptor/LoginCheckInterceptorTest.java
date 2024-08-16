@@ -4,6 +4,7 @@ import com.watermelon.server.auth.exception.AuthenticationException;
 import com.watermelon.server.auth.service.TokenVerifier;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.lottery.service.LotteryService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.assertj.core.api.Assertions;
@@ -18,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.HttpConstants.HEADER_LINK_ID;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -94,7 +94,7 @@ class LoginCheckInterceptorTest {
 
         //given
         mockVerifyForUser();
-        Mockito.when(request.getHeader(HEADER_LINK_ID)).thenReturn(TEST_URI);
+        Mockito.when(request.getCookies()).thenReturn(new Cookie[]{new Cookie(HEADER_LINK_ID, TEST_URI)});
 
         //when
         loginCheckInterceptor.preHandle(request, response, null);
