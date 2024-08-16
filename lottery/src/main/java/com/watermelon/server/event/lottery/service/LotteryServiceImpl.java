@@ -4,6 +4,7 @@ import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
+import com.watermelon.server.event.lottery.exception.LotteryApplierNotFoundException;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
 import jakarta.transaction.Transactional;
@@ -26,13 +27,13 @@ public class LotteryServiceImpl implements LotteryService{
     @Override
     public ResponseLotteryRankDto getLotteryRank(String uid) {
         return ResponseLotteryRankDto.from(
-                lotteryApplierRepository.findByUid(uid).orElseThrow()
+                findByUid(uid)
         );
     }
 
     @Override
     public LotteryApplier applyAndGet(String uid) {
-        LotteryApplier applier = lotteryApplierRepository.findByUid(uid).orElseThrow();
+        LotteryApplier applier = findByUid(uid);
         if(applier.isLotteryApplier()) return applier;
         applier.applyLottery();
         return lotteryApplierRepository.save(applier);
@@ -40,7 +41,7 @@ public class LotteryServiceImpl implements LotteryService{
 
     @Override
     public int getRemainChance(String uid) {
-        return lotteryApplierRepository.findByUid(uid).orElseThrow().getRemainChance();
+        return findByUid(uid).getRemainChance();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class LotteryServiceImpl implements LotteryService{
 
     @Override
     public LotteryApplier findLotteryApplierByUid(String uid){
-        return lotteryApplierRepository.findByUid(uid).orElseThrow();
+        return findByUid(uid);
     }
 
     @Override
@@ -101,4 +102,7 @@ public class LotteryServiceImpl implements LotteryService{
         return lotteryApplierRepository.existsByUid(uid);
     }
 
+    private LotteryApplier findByUid(String uid) {
+        return lotteryApplierRepository.findByUid(uid).orElseThrow(LotteryApplierNotFoundException::new);
+    }
 }
