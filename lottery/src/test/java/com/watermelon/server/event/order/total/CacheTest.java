@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.total;
 
 import com.watermelon.server.admin.service.AdminOrderEventService;
+import com.watermelon.server.common.config.CacheType;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
@@ -12,6 +13,7 @@ import com.watermelon.server.integration.BaseIntegrationTest;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,5 +56,19 @@ public class CacheTest extends BaseIntegrationTest {
         List<ResponseOrderEventDto> newCachedOrderEvents = orderEventQueryService.getOrderEvents();
         Assertions.assertThat(newCachedOrderEvents.size()).isEqualTo(cachedOrderEvents.size()+1);
     }
+
+//    @Test
+//    @DisplayName("Cache Expire Time 확인")
+//    void checkCacheExpireTime() throws InterruptedException {
+//        List<ResponseOrderEventDto> cachedOrderEvents = orderEventQueryService.getOrderEvents();
+//        orderEventRepository.save(OrderEvent.makeOrderEventWithOutImage(
+//                RequestOrderEventDto.makeForTestOpened(
+//                        RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
+//                )
+//        ));
+//        Thread.sleep(1000* CacheType.ORDER_EVENTS.getExpireTime());
+//        List<ResponseOrderEventDto> newCachedOrderEvents = orderEventQueryService.getOrderEvents();
+//        Assertions.assertThat(newCachedOrderEvents.size()).isEqualTo(cachedOrderEvents.size()+1);
+//    }
 
 }

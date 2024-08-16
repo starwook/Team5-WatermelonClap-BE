@@ -13,6 +13,9 @@ public enum CacheType {
             "orderEvents",
             10,
             100
+    ),
+    TEST_FOR_EXPIRE(
+            "testForExpire",1,100
     );
 
     CacheType(String cacheName, int expireTime, int maximumSize) {
