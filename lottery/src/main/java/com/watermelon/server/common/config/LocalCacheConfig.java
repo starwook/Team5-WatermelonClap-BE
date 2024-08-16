@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 
 @EnableCaching
 @Configuration
-@RequiredArgsConstructor
 public class LocalCacheConfig  {
-    private final CacheMetricsRegistrar cacheMetricsRegistrar;
 
     @Bean
     public CacheManager cacheManager() {
