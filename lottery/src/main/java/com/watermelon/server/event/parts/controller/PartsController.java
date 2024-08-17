@@ -1,6 +1,6 @@
 package com.watermelon.server.event.parts.controller;
 
-import com.watermelon.server.common.exception.ErrorResponse;
+import com.watermelon.server.exception.ErrorResponse;
 import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;

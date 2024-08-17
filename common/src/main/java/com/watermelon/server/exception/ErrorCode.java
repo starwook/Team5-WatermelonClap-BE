@@ -1,4 +1,4 @@
-package com.watermelon.server.common.exception;
+package com.watermelon.server.exception;
 
 import lombok.Getter;
 

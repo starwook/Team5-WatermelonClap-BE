@@ -1,4 +1,4 @@
-package com.watermelon.server.common.exception;
+package com.watermelon.server.exception;
 
 import com.watermelon.server.auth.exception.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.watermelon.server.common.exception;
+package com.watermelon.server.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

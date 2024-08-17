@@ -1,14 +1,9 @@
-package com.watermelon.server.common.exception;
+package com.watermelon.server.exception;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.BindingResult;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Global Exception Handler에서 발생한 에러에 대한 응답 처리를 관리

@@ -3,7 +3,7 @@ package com.watermelon.server.admin.controller;
 
 import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.admin.service.AdminOrderEventService;
-import com.watermelon.server.common.exception.ErrorResponse;
+import com.watermelon.server.exception.ErrorResponse;
 import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
