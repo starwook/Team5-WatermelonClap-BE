@@ -1,7 +1,7 @@
 package com.watermelon.server.event.order.service;
 
 
-import com.watermelon.server.error.ApplyTicketWrongException;
+import com.watermelon.server.event.order.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.domain.OrderEventWinner;
 import com.watermelon.server.event.order.dto.request.OrderEventWinnerRequestDto;

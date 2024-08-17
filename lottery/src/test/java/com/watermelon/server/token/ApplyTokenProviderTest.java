@@ -1,7 +1,7 @@
 package com.watermelon.server.token;
 
 import com.watermelon.server.ServerApplication;
-import com.watermelon.server.error.ApplyTicketWrongException;
+import com.watermelon.server.event.order.error.ApplyTicketWrongException;
 import io.jsonwebtoken.Jwts;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

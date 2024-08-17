@@ -1,14 +1,13 @@
 package com.watermelon.server.event.order.service;
 
 
-import com.watermelon.server.error.ApplyTicketWrongException;
+import com.watermelon.server.event.order.error.ApplyTicketWrongException;
 import com.watermelon.server.event.order.dto.request.OrderEventWinnerRequestDto;
 import com.watermelon.server.event.order.error.WinnerAlreadyParticipateException;
 import com.watermelon.server.event.order.error.WrongPhoneNumberFormatException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

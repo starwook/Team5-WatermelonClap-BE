@@ -1,4 +1,4 @@
-package com.watermelon.server.error;
+package com.watermelon.server.event.order.error;
 
 
 

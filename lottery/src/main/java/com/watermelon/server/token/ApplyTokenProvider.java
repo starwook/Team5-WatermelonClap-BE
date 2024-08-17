@@ -1,18 +1,15 @@
 package com.watermelon.server.token;
 
-import com.watermelon.server.YamlLoadFactory;
-import com.watermelon.server.error.ApplyTicketWrongException;
+import com.watermelon.server.event.order.error.ApplyTicketWrongException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
