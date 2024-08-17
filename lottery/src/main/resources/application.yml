@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: ${name:local}
+server:
+  port: 8091
+  base-url: http://43.202.54.29:8080
+  parts-share-url: http://localhost:5173/share
