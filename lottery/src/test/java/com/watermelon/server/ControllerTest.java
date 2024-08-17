@@ -64,7 +64,6 @@ public class ControllerTest extends APITest{
 
     protected final String TAG_LOTTERY = "추첨 이벤트";
     protected final String TAG_PARTS = "파츠 이벤트";
-    protected final String TAG_ORDER = "선착순 이벤트";
     protected final String TAG_LINK = "링크";
     protected final String TAG_EXPECTATION = "기대평";
 

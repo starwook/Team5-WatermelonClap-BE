@@ -1,6 +1,6 @@
 package com.watermelon.server.admin.controller;
 
-import com.watermelon.server.admin.exception.S3ImageFormatException;
+import com.watermelon.server.exception.S3ImageFormatException;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,12 +1,11 @@
 package com.watermelon.server.admin.controller;
 
-import com.watermelon.server.admin.exception.S3ImageFormatException;
-import com.watermelon.server.admin.service.S3ImageService;
+import com.watermelon.server.exception.S3ImageFormatException;
+import com.watermelon.server.S3ImageService;
 import com.watermelon.server.event.lottery.domain.LotteryEvent;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.repository.LotteryEventRepository;
-import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
