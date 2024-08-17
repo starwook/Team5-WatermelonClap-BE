@@ -90,7 +90,7 @@ public class CacheTest extends BaseIntegrationTest {
                 )
         )));
 
-        cacheService.putCache("orderEvents",cacheService.getOrderEventKey(),orderEventDtos);
+        cacheService.putCache(CacheType.ORDER_EVENTS.getCacheName(),cacheService.getOrderEventKey(),orderEventDtos);
         List<ResponseOrderEventDto> newOrderEventDtos = (List<ResponseOrderEventDto>) cacheService.getCacheValueByObject(
                 CacheType.ORDER_EVENTS.getCacheName()
                 ,cacheService.getOrderEventKey()

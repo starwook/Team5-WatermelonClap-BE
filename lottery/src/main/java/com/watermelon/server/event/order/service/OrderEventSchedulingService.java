@@ -25,7 +25,7 @@ public class OrderEventSchedulingService {
     private final OrderEventCommandService orderEventCommandService;
     private final CacheService cacheService;
     @Transactional
-    @CacheEvict(cacheNames = "orderEvents",allEntries = true)
+//    @CacheEvict(cacheNames = "orderEvents",allEntries = true)
     public void changeOrderStatusByTime(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         orderEvents.forEach(orderEvent -> {orderEvent.changeOrderEventStatusByTime(LocalDateTime.now());});
@@ -34,9 +34,10 @@ public class OrderEventSchedulingService {
                 .map(ResponseOrderEventDto::forUser)
                 .collect(Collectors.toList());
         cacheService.putCache(CacheType.ORDER_EVENTS.getCacheName(),
-                "orderEventKey",
+                cacheService.getOrderEventKey(),
                 newOrderEvents);
     }
+
     @Transactional
     public Long changeCurrentOrderEvent(){
         return orderEventCommandService.findOrderEventToMakeInProgress();
