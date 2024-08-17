@@ -1,4 +1,4 @@
-package com.watermelon.server.common.config;
+package com.watermelon.server.common.cache;
 
 import lombok.Getter;
 

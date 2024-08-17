@@ -1,15 +1,11 @@
-package com.watermelon.server.common.config;
+package com.watermelon.server.common.cache;
 
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.github.benmanes.caffeine.cache.stats.CacheStats;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.actuate.info.InfoContributor;
-import org.springframework.boot.actuate.metrics.cache.CacheMetricsRegistrar;
-import org.springframework.boot.actuate.metrics.cache.CaffeineCacheMeterBinderProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +31,6 @@ public class LocalCacheConfig  {
                         )
                 )
                 .collect(Collectors.toList());
-
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(caches);
         return cacheManager;
