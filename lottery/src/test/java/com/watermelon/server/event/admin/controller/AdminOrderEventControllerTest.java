@@ -15,7 +15,6 @@ import com.watermelon.server.event.order.dto.request.RequestQuizDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
-import org.hibernate.WrongClassException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

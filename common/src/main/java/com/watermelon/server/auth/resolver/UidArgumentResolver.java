@@ -10,8 +10,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import static com.watermelon.server.common.constants.HttpConstants.HEADER_UID;
-
 @Component
 @Slf4j
 public class UidArgumentResolver implements HandlerMethodArgumentResolver {
@@ -28,7 +26,7 @@ public class UidArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         //header 의 uid 를 주입
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        return request.getAttribute(HEADER_UID);
+        return request.getAttribute("uid");
     }
 
 }

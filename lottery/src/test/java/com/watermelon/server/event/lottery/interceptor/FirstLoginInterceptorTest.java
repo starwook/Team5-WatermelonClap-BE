@@ -16,8 +16,6 @@ import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static com.watermelon.server.common.constants.HttpConstants.HEADER_LINK_ID;
 import static com.watermelon.server.common.constants.HttpConstants.HEADER_UID;
 import static com.watermelon.server.constants.Constants.*;
-import static com.watermelon.server.constants.Constants.TEST_TOKEN;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)

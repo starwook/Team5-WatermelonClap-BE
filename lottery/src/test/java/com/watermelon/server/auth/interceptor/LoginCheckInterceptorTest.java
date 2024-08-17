@@ -2,8 +2,6 @@ package com.watermelon.server.auth.interceptor;
 
 import com.watermelon.server.auth.exception.AuthenticationException;
 import com.watermelon.server.auth.service.TokenVerifier;
-import com.watermelon.server.event.link.service.LinkService;
-import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.assertj.core.api.Assertions;
@@ -16,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.watermelon.server.constants.Constants.*;
-import static com.watermelon.server.common.constants.HttpConstants.HEADER_LINK_ID;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
