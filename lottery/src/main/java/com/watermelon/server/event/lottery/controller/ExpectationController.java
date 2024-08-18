@@ -30,7 +30,7 @@ public class ExpectationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Cacheable("expectations")
+
     @GetMapping(path ="/expectations")
     public ResponseEntity<List<ResponseExpectationDto>> getExpectationsForUser() {
         return new ResponseEntity<>(expectationService.getExpectationsForUser(),HttpStatus.OK);

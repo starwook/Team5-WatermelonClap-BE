@@ -5,3 +5,8 @@ server:
   port: 8080
   base-url: http://43.202.54.29:8080
   parts-share-url: http://localhost:5173/share
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches

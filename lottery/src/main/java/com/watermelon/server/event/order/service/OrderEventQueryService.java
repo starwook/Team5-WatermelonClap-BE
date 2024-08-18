@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.service;
 
 
+import com.watermelon.server.common.cache.CacheType;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
@@ -26,6 +27,7 @@ public class OrderEventQueryService {
     // (짧으면 괜찮을 수도..하지만 Transcation 밖에서 외부 API를 호출한다면?
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "orderEvents",key = "'orderEventKey'")
     public List<ResponseOrderEventDto> getOrderEvents(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         List<ResponseOrderEventDto> responseOrderEventDtos = new ArrayList<>();

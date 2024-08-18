@@ -4,7 +4,6 @@ import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
-import com.watermelon.server.redis.annotation.RedisDistributedLock;
 import lombok.*;
 import org.redisson.api.RSet;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ public class CurrentOrderEventManageService {
     private String answer;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private boolean applyFull;
     @Setter
     @Getter
     private int maxWinnerCount;
@@ -40,6 +40,7 @@ public class CurrentOrderEventManageService {
             saveOrderResult(orderResult);
             return true;
         }
+        applyFull = true;
         return false;
     }
     public int getCurrentCount() {
@@ -47,22 +48,27 @@ public class CurrentOrderEventManageService {
     }
 
     public void refreshOrderEventInProgress(OrderEvent orderEvent){
-        if(orderEvent.getId().equals(this.eventId)){
+        if(orderEvent.getId().equals(this.eventId)){ //이미 같은 이벤트라면
+            if(this.applyTickets.size()<maxWinnerCount){
+                applyFull = false;
+            }
             return;
         }
+        //이벤트 ID가 바꼈다면
         this.eventId = orderEvent.getId();
         this.quizId =orderEvent.getQuiz().getId();
         this.answer = orderEvent.getQuiz().getAnswer();
         this.startDate = orderEvent.getStartDate();
         this.endDate = orderEvent.getEndDate();
         this.maxWinnerCount = orderEvent.getWinnerCount();
+        this.applyFull = false;
         clearOrderResultRepository();
     }
     public void clearOrderResultRepository() {
         this.applyTickets.clear();
     }
 
-    public boolean isAnswerCorrect(String submitAnswer){
+    public boolean checkPrevious(String submitAnswer){
         if(this.answer.equals(submitAnswer)) return true;
         return false;
     }
@@ -83,5 +89,7 @@ public class CurrentOrderEventManageService {
         return eventId;
     }
 
-
+    public boolean isOrderApplyFull() {
+        return applyFull;
+    }
 }

@@ -63,7 +63,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 정답 틀림 ")
     void makeApplyTicketWrongAnswer() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        when(currentOrderEventManageService.isAnswerCorrect(any())).thenReturn(false);
+        when(currentOrderEventManageService.checkPrevious(any())).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.makeApplyTicket(RequestAnswerDto.makeWith(answer),1L,1L).getResult())
                 .isEqualTo(ApplyTicketStatus.WRONG.name());
     }
