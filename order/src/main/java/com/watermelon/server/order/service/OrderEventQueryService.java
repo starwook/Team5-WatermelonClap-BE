@@ -1,18 +1,22 @@
 package com.watermelon.server.order.service;
 
 
+import com.watermelon.server.common.cache.CacheType;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.repository.QuizRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class OrderEventQueryService {
     // (짧으면 괜찮을 수도..하지만 Transcation 밖에서 외부 API를 호출한다면?
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "orderEvents",key = "'orderEventKey'")
     public List<ResponseOrderEventDto> getOrderEvents(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         List<ResponseOrderEventDto> responseOrderEventDtos = new ArrayList<>();

@@ -61,7 +61,7 @@ class ExpectationControllerTest extends ControllerTest {
     void makeExpectationMakeConflictError() throws Exception {
         final String PATH = "/expectations";
         final String DOCUMENT_NAME ="expectation-conflict";
-        Mockito.doThrow(ExpectationAlreadyExistError.class).when(expectationService).makeExpectation(any(),any());
+        Mockito.doThrow(new ExpectationAlreadyExistError()).when(expectationService).makeExpectation(any(),any());
 
         mvc.perform(
                         RestDocumentationRequestBuilders.post(PATH)

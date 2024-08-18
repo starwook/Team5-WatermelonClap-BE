@@ -75,6 +75,27 @@ class PartsControllerTest extends ControllerTest {
     }
 
     @Test
+    @DisplayName("파츠 상태 변경 - id에 해당하는 파츠 없음")
+    void togglePartsNotFoundException() throws Exception {
+
+        givenEquipPartsNotExist();
+
+        whenPartsEquippedStatusIsChanged(TEST_PARTS_ID);
+
+        thenClientError();
+
+        resultActions
+                .andDo(document("id에 해당하는 파츠 없는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_PARTS)
+                                        .description("자신의 파츠 상태 변경")
+                                        .build()
+                        )));
+
+    }
+
+    @Test
     @DisplayName("파츠 뽑기 횟수 반환 - 성공")
     void getRemainChance() throws Exception {
 

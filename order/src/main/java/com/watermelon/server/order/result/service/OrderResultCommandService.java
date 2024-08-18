@@ -24,8 +24,11 @@ public class OrderResultCommandService {
     @Transactional
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException {
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
-        // 퀴즈 틀릴 시에
-        if(!currentOrderEventManageService.isAnswerCorrect(requestAnswerDto.getAnswer()))
+        // 퀴즈 틀릴 시에ApplyNotFullThenSave())
+        if(currentOrderEventManageService.isOrderApplyFull()){ //
+            return ResponseApplyTicketDto.fullApply();
+        }
+        if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
         {
             return ResponseApplyTicketDto.wrongAnswer();
         }

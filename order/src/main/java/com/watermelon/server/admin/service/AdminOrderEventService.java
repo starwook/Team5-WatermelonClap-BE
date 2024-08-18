@@ -5,6 +5,7 @@ import com.watermelon.server.S3ImageService;
 import com.watermelon.server.Scheduler;
 import com.watermelon.server.exception.S3ImageFormatException;
 import com.watermelon.server.order.domain.OrderEvent;
+
 import com.watermelon.server.order.domain.OrderEventWinner;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
@@ -41,25 +42,25 @@ public class AdminOrderEventService {
     @Transactional(readOnly = true)
     public List<ResponseOrderEventWinnerDto> getOrderEventWinnersForAdmin(Long eventId) throws WrongOrderEventFormatException {
         OrderEvent orderEvent = orderEventRepository.findByIdFetchWinner(eventId).orElseThrow(WrongOrderEventFormatException::new);
-        List<OrderEventWinner> orderEventWinners = orderEvent.getOrderEventWinner();
+        List< OrderEventWinner> orderEventWinners = orderEvent.getOrderEventWinner();
         return orderEventWinners.stream()
                 .map(orderEventWinner -> ResponseOrderEventWinnerDto.forAdmin(orderEventWinner))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public ResponseOrderEventDto makeOrderEvent(RequestOrderEventDto requestOrderEventDto, MultipartFile rewardImage, MultipartFile quizImage) throws S3ImageFormatException {
+    public ResponseOrderEventDto makeOrderEvent(RequestOrderEventDto requestOrderEventDto, MultipartFile rewardImage,MultipartFile quizImage) throws S3ImageFormatException {
         String rewardImgSrc = s3ImageService.uploadImage(rewardImage);
         String quizImgSrc = s3ImageService.uploadImage(quizImage);
         OrderEvent newOrderEvent = OrderEvent.makeOrderEventWithImage(requestOrderEventDto,rewardImgSrc,quizImgSrc);
-        saveOrderEvent(newOrderEvent);
+        saveOrderEventWithCacheEvict(newOrderEvent);
         scheduler.checkOrderEvent();
         return ResponseOrderEventDto.forAdmin(newOrderEvent);
     }
 
-    @CacheEvict(value = "orderEvents", allEntries = true)
+    @CacheEvict(cacheNames = "orderEvents", allEntries = true)
     @Transactional
-    public void saveOrderEvent(OrderEvent orderEvent){
+    public void saveOrderEventWithCacheEvict(OrderEvent orderEvent){
         orderEventRepository.save(orderEvent);
     }
 

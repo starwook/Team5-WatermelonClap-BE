@@ -14,10 +14,12 @@ import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInf
 import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
 import com.watermelon.server.event.link.dto.MyLinkDto;
 import com.watermelon.server.event.link.service.LinkService;
+import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundException;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
+import com.watermelon.server.event.parts.exception.PartsNotExistException;
 import com.watermelon.server.event.parts.service.PartsService;
 import com.watermelon.server.event.lottery.service.LotteryRewardService;
 import com.watermelon.server.event.lottery.service.LotteryService;
@@ -113,6 +115,11 @@ public class ControllerTest extends APITest{
         );
     }
 
+    protected void givenLotteryRewardInfoNotExists(){
+        Mockito.doThrow(new LotteryRewardNotFoundException())
+                .when(lotteryRewardService).getRewardInfo(TEST_RANK);
+    }
+
     protected void givenLotteryWinners() {
         Mockito.when(lotteryWinnerService.getLotteryWinners())
                 .thenReturn(List.of(
@@ -180,6 +187,11 @@ public class ControllerTest extends APITest{
     @Override
     protected void givenPartsNotEquipped() {
 
+    }
+
+    protected void givenEquipPartsNotExist(){
+        Mockito.doThrow(new PartsNotExistException()).when(partsService)
+                .toggleParts(TEST_UID, TEST_PARTS_ID);
     }
 
     protected void givenLotteryApplierWhoHasNoRemainChance(){
