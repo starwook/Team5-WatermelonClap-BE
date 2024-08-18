@@ -1,6 +1,8 @@
 package com.watermelon.server.event.order.service;
 
 import com.watermelon.server.event.order.domain.OrderEvent;
+
+import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
@@ -15,18 +17,12 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
-    private Long eventId;
-    private Long quizId;
-    private String answer;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private boolean applyFull;
-    @Setter
     @Getter
-    private int maxWinnerCount;
-//    @Getter
-//    private final RSet<OrderResult> orderResultRset;
+    private OrderEvent currentOrderEvent;
+
     private final RSet<String> applyTickets;
+
+
 
 
     @Transactional
@@ -36,32 +32,32 @@ public class CurrentOrderEventManageService {
 
 
     public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
-        if(maxWinnerCount-getCurrentCount()>0){
+        if(currentOrderEvent.getWinnerCount()- getCurrentApplyTicketSize()>0){
             saveOrderResult(orderResult);
             return true;
         }
-        applyFull = true;
+        // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
+        // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
+        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
-    public int getCurrentCount() {
+    public int getCurrentApplyTicketSize() {
         return applyTickets.size();
     }
 
-    public void refreshOrderEventInProgress(OrderEvent orderEvent){
-        if(orderEvent.getId().equals(this.eventId)){ //이미 같은 이벤트라면
-            if(this.applyTickets.size()<maxWinnerCount){
-                applyFull = false;
+    @Transactional
+    public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
+        //동일한 이벤트라면
+        if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
+            if(this.applyTickets.size()<currentOrderEvent.getWinnerCount()){
+                this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
+            //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
+            orderEventFromDB.setOrderEventStatus(currentOrderEvent.getOrderEventStatus());
             return;
         }
-        //이벤트 ID가 바꼈다면
-        this.eventId = orderEvent.getId();
-        this.quizId =orderEvent.getQuiz().getId();
-        this.answer = orderEvent.getQuiz().getAnswer();
-        this.startDate = orderEvent.getStartDate();
-        this.endDate = orderEvent.getEndDate();
-        this.maxWinnerCount = orderEvent.getWinnerCount();
-        this.applyFull = false;
+
+        currentOrderEvent = orderEventFromDB;
         clearOrderResultRepository();
     }
     public void clearOrderResultRepository() {
@@ -69,15 +65,15 @@ public class CurrentOrderEventManageService {
     }
 
     public boolean checkPrevious(String submitAnswer){
-        if(this.answer.equals(submitAnswer)) return true;
+        if(currentOrderEvent.getQuiz().isCorrect(submitAnswer)) return true;
         return false;
     }
     public boolean isTimeInEvent(LocalDateTime now){
-        if(now.isAfter(this.startDate) &&now.isBefore(endDate)) return true;
+        if(now.isAfter(currentOrderEvent.getStartDate()) &&now.isBefore(currentOrderEvent.getEndDate())) return true;
         return false;
     }
     public boolean isEventAndQuizIdWrong( Long eventId,Long quizId) {
-        if(this.eventId !=null && this.eventId.equals(eventId) && this.quizId.equals(quizId)) return true;
+        if(currentOrderEvent !=null && currentOrderEvent.getId().equals(eventId) && currentOrderEvent.getQuiz().getId().equals(quizId)) return true;
         return false;
     }
     public void checkingInfoErrors( Long eventId, Long quizId)
@@ -86,10 +82,12 @@ public class CurrentOrderEventManageService {
         if (!isTimeInEvent(LocalDateTime.now())) throw new NotDuringEventPeriodException();
     }
     public Long getCurrentOrderEventId() {
-        return eventId;
+        if (currentOrderEvent == null) return null;
+        return this.currentOrderEvent.getId();
     }
 
     public boolean isOrderApplyFull() {
-        return applyFull;
+        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
+        return false;
     }
 }

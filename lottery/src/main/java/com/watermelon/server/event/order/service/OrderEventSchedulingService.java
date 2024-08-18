@@ -25,7 +25,7 @@ public class OrderEventSchedulingService {
     private final OrderEventCommandService orderEventCommandService;
     private final CacheService cacheService;
     @Transactional
-//    @CacheEvict(cacheNames = "orderEvents",allEntries = true)
+    // 선착순 이벤트의 상태를 시간에 따라 바꿔주는 메소드
     public void changeOrderStatusByTime(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         orderEvents.forEach(orderEvent -> {orderEvent.changeOrderEventStatusByTime(LocalDateTime.now());});
@@ -38,6 +38,7 @@ public class OrderEventSchedulingService {
                 newOrderEvents);
     }
 
+    //현재 상태를 바꿔주고
     @Transactional
     public Long changeCurrentOrderEvent(){
         return orderEventCommandService.findOrderEventToMakeInProgress();

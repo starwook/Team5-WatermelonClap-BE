@@ -1,5 +1,9 @@
 package com.watermelon.server.event.order.service;
 
+import com.watermelon.server.event.order.domain.OrderEvent;
+import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
+import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
+import com.watermelon.server.event.order.dto.request.RequestQuizDto;
 import com.watermelon.server.event.order.result.domain.OrderResult;
 import org.aspectj.weaver.ast.Or;
 import org.assertj.core.api.Assertions;
@@ -23,7 +27,13 @@ class CurrentOrderEventManageServiceTest {
     private CurrentOrderEventManageService currentOrderEventManageService;
     @BeforeEach
     void setUp() {
-        currentOrderEventManageService.setMaxWinnerCount(100);
+        currentOrderEventManageService.refreshOrderEventInProgress(
+                OrderEvent.makeOrderEventWithOutImage(
+                        RequestOrderEventDto.makeForTestOpened(
+                                RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
+                        )
+                )
+        );
     }
 
     @Test
@@ -36,7 +46,7 @@ class CurrentOrderEventManageServiceTest {
     @Test
     @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
     public void checkIsOrderApplyFull() {
-        when(applyTickets.size()).thenReturn(currentOrderEventManageService.getMaxWinnerCount());
+        when(applyTickets.size()).thenReturn(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave(new OrderResult())).isFalse();
 
     }

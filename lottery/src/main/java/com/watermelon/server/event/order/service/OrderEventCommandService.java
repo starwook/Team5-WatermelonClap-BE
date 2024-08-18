@@ -42,7 +42,6 @@ public class OrderEventCommandService {
 
     @Transactional
     public Long findOrderEventToMakeInProgress(){
-        //현재 OrderEvent의 상태를 주기적으로 변경
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         if(orderEvents.isEmpty()) return currentOrderEventManageService.getCurrentOrderEventId();// 이벤트 없을시 스킵
 

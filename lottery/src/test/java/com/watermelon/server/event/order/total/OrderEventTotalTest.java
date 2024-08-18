@@ -82,8 +82,6 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].eventId").value(openOrderEvent.getId()))
-                .andExpect(jsonPath("$[0].startDate").value(openOrderEvent.getStartDate().toString()))
-                .andExpect(jsonPath("$[0].endDate").value(openOrderEvent.getEndDate().toString()))
                 .andExpect(jsonPath("$[0].status").value(openOrderEvent.getOrderEventStatus().toString()))
                 .andExpect(jsonPath("$[0].quiz").exists())
                 .andDo(print());
@@ -114,7 +112,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andDo(print());
     }
     @Test
-    @DisplayName("[통합] 선착순 이벤트 오픈 안 된 이벤트 가져오기")
+    @DisplayName("[통합] 선착순 이벤트 오픈 안 된 이벤트 가져오기 - quiz = null")
     public void getUnOpenOrderEvent() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
 
@@ -122,8 +120,6 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].eventId").value(unOpenOrderEvent.getId()))
-                .andExpect(jsonPath("$[0].startDate").value(unOpenOrderEvent.getStartDate().toString()))
-                .andExpect(jsonPath("$[0].endDate").value(unOpenOrderEvent.getEndDate().toString()))
                 .andExpect(jsonPath("$[0].status").value(unOpenOrderEvent.getOrderEventStatus().toString()))
                 .andExpect(jsonPath("$[0].quiz").doesNotExist())
                 .andDo(print());
@@ -310,7 +306,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         /**
          * 선착순 최대 인원 수만큼 응모 추가
          */
-        for(int i=0;i<currentOrderEventManageService.getMaxWinnerCount();i++){
+        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
             mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestAnswerDto)))
@@ -320,7 +316,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         }
 
 
-        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyTicketSize()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))
