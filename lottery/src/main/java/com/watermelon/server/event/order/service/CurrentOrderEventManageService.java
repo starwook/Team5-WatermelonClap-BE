@@ -1,6 +1,7 @@
 package com.watermelon.server.event.order.service;
 
 import com.watermelon.server.event.order.domain.OrderEvent;
+import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
@@ -43,7 +44,7 @@ public class CurrentOrderEventManageService {
             saveOrderResult(orderResult);
             return true;
         }
-        applyFull = true;
+        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
     public int getCurrentCount() {
@@ -54,7 +55,7 @@ public class CurrentOrderEventManageService {
     public void refreshOrderEventInProgress(OrderEvent newOrderEvent){
         if(currentOrderEvent != null && newOrderEvent.getId().equals(currentOrderEvent.getId())){ //이미 같은 이벤트라면
             if(this.applyTickets.size()<currentOrderEvent.getWinnerCount()){
-                applyFull = false;
+                this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
             return;
         }
@@ -66,7 +67,7 @@ public class CurrentOrderEventManageService {
 //        this.endDate = newOrderEvent.getEndDate();
 //        this.maxWinnerCount = newOrderEvent.getWinnerCount();
         currentOrderEvent = newOrderEvent;
-        this.applyFull = false;
+        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
         clearOrderResultRepository();
     }
     public void clearOrderResultRepository() {
@@ -96,6 +97,7 @@ public class CurrentOrderEventManageService {
     }
 
     public boolean isOrderApplyFull() {
-        return applyFull;
+        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.OPEN))return false;
+        return true;
     }
 }
