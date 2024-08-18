@@ -1,13 +1,14 @@
 package com.watermelon.server.admin.controller;
 
 
+import com.watermelon.server.admin.exception.EventDurationConflictException;
 import com.watermelon.server.admin.exception.S3ImageFormatException;
 import com.watermelon.server.admin.service.AdminOrderEventService;
 import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class AdminOrderEventController {
             @RequestPart("orderEvent") @Valid RequestOrderEventDto requestOrderEventDto,
             @RequestPart("rewardImage") MultipartFile rewardImage,
             @RequestPart("quizImage") MultipartFile quizImage)
-            throws S3ImageFormatException {
+            throws S3ImageFormatException, EventDurationConflictException {
 
         return adminOrderEventService.makeOrderEvent(requestOrderEventDto,rewardImage,quizImage);
     }
@@ -50,12 +51,16 @@ public class AdminOrderEventController {
 
 
     @ExceptionHandler(S3ImageFormatException.class)
-    public ResponseEntity<String> handleS3ImageFormatException(S3ImageFormatException s3ImageFormatException){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(s3ImageFormatException.getMessage());
+    public ResponseEntity<ErrorResponse> handleS3ImageFormatException(S3ImageFormatException s3ImageFormatException){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.of(s3ImageFormatException.getMessage()));
     }
     @ExceptionHandler(WrongOrderEventFormatException.class)
     public ResponseEntity<ErrorResponse> handleWrongOrderEventFormatException(WrongOrderEventFormatException wrongOrderEventFormatException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(wrongOrderEventFormatException.getMessage()));
+    }
+    @ExceptionHandler(EventDurationConflictException.class)
+    public ResponseEntity<ErrorResponse> handleEventDurationConflictException(EventDurationConflictException eventDurationConflictException){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(eventDurationConflictException.getMessage()));
     }
 
 }

@@ -14,8 +14,7 @@ import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.event.order.dto.request.RequestQuizDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventWinnerDto;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
-import org.hibernate.WrongClassException;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -201,7 +200,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    @DisplayName("[DOC] 선착순 이벤트를 삭제한다 - 에러")
     void deleteOrderEventThrowError() throws Exception {
         final String PATH = "/admin/event/order/{eventId}";
         final String DOCUMENT_NAME ="not-exist";
