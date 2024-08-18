@@ -200,7 +200,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    @DisplayName("[DOC] 선착순 이벤트를 삭제한다 - 에러")
     void deleteOrderEventThrowError() throws Exception {
         final String PATH = "/admin/event/order/{eventId}";
         final String DOCUMENT_NAME ="not-exist";

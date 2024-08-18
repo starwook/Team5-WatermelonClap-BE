@@ -51,14 +51,14 @@ public class AdminOrderEventController {
 
 
     @ExceptionHandler(S3ImageFormatException.class)
-    public ResponseEntity<String> handleS3ImageFormatException(S3ImageFormatException s3ImageFormatException){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(s3ImageFormatException.getMessage());
+    public ResponseEntity<ErrorResponse> handleS3ImageFormatException(S3ImageFormatException s3ImageFormatException){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.of(s3ImageFormatException.getMessage()));
     }
     @ExceptionHandler(WrongOrderEventFormatException.class)
     public ResponseEntity<ErrorResponse> handleWrongOrderEventFormatException(WrongOrderEventFormatException wrongOrderEventFormatException){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(wrongOrderEventFormatException.getMessage()));
     }
-    @ExceptionHandler(WrongOrderEventFormatException.class)
+    @ExceptionHandler(EventDurationConflictException.class)
     public ResponseEntity<ErrorResponse> handleEventDurationConflictException(EventDurationConflictException eventDurationConflictException){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.of(eventDurationConflictException.getMessage()));
     }
