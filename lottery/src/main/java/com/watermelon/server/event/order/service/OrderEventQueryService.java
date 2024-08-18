@@ -1,11 +1,9 @@
 package com.watermelon.server.event.order.service;
 
 
-import com.watermelon.server.common.cache.CacheType;
 import com.watermelon.server.event.order.domain.OrderEvent;
 import com.watermelon.server.event.order.dto.response.ResponseOrderEventDto;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
-import com.watermelon.server.event.order.repository.QuizRepository;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

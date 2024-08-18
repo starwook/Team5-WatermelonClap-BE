@@ -6,7 +6,7 @@ import com.watermelon.server.event.order.domain.OrderEventStatus;
 import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.event.order.dto.request.RequestQuizDto;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.repository.OrderEventRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 //@DataJpaTest

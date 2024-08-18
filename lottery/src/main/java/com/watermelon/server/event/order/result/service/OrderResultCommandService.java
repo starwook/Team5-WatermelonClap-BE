@@ -3,8 +3,8 @@ package com.watermelon.server.event.order.result.service;
 
 import com.watermelon.server.event.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.event.order.dto.response.ResponseApplyTicketDto;
-import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
 import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.redis.annotation.RedisDistributedLock;

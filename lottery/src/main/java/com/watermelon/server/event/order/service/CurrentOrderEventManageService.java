@@ -1,8 +1,8 @@
 package com.watermelon.server.event.order.service;
 
 import com.watermelon.server.event.order.domain.OrderEvent;
-import com.watermelon.server.event.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.event.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.event.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.event.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.event.order.result.domain.OrderResult;
 import lombok.*;
 import org.redisson.api.RSet;
