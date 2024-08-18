@@ -97,14 +97,14 @@ public class OrderEvent extends BaseEntity {
 
     @Transactional
     public void changeOrderEventStatusByTime(LocalDateTime now){
-        if(orderEventStatus.equals(OrderEventStatus.END)||orderEventStatus.equals(OrderEventStatus.CLOSED)) return;
+        if(orderEventStatus.equals(OrderEventStatus.END)) return;
         if(orderEventStatus.equals(OrderEventStatus.UPCOMING)){
             if(now.isAfter(startDate)) {
                 changeOrderEventStatus(OrderEventStatus.OPEN);
                 log.info("EVENT OPEN");
             }
         }
-        if(orderEventStatus.equals(OrderEventStatus.OPEN)){
+        if(orderEventStatus.equals(OrderEventStatus.OPEN)||orderEventStatus.equals(OrderEventStatus.CLOSED)){
             if(now.isAfter(endDate)){
                 changeOrderEventStatus(OrderEventStatus.END);
                 log.info("EVENT END");
