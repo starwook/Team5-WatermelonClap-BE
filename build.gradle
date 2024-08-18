@@ -104,4 +104,83 @@ subprojects {
 		runtimeOnly "io.jsonwebtoken:jjwt-impl:${JJWT_VERSION}"
 	}
 
+
+	bootJar {
+		dependsOn 'openapi3'
+		dependsOn 'customGenerateSwaggerUI'
+		dependsOn 'copySwaggerUI'
+	}
+
+//OpenAPI Spec 지정
+	openapi3 {
+		title = 'Watermelon REST API'
+		description = 'Watermelon API 문서입니다.'
+		version = '0.1.0'
+		servers = [ { url = 'http://43.202.54.29:8080' } ]
+		format = 'yaml'
+		contact = {
+			name = 'watermelon'
+			email = 'watermelon@gmail.com'
+		}
+	}
+
+// Swagger UI 파일 복사 태스크 등록
+	tasks.register('copySwaggerUI', Copy) {
+		dependsOn jar
+		dependsOn compileTestJava
+		dependsOn test
+		dependsOn customGenerateSwaggerUI
+		dependsOn resolveMainClassName
+		from("build/swagger-ui-watermelon")
+		into("build/resources/main/static/docs")
+	}
+
+	tasks.register('customGenerateSwaggerUI', GenerateSwaggerUI) {
+		dependsOn 'openapi3'
+		doFirst {
+			def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+
+			def securitySchemesContent =  "  securitySchemes:\n" +  \
+                                      "    bearerAuth:\n" +  \
+                                      "      type: http\n" +  \
+									  "      scheme: bearer\n"+  \
+                                      "security:\n" +
+					"  - bearerAuth: []  # Apply the security scheme here"
+
+			swaggerUIFile.append securitySchemesContent
+		}
+		inputFile = file('build/api-spec/openapi3.yaml')
+		outputDir = file("build/swagger-ui-watermelon")
+		wipeOutputDir = true
+	}
+
+	swaggerSources {
+		watermelon {
+			inputFile = file('build/api-spec/openapi3.yaml') //openapi3 파일 위치 지정
+		}
+
+	}
+
+	jacocoTestReport {
+		dependsOn test // tests are required to run before generating the report
+		dependsOn 'copySwaggerUI'
+		reports {
+			xml.required = true
+			csv.required = false
+			html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+		}
+
+		afterEvaluate {
+			classDirectories.setFrom(
+					files(classDirectories.files.collect {
+						fileTree(dir: it, excludes: [
+								'**/*Application*',
+								'**/*Exception*',
+								'**/dto/**',
+						])
+					})
+			)
+		}
+	}
+
 }
