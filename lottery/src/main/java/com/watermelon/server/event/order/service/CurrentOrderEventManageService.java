@@ -18,18 +18,8 @@ import java.time.LocalDateTime;
 public class CurrentOrderEventManageService {
     private OrderEvent currentOrderEvent;
 
-    private boolean applyFull;
     private final RSet<String> applyTickets;
-//    @Setter
-//    @Getter
-//    private int maxWinnerCount;
-//    private Long eventId;
-//    private Long quizId;
-//    private String answer;
-//    private LocalDateTime startDate;
-//    private LocalDateTime endDate;
-//    @Getter
-//    private final RSet<OrderResult> orderResultRset;
+
 
 
 
@@ -44,6 +34,8 @@ public class CurrentOrderEventManageService {
             saveOrderResult(orderResult);
             return true;
         }
+        // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
+        // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
@@ -52,22 +44,18 @@ public class CurrentOrderEventManageService {
     }
 
     @Transactional
-    public void refreshOrderEventInProgress(OrderEvent newOrderEvent){
-        if(currentOrderEvent != null && newOrderEvent.getId().equals(currentOrderEvent.getId())){ //이미 같은 이벤트라면
+    public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
+        //동일한 이벤트라면
+        if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
             if(this.applyTickets.size()<currentOrderEvent.getWinnerCount()){
                 this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
+            //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
+            orderEventFromDB.setOrderEventStatus(currentOrderEvent.getOrderEventStatus());
             return;
         }
-        //이벤트 ID가 바꼈다면
-//        this.eventId = newOrderEvent.getId();
-//        this.quizId =newOrderEvent.getQuiz().getId();
-//        this.answer = newOrderEvent.getQuiz().getAnswer();
-//        this.startDate = newOrderEvent.getStartDate();
-//        this.endDate = newOrderEvent.getEndDate();
-//        this.maxWinnerCount = newOrderEvent.getWinnerCount();
-        currentOrderEvent = newOrderEvent;
-        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
+
+        currentOrderEvent = orderEventFromDB;
         clearOrderResultRepository();
     }
     public void clearOrderResultRepository() {
@@ -97,7 +85,7 @@ public class CurrentOrderEventManageService {
     }
 
     public boolean isOrderApplyFull() {
-        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.OPEN))return false;
-        return true;
+        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
+        return false;
     }
 }
