@@ -1,12 +1,14 @@
 package com.watermelon.server.event.order.result.service;
 
+import com.watermelon.server.event.order.domain.OrderEvent;
+import com.watermelon.server.event.order.dto.request.RequestOrderEventDto;
+import com.watermelon.server.event.order.dto.request.RequestOrderRewardDto;
+import com.watermelon.server.event.order.dto.request.RequestQuizDto;
 import com.watermelon.server.event.order.result.domain.OrderResult;
 import com.watermelon.server.event.order.service.CurrentOrderEventManageService;
 import org.assertj.core.api.Assertions;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.redisson.api.RSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -26,12 +28,18 @@ class OrderResultLockTest {
     @BeforeEach
     void setUp() {
        currentOrderEventManageService.clearOrderResultRepository();
-       currentOrderEventManageService.setMaxWinnerCount(200);
+       currentOrderEventManageService.refreshOrderEventInProgress(
+               OrderEvent.makeOrderEventWithOutImage(
+                       RequestOrderEventDto.makeForTestOpened(
+                               RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
+                       )
+               )
+       );
     }
 
     @Test
-    void 선착순_이벤트_락_적용_200명_25배_신청() throws InterruptedException {
-        int numberOfThreads = currentOrderEventManageService.getMaxWinnerCount()*25;
+    void 선착순_이벤트_락_적용_25배_신청() throws InterruptedException {
+        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*25;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){
@@ -48,8 +56,8 @@ class OrderResultLockTest {
         }
         latch.await();
 
-        System.out.println("OrderResult 개수: "+currentOrderEventManageService.getCurrentCount());
-        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(currentOrderEventManageService.getMaxWinnerCount());
+        System.out.println("OrderResult 개수: "+currentOrderEventManageService.getCurrentApplyTicketSize());
+        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyTicketSize()).isEqualTo(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
     }
 //    @Test
 //    void 선착순_이벤트_락_미적용_100명() throws InterruptedException {

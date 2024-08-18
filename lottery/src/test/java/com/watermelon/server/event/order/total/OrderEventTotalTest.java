@@ -310,7 +310,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         /**
          * 선착순 최대 인원 수만큼 응모 추가
          */
-        for(int i=0;i<currentOrderEventManageService.getMaxWinnerCount();i++){
+        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
             mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(requestAnswerDto)))
@@ -320,7 +320,7 @@ public class OrderEventTotalTest extends BaseIntegrationTest {
         }
 
 
-        Assertions.assertThat(currentOrderEventManageService.getCurrentCount()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyTicketSize()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
+    @Getter
     private OrderEvent currentOrderEvent;
 
     private final RSet<String> applyTickets;
@@ -30,7 +31,7 @@ public class CurrentOrderEventManageService {
 
 
     public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
-        if(currentOrderEvent.getWinnerCount()-getCurrentCount()>0){
+        if(currentOrderEvent.getWinnerCount()- getCurrentApplyTicketSize()>0){
             saveOrderResult(orderResult);
             return true;
         }
@@ -39,7 +40,7 @@ public class CurrentOrderEventManageService {
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
-    public int getCurrentCount() {
+    public int getCurrentApplyTicketSize() {
         return applyTickets.size();
     }
 
