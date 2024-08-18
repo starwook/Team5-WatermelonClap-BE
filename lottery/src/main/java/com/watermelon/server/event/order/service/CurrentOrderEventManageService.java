@@ -15,18 +15,21 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
-    private Long eventId;
-    private Long quizId;
-    private String answer;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private OrderEvent currentOrderEvent;
+
     private boolean applyFull;
-    @Setter
-    @Getter
-    private int maxWinnerCount;
+    private final RSet<String> applyTickets;
+//    @Setter
+//    @Getter
+//    private int maxWinnerCount;
+//    private Long eventId;
+//    private Long quizId;
+//    private String answer;
+//    private LocalDateTime startDate;
+//    private LocalDateTime endDate;
 //    @Getter
 //    private final RSet<OrderResult> orderResultRset;
-    private final RSet<String> applyTickets;
+
 
 
     @Transactional
@@ -36,7 +39,7 @@ public class CurrentOrderEventManageService {
 
 
     public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
-        if(maxWinnerCount-getCurrentCount()>0){
+        if(currentOrderEvent.getWinnerCount()-getCurrentCount()>0){
             saveOrderResult(orderResult);
             return true;
         }
@@ -47,20 +50,22 @@ public class CurrentOrderEventManageService {
         return applyTickets.size();
     }
 
-    public void refreshOrderEventInProgress(OrderEvent orderEvent){
-        if(orderEvent.getId().equals(this.eventId)){ //이미 같은 이벤트라면
-            if(this.applyTickets.size()<maxWinnerCount){
+    @Transactional
+    public void refreshOrderEventInProgress(OrderEvent newOrderEvent){
+        if(currentOrderEvent != null && newOrderEvent.getId().equals(currentOrderEvent.getId())){ //이미 같은 이벤트라면
+            if(this.applyTickets.size()<currentOrderEvent.getWinnerCount()){
                 applyFull = false;
             }
             return;
         }
         //이벤트 ID가 바꼈다면
-        this.eventId = orderEvent.getId();
-        this.quizId =orderEvent.getQuiz().getId();
-        this.answer = orderEvent.getQuiz().getAnswer();
-        this.startDate = orderEvent.getStartDate();
-        this.endDate = orderEvent.getEndDate();
-        this.maxWinnerCount = orderEvent.getWinnerCount();
+//        this.eventId = newOrderEvent.getId();
+//        this.quizId =newOrderEvent.getQuiz().getId();
+//        this.answer = newOrderEvent.getQuiz().getAnswer();
+//        this.startDate = newOrderEvent.getStartDate();
+//        this.endDate = newOrderEvent.getEndDate();
+//        this.maxWinnerCount = newOrderEvent.getWinnerCount();
+        currentOrderEvent = newOrderEvent;
         this.applyFull = false;
         clearOrderResultRepository();
     }
@@ -69,15 +74,15 @@ public class CurrentOrderEventManageService {
     }
 
     public boolean checkPrevious(String submitAnswer){
-        if(this.answer.equals(submitAnswer)) return true;
+        if(currentOrderEvent.getQuiz().isCorrect(submitAnswer)) return true;
         return false;
     }
     public boolean isTimeInEvent(LocalDateTime now){
-        if(now.isAfter(this.startDate) &&now.isBefore(endDate)) return true;
+        if(now.isAfter(currentOrderEvent.getStartDate()) &&now.isBefore(currentOrderEvent.getEndDate())) return true;
         return false;
     }
     public boolean isEventAndQuizIdWrong( Long eventId,Long quizId) {
-        if(this.eventId !=null && this.eventId.equals(eventId) && this.quizId.equals(quizId)) return true;
+        if(currentOrderEvent !=null && currentOrderEvent.getId().equals(eventId) && currentOrderEvent.getQuiz().getId().equals(quizId)) return true;
         return false;
     }
     public void checkingInfoErrors( Long eventId, Long quizId)
@@ -86,7 +91,8 @@ public class CurrentOrderEventManageService {
         if (!isTimeInEvent(LocalDateTime.now())) throw new NotDuringEventPeriodException();
     }
     public Long getCurrentOrderEventId() {
-        return eventId;
+        if (currentOrderEvent == null) return null;
+        return this.currentOrderEvent.getId();
     }
 
     public boolean isOrderApplyFull() {
