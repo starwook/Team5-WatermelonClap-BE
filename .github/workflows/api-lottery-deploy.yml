@@ -74,7 +74,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           key: ${{secrets.SSH_KEY}}
-          host: ${{secrets.SSH_API_ORDER_HOST}}
+          host: ${{secrets.SSH_API_LOTTERY_HOST}}
           username: ${{secrets.SSH_USER}}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-lottery:latest
