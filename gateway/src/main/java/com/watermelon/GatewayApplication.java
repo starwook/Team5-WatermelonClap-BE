@@ -19,9 +19,9 @@ public class GatewayApplication {
                         .path("/admin/event/order/**")
                         .or()
                         .path("/event/order/**")
-                        .uri("http://localhost:8092"))
+                        .uri("http://10.1.5.40:8080"))
                 .route("lottery", r -> r.path("/**")
-                        .uri("http://localhost:8091"))
+                        .uri("http://10.1.5.40:8080"))
                 .build();
     }
 
