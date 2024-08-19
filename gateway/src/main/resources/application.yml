@@ -8,20 +8,27 @@ spring:
   cloud:
     default-filters:
       - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-#    globalcors:
-#      cors-configurations:
-#          '[/**]':
-#            allowedOrigins:
-#                - 'http://localhost:5173'
-#                - 'http://localhost:63342'
-#                - 'https://watermelon-clap.web.app' # 허용하려는 도메인
-#            allow-credentials: true # 요청 시 인증 정보를 전송하도록 허가
-#            allowedHeaders:  # 허용하려는 헤더
-#            allowedMethods: # 허용하려는 HTTP 메서드
-#              - PUT
-#              - GET
-#              - POST
-#              - DELETE
-#              - OPTIONS
-#              - PATCH
+    globalcors:
+      cors-configurations:
+          '[/**]':
+            allowedOrigins:
+                - 'http://localhost:5173'
+                - 'http://localhost:63342'
+                - 'https://watermelon-clap.web.app' # 허용하려는 도메인
+            allow-credentials: true # 요청 시 인증 정보를 전송하도록 허가
+            # 허용하려는 헤더
+            allowedHeaders:
+              - 'Origin'
+              - 'X-Requested-With'
+              - 'Content-Type'
+              - 'Accept'
+              - 'Authorization'
+              - 'ApplyTicket'
+            allowedMethods: # 허용하려는 HTTP 메서드
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+              - PATCH
 
