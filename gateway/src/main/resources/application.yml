@@ -7,8 +7,11 @@ spring:
     web-application-type: reactive
   cloud:
     gateway:
+      filter:
+        dedupe-response-header:
+          enabled: true
       default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       globalcors:
         cors-configurations:
             '[/**]':
@@ -32,6 +35,11 @@ spring:
                 - DELETE
                 - OPTIONS
                 - PATCH
+      routes:
+
+        filters:
+          -De
+
 
 
 
