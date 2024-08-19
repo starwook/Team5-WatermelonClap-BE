@@ -66,7 +66,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'ap-northeast-2'  # 리전 정보
           source-dir: 'swagger-ui-watermelon'  # 업로드할 파일들이 위치한 로컬 디렉토리
-          AWS_S3_BUCKET: 'watermelon-s3-bucket/swagger-ui-watermelon'  # S3 버킷 이름
+          AWS_S3_BUCKET: 'watermelon-s3-bucket'  # S3 버킷 이름
 
       # 애플리케이션을 Build 한다.
       - name: 🔧 Build Spring server
