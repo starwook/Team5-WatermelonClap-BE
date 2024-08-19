@@ -1,0 +1,79 @@
+name: Gateway-Deploy
+
+on:
+  pull_request:
+    branches: [dev] # master branch에 PR을 보낼 때 실행
+    paths:
+      - "gateway/**"
+#  push:
+#    branches: [WB-115-api-server] # master branch에 PR을 보낼 때 실행
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    #    services:
+    #      redis:
+    #        image: redis:6.x
+    #        ports:
+    #          - 6379:6379
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: 💾 Cache Gradle & Spring
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set YML
+        run: |
+          cd gateway
+          ls -l
+          mkdir -p src/main/resources
+          find src
+
+      # Gradle wrapper 파일 실행 권한주기
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: 🔧 Build Spring server
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean gateway:build 
+
+      - name: Docker build
+        run: |
+          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/gateway
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+          docker build --no-cache --platform linux/arm64 -t app .
+          
+          docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
+          docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
+
+
+      - name: deploy in aws
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{secrets.SSH_KEY}}
+          host: ${{secrets.GATEWAY_SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-gateway:latest
+            docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-gateway:latest watermelon-api-gateway:latest
+            docker stop $(docker ps -a -q) 
+            docker run -i -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-gateway -p 8080:8080 watermelon-api-gateway:latest
+            docker rm $(docker ps --filter 'status=exited' -a -q)
+            # 실행 중이지 않으 모든 컨테인 삭제
+            docker image prune -a -f
+            # 사용하지않은 모든 이미지 삭제
+
