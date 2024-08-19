@@ -62,8 +62,8 @@ jobs:
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
           AWS_REGION: 'ap-northeast-2'  # 리전 정보
           SOURCE_DIR: 'swagger-ui-watermelon'  # 업로드할 파일들이 위치한 로컬 디렉토리
           AWS_S3_BUCKET: 'watermelon-s3-bucket'  # S3 버킷 이름
