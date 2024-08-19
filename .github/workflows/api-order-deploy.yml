@@ -49,9 +49,24 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Gradle test를 실행한다
-      - name: Test with Gradle
-        run: ./gradlew --info order:test
+      # 테스트 후 스웨어 문서를 생성한다.
+      - name: Generate Swagger Document
+        run: |
+          ./gradlew --info test
+          ./gradlew mergeApiSpecs
+          ./gradlew openapi3
+          ./gradlew customGenerateSwaggerUI
+          ls
+
+      # 스웨거를 업로드한다.
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-2'  # 리전 정보
+          SOURCE_DIR: 'swagger-ui-watermelon'  # 업로드할 파일들이 위치한 로컬 디렉토리
+          AWS_S3_BUCKET: 'watermelon-s3-bucket'  # S3 버킷 이름
 
       # 애플리케이션을 Build 한다.
       - name: 🔧 Build Spring server
