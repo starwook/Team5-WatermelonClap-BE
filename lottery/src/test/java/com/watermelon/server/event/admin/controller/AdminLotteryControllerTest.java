@@ -180,4 +180,49 @@ class AdminLotteryControllerTest extends ControllerTest {
                         )));
 
     }
+
+    @Test
+    @DisplayName("어드민 권한 체크 - 성공")
+    void adminAuthorityCheckSuccess() throws Exception {
+
+        whenAdminCheckAuthed();
+
+        thenAdminCheckAuthed();
+
+        resultActions
+                .andDo(print())
+                .andDo(document("어드민 권한이 있는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .requestFields(
+                                        )
+                                        .tag(TAG_LOTTERY)
+                                        .description("어드민 권한 확인")
+                                        .build()
+                        )));
+
+    }
+
+    @Test
+    @DisplayName("어드민 권한 체크 - 실패")
+    void adminAuthorityCheckFail() throws Exception {
+
+        whenAdminCheckNotAuthed();
+
+        thenClientError();
+
+        resultActions
+                .andDo(print())
+                .andDo(document("어드민 권한이 없는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .requestFields(
+                                        )
+                                        .tag(TAG_LOTTERY)
+                                        .description("어드민 권한 확인")
+                                        .build()
+                        )));
+
+    }
+
 }
