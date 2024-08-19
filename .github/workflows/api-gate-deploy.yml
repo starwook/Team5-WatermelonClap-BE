@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [dev] # master branch에 PR을 보낼 때 실행
     paths:
-      - "common/**"
+      - "gateway/**"
 #  push:
 #    branches: [WB-115-api-server] # master branch에 PR을 보낼 때 실행
 
@@ -40,14 +40,6 @@ jobs:
           cd lottery
           ls -l
           mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > src/main/resources/application-local.yml
-          echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > src/main/resources/application-local-db.yml
-          echo "${{ secrets.APPLICATION_LOCAL_TOKEN }}" | base64 --decode > src/main/resources/application-local-token.yml
-
-          echo "${{ secrets.DEPLOY }}" | base64 --decode > src/main/resources/application-deploy.yml
-          echo "${{ secrets.DEPLOY_DB }}" | base64 --decode > src/main/resources/application-deploy-db.yml
-          echo "${{ secrets.DEPLOY_JWT_TOKEN }}" | base64 --decode > src/main/resources/application-deploy-token.yml
-          echo "${{ secrets.FIREBASE }}" | base64 --decode > src/main/resources/firebase.json
           find src
 
       # Gradle wrapper 파일 실행 권한주기
@@ -58,22 +50,6 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew --info test
 
-      - name: JaCoCo Report
-        uses: Madrapps/jacoco-report@v1.6.1
-        with:
-          paths: ${{ github.workspace }}build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "테스트 커버리지 측정"
-          min-coverage-overall: 70
-          min-coverage-changed-files: 50
-
-      # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
-        with:
-          files: build/test-results/**/*.xml
-
       - name: 🔧 Build Spring server
         run: |
           chmod +x ./gradlew
@@ -81,12 +57,12 @@ jobs:
 
       - name: Docker build
         run: |
-          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/lottery
+          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/gateway
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
           docker build --no-cache -t app .
           
-          docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon:latest
-          docker push ${{secrets.DOCKER_USERNAME}}/watermelon:latest
+          docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
+          docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
 
 
       - name: deploy in aws
@@ -96,14 +72,10 @@ jobs:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           script: |
-            
-            
-            docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon:latest
-            docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon:latest watermelon:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-gateway:latest
+            docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-gateway:latest watermelon-api-gateway:latest
             docker stop $(docker ps -a -q) 
-            
-            docker run -i -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-api -p 8080:8080 watermelon:latest
-            
+            docker run -i -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-api -p 8080:8080 watermelon-api-gateway:latest
             docker rm $(docker ps --filter 'status=exited' -a -q)
             # 실행 중이지 않으 모든 컨테인 삭제
             docker image prune -a -f

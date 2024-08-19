@@ -16,6 +16,7 @@ dependencies {
     implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.redisson:redisson-spring-boot-starter:3.24.3'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 test {
