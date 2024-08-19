@@ -17,9 +17,9 @@ public class DeployConfig {
                         .path("/admin/event/order/**")
                         .or()
                         .path("/event/order/**")
-                        .uri("http://10.1.5.40:8080"))
+                        .uri("http://10.1.5.41:8092"))
                 .route("lottery", r -> r.path("/**")
-                        .uri("http://10.1.5.40:8080"))
+                        .uri("http://10.1.8.38:8091"))
                 .build();
     }
 }

@@ -35,10 +35,7 @@ spring:
                 - DELETE
                 - OPTIONS
                 - PATCH
-      routes:
 
-        filters:
-          -De
 
 
 
