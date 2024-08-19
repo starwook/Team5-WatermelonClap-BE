@@ -2,11 +2,7 @@ package com.watermelon.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsUtils;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -23,7 +19,6 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebFlux
 public class PreFlightCorsConfiguration  {
     private static final String ALLOWED_HEADERS = "Origin, X-Requested-With, Content-Type, Accept, Authorization, ApplyTicket";
 
@@ -38,11 +33,13 @@ public class PreFlightCorsConfiguration  {
     @Bean
     CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowCredentials(true);
+//        corsConfig.addAllowedOriginPattern("*");
         corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:5173","http://localhost:63342","https://watermelon-clap.web.app"));
         corsConfig.setMaxAge(8000L);
-        corsConfig.setAllowedMethods(Arrays.asList("GET","POST","DELETE","OPTIONS","PUT"));
+        corsConfig.setAllowedMethods(Arrays.asList("PATCH","GET","POST","DELETE","OPTIONS","PUT"));
         corsConfig.setAllowedHeaders(Arrays.asList("Origin","X-Requested-With","Content-Type","Accept","Authorization","ApplyTicket"));
-        corsConfig.setAllowCredentials(true);
+
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
