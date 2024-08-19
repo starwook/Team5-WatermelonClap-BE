@@ -64,7 +64,7 @@ jobs:
         run: |
           cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/lottery
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-          docker build --no-cache -t app .
+          docker build --no-cache --platform linux/arm64/v8 -t app .
           
           docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-lottery:latest
           docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-lottery:latest
