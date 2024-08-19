@@ -5,12 +5,16 @@
 #    branches: [dev] # master branch에 PR을 보낼 때 실행
 #    paths:
 #      - "lottery/**"
+
+#      - "gateway/**"
+
 #      - "order/**"
 ##  push:
 ##    branches: [WB-115-api-server] # master branch에 PR을 보낼 때 실행
 #
 #jobs:
 #  test:
+
 #    runs-on: ubuntu-latest
 #
 #    #    services:

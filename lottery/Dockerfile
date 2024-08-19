@@ -8,7 +8,6 @@ COPY pinpoint-agent-2.5.3/ /usr/local
 
 ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=deploy
-RUN echo /usr/local
 #ENTRYPOINT ["java","-jar","/watermelon.jar"]
 ENTRYPOINT ["java","-jar", \
 "-javaagent:/usr/local/pinpoint-bootstrap.jar", \
