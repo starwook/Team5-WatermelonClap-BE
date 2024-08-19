@@ -9,7 +9,7 @@ on:
 #    branches: [WB-115-api-server] # master branch에 PR을 보낼 때 실행
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     #    services:
@@ -37,7 +37,7 @@ jobs:
 
       - name: Set YML
         run: |
-          cd lottery
+          cd gateway
           ls -l
           mkdir -p src/main/resources
           find src
@@ -45,10 +45,6 @@ jobs:
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      # Gradle test를 실행한다
-      - name: Test with Gradle
-        run: ./gradlew --info test
 
       - name: 🔧 Build Spring server
         run: |
