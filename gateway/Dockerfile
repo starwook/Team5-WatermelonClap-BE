@@ -12,6 +12,6 @@ RUN echo /usr/local
 #ENTRYPOINT ["java","-jar","/watermelon.jar"]
 ENTRYPOINT ["java","-jar", \
 "-javaagent:/usr/local/pinpoint-bootstrap.jar", \
-"-Dpinpoint.applicationName=order-api", \
+"-Dpinpoint.applicationName=gateway", \
 "-Dpinpoint.config=/usr/local/pinpoint-root.config", \
 "/watermelon.jar"]
