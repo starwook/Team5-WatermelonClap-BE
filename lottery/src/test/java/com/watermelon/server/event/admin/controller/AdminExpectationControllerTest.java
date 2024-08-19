@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,7 +50,7 @@ class AdminExpectationControllerTest extends ControllerTest {
         Mockito.when(expectationService.getExpectationsForAdmin()).thenReturn(expectationDtoList);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
@@ -72,7 +73,7 @@ class AdminExpectationControllerTest extends ControllerTest {
         Mockito.when(expectationService.toggleExpectation(any())).thenReturn(ResponseAdminExpectationApprovedDto.forAdminAfterToggleIsApproved(expectation));
 
         mvc.perform(RestDocumentationRequestBuilders.post(PATH,1)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,

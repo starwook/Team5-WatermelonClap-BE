@@ -26,13 +26,25 @@ derby.log
 /lottery/src/main/resources/application-deploy.yml
 /lottery/src/main/resources/application-test.yml
 
+/order/src/main/resources/application-local-db.yml
+
+/common/src/main/resources/application-local.yml
+/common/src/main/resources/application-local-db.yml
+/common/src/main/resources/application-local-token.yml
+/common/src/main/resources/application-deploy-token.yml
+/common/src/main/resources/application-deploy-db.yml
+/common/src/main/resources/application-deploy.yml
+/common/src/main/resources/application-test.yml
+
+
 # Gradle artifacts
 .gradle
 .gradletasknamecache
 /build
 /gateway/build
 /lottery/build
-
+/order/build
+/common/build
 buildSrc/build
 /spring-*/build
 /framework-*/build

@@ -1,7 +1,7 @@
 package com.watermelon.server.event.admin.service;
 
-import com.watermelon.server.admin.exception.S3ImageFormatException;
-import com.watermelon.server.admin.service.S3ImageService;
+import com.watermelon.server.exception.S3ImageFormatException;
+import com.watermelon.server.S3ImageService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

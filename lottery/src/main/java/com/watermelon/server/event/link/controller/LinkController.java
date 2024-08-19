@@ -1,7 +1,6 @@
 package com.watermelon.server.event.link.controller;
 
 import com.watermelon.server.event.link.service.LinkService;
-import com.watermelon.server.event.link.utils.LinkUtils;
 import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.link.dto.MyLinkDto;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
 package com.watermelon.server.event.lottery.controller;
 
 import com.watermelon.server.auth.annotations.Uid;
-import com.watermelon.server.common.exception.ErrorResponse;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
@@ -13,6 +12,7 @@ import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundExcept
 import com.watermelon.server.event.lottery.service.LotteryRewardService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import com.watermelon.server.event.lottery.service.LotteryWinnerService;
+import com.watermelon.server.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

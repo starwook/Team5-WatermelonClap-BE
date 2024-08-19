@@ -7,8 +7,6 @@ import com.watermelon.server.event.parts.domain.PartsCategory;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
 import com.watermelon.server.event.parts.repository.PartsRepository;
-import com.watermelon.server.event.parts.service.LotteryApplierPartsService;
-import com.watermelon.server.event.parts.service.PartsServiceImpl;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
