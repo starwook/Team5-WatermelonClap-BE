@@ -88,7 +88,7 @@ subprojects {
 		swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.47'  // or Swagger Codegen V3
 
 		//db
-		implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
 		runtimeOnly 'com.mysql:mysql-connector-j'
 		implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
@@ -97,8 +97,7 @@ subprojects {
 		/**
 		 * for Caching
 		 */
-		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-		implementation 'org.redisson:redisson-spring-boot-starter:3.24.3'
+
 		implementation 'org.springframework.boot:spring-boot-starter-cache'
 		implementation 'com.github.ben-manes.caffeine:caffeine'
 
