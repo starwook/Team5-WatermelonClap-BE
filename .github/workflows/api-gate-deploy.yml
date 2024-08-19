@@ -1,4 +1,4 @@
-name: Deploy
+name: Gateway-Deploy
 
 on:
   pull_request:
@@ -55,7 +55,7 @@ jobs:
         run: |
           cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/gateway
           docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-          docker build --no-cache --platform/linux/arm64 -t app .
+          docker build --no-cache --platform linux/arm64 -t app .
           
           docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
           docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-gateway:latest
