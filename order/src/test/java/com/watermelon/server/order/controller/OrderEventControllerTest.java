@@ -1,32 +1,31 @@
-package com.watermelon.server.order.controller;
+package com.watermelon.server.event.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.watermelon.server.config.MockLoginInterceptorConfig;
+import com.watermelon.server.ControllerTest;
+import com.watermelon.server.order.exception.ApplyTicketWrongException;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.dto.request.*;
 import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
-import com.watermelon.server.order.error.*;
+import com.watermelon.server.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
 import com.watermelon.server.order.result.service.OrderResultCommandService;
 import com.watermelon.server.order.service.OrderEventCommandService;
 import com.watermelon.server.order.service.OrderEventQueryService;
+import com.watermelon.server.order.controller.OrderEventController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,20 +41,8 @@ import static reactor.core.publisher.Mono.when;
 
 
 @WebMvcTest(OrderEventController.class)
-
-@AutoConfigureRestDocs
-@MockBean(JpaMetamodelMappingContext.class)
-@Import(MockLoginInterceptorConfig.class)
-class OrderEventControllerTest {
-
-    @Autowired
-    protected MockMvc mvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    protected final String TAG_ORDER = "선착순 이벤트";
-
+class OrderEventControllerTest extends ControllerTest {
+    private final String TAG_ORDER ="선착순 이벤트";
     @MockBean
     private OrderEventQueryService orderEventQueryService;
     @MockBean
@@ -63,6 +50,8 @@ class OrderEventControllerTest {
 
     @MockBean
     private OrderResultCommandService orderResultCommandService;
+
+
 
     private ResponseOrderEventDto openOrderEventResponse;
     private ResponseOrderEventDto soonOpenResponse;

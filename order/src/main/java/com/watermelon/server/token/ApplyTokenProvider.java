@@ -1,6 +1,6 @@
 package com.watermelon.server.token;
 
-import com.watermelon.server.order.error.ApplyTicketWrongException;
+import com.watermelon.server.order.exception.ApplyTicketWrongException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

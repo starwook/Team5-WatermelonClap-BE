@@ -2,9 +2,8 @@ package com.watermelon.server.admin.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watermelon.server.ControllerTest;
 import com.watermelon.server.admin.service.AdminOrderEventService;
-import com.watermelon.server.config.MockLoginInterceptorConfig;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.domain.OrderEventWinner;
@@ -14,21 +13,16 @@ import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventWinnerDto;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -36,7 +30,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
-import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -44,20 +37,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureRestDocs
-@MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(AdminOrderEventController.class)
-@Import(MockLoginInterceptorConfig.class)
 @DisplayName("[DOC] 선착순 이벤트 ")
-class AdminOrderEventControllerTest {
+class AdminOrderEventControllerTest extends ControllerTest {
 
-    @Autowired
-    protected MockMvc mvc;
-
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-    protected final String TAG_ORDER = "선착순 이벤트";
+    private final String TAG_ORDER ="선착순 이벤트";
 
     @MockBean
     private AdminOrderEventService adminOrderEventService;
@@ -119,7 +103,7 @@ class AdminOrderEventControllerTest {
         mvc.perform(
                         RestDocumentationRequestBuilders
                                 .get(PATH,openOrderEvent.getId())
-                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
                 )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -141,7 +125,7 @@ class AdminOrderEventControllerTest {
         Mockito.when(adminOrderEventService.getOrderEventsForAdmin()).thenReturn(responseOrderEventDtos);
 
         mvc.perform(RestDocumentationRequestBuilders.get(PATH)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseOrderEventDtos)))
                 .andDo(print())
@@ -173,7 +157,7 @@ class AdminOrderEventControllerTest {
                                 .file(quizImage)
                                 .file(rewardImage)
                                 .file(orderEvent)
-                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN)
+                                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
@@ -202,7 +186,7 @@ class AdminOrderEventControllerTest {
         final String DOCUMENT_NAME ="success";
 
         mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,
@@ -215,14 +199,14 @@ class AdminOrderEventControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    @DisplayName("[DOC] 선착순 이벤트를 삭제한다 - 에러")
     void deleteOrderEventThrowError() throws Exception {
         final String PATH = "/admin/event/order/{eventId}";
         final String DOCUMENT_NAME ="not-exist";
         Mockito.doThrow(WrongOrderEventFormatException.class).when(adminOrderEventService).deleteOrderEvent(1L);
 
         mvc.perform(RestDocumentationRequestBuilders.delete(PATH,1L)
-                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_VALID_TOKEN))
+                        .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + " " + TEST_TOKEN))
                 .andExpect(status().isNotFound())
                 .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document(DOCUMENT_NAME,

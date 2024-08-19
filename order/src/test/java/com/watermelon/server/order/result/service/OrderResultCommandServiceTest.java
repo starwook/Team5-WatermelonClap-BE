@@ -2,8 +2,8 @@ package com.watermelon.server.order.result.service;
 
 import com.watermelon.server.order.domain.ApplyTicketStatus;
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
-import com.watermelon.server.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;

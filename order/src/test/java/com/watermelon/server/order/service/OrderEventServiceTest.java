@@ -6,7 +6,7 @@ import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.repository.OrderEventRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

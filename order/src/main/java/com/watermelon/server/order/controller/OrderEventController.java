@@ -2,20 +2,19 @@ package com.watermelon.server.order.controller;
 
 
 import com.watermelon.server.exception.ErrorResponse;
-import com.watermelon.server.order.error.ApplyTicketWrongException;
+import com.watermelon.server.order.exception.ApplyTicketWrongException;
 import com.watermelon.server.order.dto.request.OrderEventWinnerRequestDto;
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
-import com.watermelon.server.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.order.error.WinnerAlreadyParticipateException;
-import com.watermelon.server.order.error.WrongPhoneNumberFormatException;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
+import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.result.service.OrderResultCommandService;
 import com.watermelon.server.order.service.OrderEventCommandService;
 import com.watermelon.server.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

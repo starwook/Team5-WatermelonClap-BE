@@ -11,7 +11,7 @@ import com.watermelon.server.order.dto.request.RequestQuizDto;
 import com.watermelon.server.order.dto.response.ResponseOrderEventDto;
 import com.watermelon.server.order.repository.OrderEventRepository;
 import com.watermelon.server.order.service.OrderEventQueryService;
-import com.watermelon.server.event.order.service.OrderEventSchedulingService;
+import com.watermelon.server.order.service.OrderEventSchedulingService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

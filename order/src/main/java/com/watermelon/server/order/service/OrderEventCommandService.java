@@ -1,13 +1,16 @@
 package com.watermelon.server.order.service;
 
 
-import com.watermelon.server.order.error.ApplyTicketWrongException;
+
+import com.watermelon.server.order.exception.ApplyTicketWrongException;
 import com.watermelon.server.order.dto.request.OrderEventWinnerRequestDto;
-import com.watermelon.server.order.error.WinnerAlreadyParticipateException;
-import com.watermelon.server.order.error.WrongPhoneNumberFormatException;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
+import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.repository.OrderEventRepository;
+
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +45,6 @@ public class OrderEventCommandService {
 
     @Transactional
     public Long findOrderEventToMakeInProgress(){
-        //현재 OrderEvent의 상태를 주기적으로 변경
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         if(orderEvents.isEmpty()) return currentOrderEventManageService.getCurrentOrderEventId();// 이벤트 없을시 스킵
 

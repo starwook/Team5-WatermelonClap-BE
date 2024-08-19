@@ -1,6 +1,0 @@
-spring:
-  profiles:
-    active: local
-server:
-  base-url: http://43.202.54.29:8080
-  parts-share-url: https://watermelon-clap.web.app/share

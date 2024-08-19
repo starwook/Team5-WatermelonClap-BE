@@ -1,14 +1,15 @@
 package com.watermelon.server.order.service;
 
 
-import com.watermelon.server.order.error.ApplyTicketWrongException;
+import com.watermelon.server.order.exception.ApplyTicketWrongException;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventWinner;
 import com.watermelon.server.order.dto.request.OrderEventWinnerRequestDto;
-import com.watermelon.server.order.error.WinnerAlreadyParticipateException;
-import com.watermelon.server.order.error.WrongPhoneNumberFormatException;
+import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
+import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
 import com.watermelon.server.order.repository.OrderEventRepository;
 import com.watermelon.server.order.repository.OrderEventWinnerRepository;
+
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import lombok.RequiredArgsConstructor;

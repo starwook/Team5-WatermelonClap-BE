@@ -3,10 +3,10 @@ package com.watermelon.server.order.result.service;
 
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
-import com.watermelon.server.order.error.NotDuringEventPeriodException;
-import com.watermelon.server.order.error.WrongOrderEventFormatException;
+import com.watermelon.server.order.exception.NotDuringEventPeriodException;
+import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.result.domain.OrderResult;
-import com.watermelon.server.order.service.CurrentOrderEventManageService;
+import com.watermelon.server.order.service. CurrentOrderEventManageService;
 import com.watermelon.server.redis.annotation.RedisDistributedLock;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -21,6 +21,7 @@ public class OrderResultCommandService {
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
 
+
     @Transactional
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException {
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
@@ -34,6 +35,7 @@ public class OrderResultCommandService {
         }
         return createTokenAndMakeTicket(orderEventId);
     }
+
 
     @Transactional
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId){
