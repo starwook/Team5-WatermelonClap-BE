@@ -2,6 +2,8 @@
 server:
   port: 8080 # port number
 spring:
+  profiles:
+    active: ${name:local}
   main:
     web-application-type: reactive
   cloud:
