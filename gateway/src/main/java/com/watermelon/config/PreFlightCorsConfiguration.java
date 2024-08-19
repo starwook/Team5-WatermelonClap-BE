@@ -30,23 +30,23 @@ public class PreFlightCorsConfiguration  {
 
     private static final String MAX_AGE = "3600";
 
-    @Bean
-    CorsWebFilter corsWebFilter() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowCredentials(true);
-//        corsConfig.addAllowedOriginPattern("*");
-        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:5173","http://localhost:63342","https://watermelon-clap.web.app"));
-        corsConfig.setMaxAge(8000L);
-        corsConfig.setAllowedMethods(Arrays.asList("PATCH","GET","POST","DELETE","OPTIONS","PUT"));
-        corsConfig.setAllowedHeaders(Arrays.asList("Origin","X-Requested-With","Content-Type","Accept","Authorization","ApplyTicket"));
-
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfig);
-
-        return new CorsWebFilter(source);
-    }
+//    @Bean
+//    CorsWebFilter corsWebFilter() {
+//        CorsConfiguration corsConfig = new CorsConfiguration();
+//        corsConfig.setAllowCredentials(true);
+////        corsConfig.addAllowedOriginPattern("*");
+//        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:5173","http://localhost:63342","https://watermelon-clap.web.app"));
+//        corsConfig.setMaxAge(8000L);
+//        corsConfig.setAllowedMethods(Arrays.asList("PATCH","GET","POST","DELETE","OPTIONS","PUT"));
+//        corsConfig.setAllowedHeaders(Arrays.asList("Origin","X-Requested-With","Content-Type","Accept","Authorization","ApplyTicket"));
+//
+//
+//        UrlBasedCorsConfigurationSource source =
+//                new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfig);
+//
+//        return new CorsWebFilter(source);
+//    }
 //    @Bean
 //    public WebFilter corsFilter() {
 //
