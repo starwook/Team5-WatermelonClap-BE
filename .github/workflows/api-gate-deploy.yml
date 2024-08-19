@@ -69,7 +69,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           key: ${{secrets.SSH_KEY}}
-          host: ${{secrets.SSH_HOST}}
+          host: ${{secrets.GATEWAY_SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-gateway:latest
