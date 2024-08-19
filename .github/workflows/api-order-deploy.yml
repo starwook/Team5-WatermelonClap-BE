@@ -81,7 +81,7 @@ jobs:
             docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest watermelon-api-order:latest
             docker stop $(docker ps -a -q) 
             
-            docker run -i -d -p 8080:8080 watermelon-api-order:latest
+            docker run -i -d -p 8092:8092 watermelon-api-order:latest
             
             docker rm $(docker ps --filter 'status=exited' -a -q)
             # 실행 중이지 않으 모든 컨테인 삭제
