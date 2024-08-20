@@ -2,6 +2,7 @@ package com.watermelon.server.common.config;
 
 import com.watermelon.server.admin.interceptor.AdminAuthorizationInterceptor;
 import com.watermelon.server.auth.interceptor.LoginCheckInterceptor;
+import com.watermelon.server.auth.interceptor.LoginCheckInterceptorImpl;
 import com.watermelon.server.auth.resolver.UidArgumentResolver;
 import com.watermelon.server.common.interceptor.LoginCheckExpectationPostOnlyInterceptor;
 import com.watermelon.server.event.lottery.interceptor.FirstLoginInterceptor;

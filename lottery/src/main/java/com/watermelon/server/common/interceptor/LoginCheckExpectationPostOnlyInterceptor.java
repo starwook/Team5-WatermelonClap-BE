@@ -1,6 +1,7 @@
 package com.watermelon.server.common.interceptor;
 
 import com.watermelon.server.auth.interceptor.LoginCheckInterceptor;
+import com.watermelon.server.auth.interceptor.LoginCheckInterceptorImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

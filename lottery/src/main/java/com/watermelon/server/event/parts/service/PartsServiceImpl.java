@@ -16,8 +16,10 @@ import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -143,5 +145,11 @@ public class PartsServiceImpl implements PartsService {
 
     }
 
+
+    @PostConstruct
+    @Profile("local")
+    public void saveParts(){
+        partsRepository.saveAll(Parts.createAllParts());
+    }
 
 }

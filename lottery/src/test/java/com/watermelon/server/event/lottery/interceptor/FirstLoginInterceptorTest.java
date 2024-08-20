@@ -2,6 +2,7 @@ package com.watermelon.server.event.lottery.interceptor;
 
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.lottery.service.LotteryService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +59,7 @@ class FirstLoginInterceptorTest {
 
         //given
         Mockito.when(request.getAttribute(HEADER_UID)).thenReturn(HEADER_UID);
-        Mockito.when(request.getHeader(HEADER_LINK_ID)).thenReturn(TEST_URI);
+        Mockito.when(request.getCookies()).thenReturn(new Cookie[]{new Cookie(HEADER_LINK_ID, TEST_URI)});
 
         //when
         firstLoginInterceptor.preHandle(request, response, null);
