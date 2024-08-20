@@ -96,7 +96,7 @@ jobs:
             docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-lottery:latest watermelon-api-lottery:latest
             docker stop $(docker ps -a -q) 
             
-            docker run -i -d -p 8091:8091 watermelon-api-lottery:latest
+            docker run -i -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-lottery -p 8091:8091 watermelon-api-lottery:latest
             
             docker rm $(docker ps --filter 'status=exited' -a -q)
             # 실행 중이지 않으 모든 컨테인 삭제
