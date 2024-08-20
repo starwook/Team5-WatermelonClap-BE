@@ -47,10 +47,10 @@ public class EmbeddedRedisConfig {
         return Redisson.create(config);
     }
 
-    @Bean
-    public RSet<OrderResult> orderResultSet(RedissonClient redissonClient) {
-        return redissonClient.getSet("order-result");
-    }
+//    @Bean
+//    public RSet<OrderResult> orderResultSet(RedissonClient redissonClient) {
+//        return redissonClient.getSet("order-result");
+//    }
     @Bean
     public RSet<String> orderResultApplyTickets(RedissonClient redissonClient) {
         return redissonClient.getSet("order-result-apply-tickets");

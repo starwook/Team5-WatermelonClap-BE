@@ -61,7 +61,6 @@ public class CurrentOrderEventManageService {
         currentOrderEvent = orderEventFromDB;
         clearOrderResultRepository();
     }
-    public int
     public void clearOrderResultRepository() {
          orderResultRepository.deleteAll();
 //        this.applyTickets.clear();
