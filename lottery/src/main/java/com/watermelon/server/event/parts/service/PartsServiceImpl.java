@@ -146,10 +146,10 @@ public class PartsServiceImpl implements PartsService {
     }
 
 
-    @PostConstruct
-    @Profile("local")
-    public void saveParts(){
-        partsRepository.saveAll(Parts.createAllParts());
-    }
+//    @PostConstruct
+//    @Profile("local")
+//    public void saveParts(){
+//        partsRepository.saveAll(Parts.createAllParts());
+//    }
 
 }
