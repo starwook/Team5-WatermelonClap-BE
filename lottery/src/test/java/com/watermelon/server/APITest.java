@@ -339,6 +339,18 @@ public abstract class APITest {
 
     }
 
+    protected void whenAdminCheckAuthed() throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/admin/check")));
+    }
+
+    protected void whenAdminCheckNotAuthed() throws Exception {
+        resultActions = mvc.perform(get("/admin/check"));
+    }
+
+    protected void thenAdminCheckAuthed() throws Exception {
+        resultActions.andExpect(status().isOk());
+    }
+
     protected void thenLotteryEventCreate() throws Exception {
         resultActions
                 .andExpect(status().isOk());
