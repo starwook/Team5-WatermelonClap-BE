@@ -5,6 +5,7 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
+import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import lombok.*;
 import org.redisson.api.RSet;
@@ -20,14 +21,13 @@ public class CurrentOrderEventManageService {
     @Getter
     private OrderEvent currentOrderEvent;
 
-    private final RSet<String> applyTickets;
+//    private final RSet<String> applyTickets;
+    private final OrderResultRepository orderResultRepository;
 
-
-
-
-    @Transactional
     public void saveOrderResult(OrderResult orderResult){
-        applyTickets.add(orderResult.getApplyToken());
+//        applyTickets.add(orderResult.getApplyToken());
+
+        orderResultRepository.save(orderResult);
     }
 
 
@@ -42,14 +42,15 @@ public class CurrentOrderEventManageService {
         return false;
     }
     public int getCurrentApplyTicketSize() {
-        return applyTickets.size();
+        return orderResultRepository.findAll().size();
     }
+
 
     @Transactional
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
         //동일한 이벤트라면
         if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
-            if(this.applyTickets.size()<currentOrderEvent.getWinnerCount()){
+            if(getCurrentApplyTicketSize()<currentOrderEvent.getWinnerCount()){
                 this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
             //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
@@ -60,8 +61,10 @@ public class CurrentOrderEventManageService {
         currentOrderEvent = orderEventFromDB;
         clearOrderResultRepository();
     }
+    public int
     public void clearOrderResultRepository() {
-        this.applyTickets.clear();
+         orderResultRepository.deleteAll();
+//        this.applyTickets.clear();
     }
 
     public boolean checkPrevious(String submitAnswer){
