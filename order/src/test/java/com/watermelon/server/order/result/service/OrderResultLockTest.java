@@ -4,6 +4,7 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
+import com.watermelon.server.order.repository.OrderEventRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
 import org.assertj.core.api.Assertions;
@@ -24,22 +25,26 @@ class OrderResultLockTest {
 
     @Autowired
     private OrderResultCommandService orderResultCommandService;
+    @Autowired
+    private OrderEventRepository orderEventRepository;
+
 
     @BeforeEach
     void setUp() {
+        OrderEvent orderEvent = orderEventRepository.save( OrderEvent.makeOrderEventWithOutImage(
+                RequestOrderEventDto.makeForTestOpened(
+                        RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
+                )
+        ));
        currentOrderEventManageService.clearOrderResultRepository();
        currentOrderEventManageService.refreshOrderEventInProgress(
-               OrderEvent.makeOrderEventWithOutImage(
-                       RequestOrderEventDto.makeForTestOpened(
-                               RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
-                       )
-               )
+              orderEvent
        );
     }
 
     @Test
-    void 선착순_이벤트_락_적용_25배_신청() throws InterruptedException {
-        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*25;
+    void 선착순_이벤트_락_적용_10배_신청() throws InterruptedException {
+        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()-1;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){

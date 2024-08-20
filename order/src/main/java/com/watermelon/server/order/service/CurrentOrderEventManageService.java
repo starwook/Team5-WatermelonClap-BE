@@ -5,11 +5,15 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
+import com.watermelon.server.order.lock.MysqlNamedLock;
 import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import lombok.*;
 import org.redisson.api.RSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
+    private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
     @Getter
     private OrderEvent currentOrderEvent;
 
@@ -31,7 +36,10 @@ public class CurrentOrderEventManageService {
     }
 
 
+//    @MysqlNamedLock(key ="orderResult")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean isOrderApplyNotFullThenSave(OrderResult orderResult){
+        log.info("new Transaction!!");
         if(currentOrderEvent.getWinnerCount()- getCurrentApplyTicketSize()>0){
             saveOrderResult(orderResult);
             return true;

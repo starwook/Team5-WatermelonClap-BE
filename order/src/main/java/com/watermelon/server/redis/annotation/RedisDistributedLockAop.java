@@ -1,6 +1,7 @@
 package com.watermelon.server.redis.annotation;
 
 
+import com.watermelon.server.order.lock.AopForTransaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
