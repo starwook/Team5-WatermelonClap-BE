@@ -19,13 +19,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class LoginCheckInterceptorTest {
+class LoginCheckInterceptorImplTest {
 
     @Mock
     private TokenVerifier tokenVerifier;
 
     @InjectMocks
-    private LoginCheckInterceptor loginCheckInterceptor;
+    private LoginCheckInterceptorImpl loginCheckInterceptor;
 
     @Mock
     private HttpServletRequest request;
