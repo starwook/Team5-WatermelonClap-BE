@@ -82,4 +82,10 @@ public class AdminLotteryController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+
+    @GetMapping("/admin/check")
+    public ResponseEntity<Void> checkAdminAuthority(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

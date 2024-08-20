@@ -24,15 +24,15 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("preHandle");
 
-        String token = AuthUtils.parseAuthenticationHeaderValue(
-                request.getHeader(HEADER_AUTHORIZATION)
-        );
         try {
+            String token = AuthUtils.parseAuthenticationHeaderValue(
+                    request.getHeader(HEADER_AUTHORIZATION)
+            );
             String uid = tokenVerifier.verify(token);
             request.setAttribute(HEADER_UID, uid);
 
             return true;
-        }catch (InvalidTokenException e) {
+        } catch (Exception e) {
             throw new AuthenticationException("invalid token");
         }
     }
