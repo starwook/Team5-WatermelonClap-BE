@@ -22,7 +22,7 @@ public class OrderResultCommandService {
     private final ApplyTokenProvider applyTokenProvider;
 
 
-    @Transactional
+//    @Transactional
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException {
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
         // 퀴즈 틀릴 시에ApplyNotFullThenSave())
