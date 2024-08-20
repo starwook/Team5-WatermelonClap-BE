@@ -5,7 +5,6 @@ FROM  openjdk:17
 COPY build/libs/lottery-0.0.1-SNAPSHOT.jar watermelon-gate.jar
 COPY pinpoint-agent-2.5.3/ /usr/local
 
-
 ENV TZ=Asia/Seoul
 ENV SPRING_PROFILES_ACTIVE=deploy
 #ENTRYPOINT ["java","-jar","/watermelon.jar"]
