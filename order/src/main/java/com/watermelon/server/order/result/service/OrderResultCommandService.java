@@ -5,9 +5,9 @@ import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
+import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service. CurrentOrderEventManageService;
-import com.watermelon.server.redis.annotation.RedisDistributedLock;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ public class OrderResultCommandService {
 
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
+    private final OrderResultRepository orderResultRepository;
 
 
 //    @Transactional
@@ -37,24 +38,40 @@ public class OrderResultCommandService {
     }
 
 
-    @Transactional
+//    @Transactional
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId){
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
         OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
-        if(saveOrderResultWithLock(orderResult)){
+        if(saveOrderResultIfCan(orderResult)){
             return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
     }
 
 
-    @RedisDistributedLock(key = "orderResultLock")
-    public boolean saveOrderResultWithLock(OrderResult orderResult){
-        if(currentOrderEventManageService.isOrderApplyNotFullThenSave(orderResult)){
+//    @RedisDistributedLock(key = "orderResultLock")
+//    @Transactional //getLock과 release Lock을 하나의 커밋으로 포함해야함
+//    public boolean saveOrderResultWithLock(OrderResult orderResult){
+//        try{
+//            orderResultRepository.getLock("orderResult",3);
+//            return currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(orderResult);
+//        }
+//        finally {
+//            orderResultRepository.releaseLock("orderResult");
+//        }
+//    }
+    public boolean saveOrderResultIfCan(OrderResult orderResult){
+        if(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
+            saveOrderResult(orderResult);
             return true;
         }
         return false;
     }
+    @Transactional
+    public void saveOrderResult(OrderResult orderResult){
+        orderResultRepository.save(orderResult);
+    }
+
 //    //저장 할시에 확실하게 돌려주어야함 - 하지만 돌려주지 못 할시에는 어떻게?( 로그인이 안 되어있음)
 //
 //    @Transactional

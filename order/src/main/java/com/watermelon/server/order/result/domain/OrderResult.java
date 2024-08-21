@@ -1,14 +1,15 @@
 package com.watermelon.server.order.result.domain;
 
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.redis.core.RedisHash;
 
 
-@RedisHash(value ="order-result")
+
 @Getter
+@Entity
 @RequiredArgsConstructor
 public class OrderResult {
 

@@ -53,6 +53,16 @@ public class RequestOrderEventDto {
                 .winnerCount(100)
                 .build();
     }
+
+    public static RequestOrderEventDto makeForTestOpenedWithApplyCount(RequestQuizDto requestQuizDto, RequestOrderRewardDto requestOrderRewardDto){
+        return RequestOrderEventDto.builder()
+                .reward(requestOrderRewardDto)
+                .quiz(requestQuizDto)
+                .startDate(LocalDateTime.now().minusHours(10))
+                .endDate(LocalDateTime.now().plusHours(20))
+                .winnerCount(100)
+                .build();
+    }
     public static RequestOrderEventDto makeForTestOpenAfter1SecondCloseAfter3Second(RequestQuizDto requestQuizDto, RequestOrderRewardDto requestOrderRewardDto){
         return RequestOrderEventDto.builder()
                 .reward(requestOrderRewardDto)

@@ -4,8 +4,11 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.repository.OrderEventRepository;
+import com.watermelon.server.order.repository.OrderResultRepository;
+import com.watermelon.server.order.result.domain.OrderApplyCount;
 import com.watermelon.server.order.result.domain.OrderResult;
-import org.aspectj.weaver.ast.Or;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.redisson.api.RSet;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -22,9 +27,13 @@ import static org.mockito.Mockito.when;
 class CurrentOrderEventManageServiceTest {
 
     @Mock
-    private RSet<String> applyTickets;
+    private OrderEventRepository orderEventRepository;
+    @Mock
+    private OrderResultRepository orderResultRepository;
     @InjectMocks
     private CurrentOrderEventManageService currentOrderEventManageService;
+    @Mock
+    private OrderApplyCountRepository orderApplyCountRepository;
     @BeforeEach
     void setUp() {
         currentOrderEventManageService.refreshOrderEventInProgress(
@@ -38,16 +47,21 @@ class CurrentOrderEventManageServiceTest {
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인")
-    public void checkIsOrderApplyNotFullThenSave() {
-        when(applyTickets.size()).thenReturn(0);
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave(new OrderResult())).isTrue();
+    public void checkIsOrderApplyNotFullThenPlusCount() {
+        when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
     public void checkIsOrderApplyFull() {
-        when(applyTickets.size()).thenReturn(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenSave(new OrderResult())).isFalse();
+        ArrayList<OrderResult> orderResults = new ArrayList<>();
+        OrderApplyCount orderApplyCount = OrderApplyCount.createWithNothing();
+        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
+            orderApplyCount.addCount();
+        }
+        when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(orderApplyCount));
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
 
     }
 }
