@@ -2,6 +2,7 @@ package com.watermelon.server.order.domain;
 
 import com.watermelon.server.BaseEntity;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
+import com.watermelon.server.order.result.domain.OrderApplyCount;
 import jakarta.persistence.*;
 import lombok.*;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class OrderEvent extends BaseEntity {
         this.quiz = quiz;
         this.orderEventReward = orderEventReward;
         this.orderEventStatus = OrderEventStatus.UPCOMING;
+
     }
 
 
@@ -65,6 +67,18 @@ public class OrderEvent extends BaseEntity {
                 .winnerCount(requestOrderEventDto.getWinnerCount())
                 .build();
     }
+    public static OrderEvent makeOrderEventWithOutImageNewApplyCount(RequestOrderEventDto requestOrderEventDto){
+        Quiz quiz = Quiz.makeQuiz(requestOrderEventDto.getQuiz());
+        OrderEventReward reward = OrderEventReward.makeReward(requestOrderEventDto.getReward());
+        return OrderEvent.builder()
+                .quiz(quiz)
+                .startDate(requestOrderEventDto.getStartDate())
+                .endDate(requestOrderEventDto.getEndDate())
+                .orderEventReward(reward)
+                .winnerCount(requestOrderEventDto.getWinnerCount())
+//                .orderApplyCount(OrderApplyCount.createWithNothing())
+                .build();
+    }
     public static OrderEvent makeOrderEventWithImage(RequestOrderEventDto requestOrderEventDto,String rewardImgSrc,String quizImgSrc){
         Quiz quiz = Quiz.makeQuizWithImage(requestOrderEventDto.getQuiz(),quizImgSrc);
         OrderEventReward reward = OrderEventReward.makeRewardWithImage(requestOrderEventDto.getReward(),rewardImgSrc);
@@ -74,6 +88,18 @@ public class OrderEvent extends BaseEntity {
                 .endDate(requestOrderEventDto.getEndDate())
                 .orderEventReward(reward)
                 .winnerCount(requestOrderEventDto.getWinnerCount())
+                .build();
+    }
+    public static OrderEvent makeOrderEventWithImageNewApplyCount(RequestOrderEventDto requestOrderEventDto,String rewardImgSrc,String quizImgSrc){
+        Quiz quiz = Quiz.makeQuizWithImage(requestOrderEventDto.getQuiz(),quizImgSrc);
+        OrderEventReward reward = OrderEventReward.makeRewardWithImage(requestOrderEventDto.getReward(),rewardImgSrc);
+        return OrderEvent.builder()
+                .quiz(quiz)
+                .startDate(requestOrderEventDto.getStartDate())
+                .endDate(requestOrderEventDto.getEndDate())
+                .orderEventReward(reward)
+                .winnerCount(requestOrderEventDto.getWinnerCount())
+//                .orderApplyCount(OrderApplyCount.createWithNothing())
                 .build();
     }
 

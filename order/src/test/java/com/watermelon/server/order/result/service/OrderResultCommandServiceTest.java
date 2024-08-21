@@ -46,7 +46,7 @@ class OrderResultCommandServiceTest {
     public void makeOrderResult() {
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
 
-        when(currentOrderEventManageService.isOrderApplyNotFullThenSave(any())).thenReturn(true);
+        when(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).thenReturn(true);
         Assertions.assertThat(orderResultCommandService.createTokenAndMakeTicket(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.SUCCESS.name());
     }
@@ -55,7 +55,7 @@ class OrderResultCommandServiceTest {
     public void makeOrderResultFull() {
 
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
-        when(currentOrderEventManageService.isOrderApplyNotFullThenSave(any())).thenReturn(false);
+        when(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.createTokenAndMakeTicket(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.CLOSED.name());
     }
