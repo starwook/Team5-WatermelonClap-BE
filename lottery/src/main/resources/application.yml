@@ -3,8 +3,8 @@ spring:
     active: ${name:local}
 server:
   port: 8091
-  base-url: http://43.202.54.29:8080
-  parts-share-url: http://localhost:5173/share
+  base-url: https://softeer.store:8080
+  parts-share-url: https://watermelon-clap.web.app/share
 management:
   endpoints:
     web:
