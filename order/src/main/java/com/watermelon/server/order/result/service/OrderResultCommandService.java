@@ -62,7 +62,7 @@ public class OrderResultCommandService {
 //    }
     public boolean saveOrderResultIfCan(OrderResult orderResult){
         if(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
-//            saveOrderResult(orderResult);
+            saveOrderResult(orderResult);
             return true;
         }
         return false;

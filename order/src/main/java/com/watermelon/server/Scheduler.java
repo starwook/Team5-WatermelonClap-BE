@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class Scheduler {
     private final OrderEventSchedulingService orderEventSchedulingService;
     private final CurrentOrderEventManageService currentOrderEventManageService;
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 1000)
     public void checkOrderEvent(){
         Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         orderEventSchedulingService.changeOrderStatusByTime();

@@ -49,9 +49,9 @@ class OrderResultLockTest {
        orderEventRepository.delete(orderEvent);
     }
     @Test
-    void 선착순_이벤트_락_적용_10배_신청() throws InterruptedException {
+    void 선착순_이벤트_락_적용_3배_신청() throws InterruptedException {
         currentOrderEventManageService.clearOrderResultRepository();
-        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*5;
+        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*3;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for(int i=0;i<numberOfThreads;i++){

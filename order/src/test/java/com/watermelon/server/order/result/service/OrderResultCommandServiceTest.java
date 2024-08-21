@@ -4,6 +4,7 @@ import com.watermelon.server.order.domain.ApplyTicketStatus;
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
+import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;
@@ -15,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.redisson.api.RSet;
+
 
 
 import static org.mockito.ArgumentMatchers.any;
@@ -28,12 +29,13 @@ class OrderResultCommandServiceTest {
     @Mock
     private ApplyTokenProvider applyTokenProvider;
 
-    @Mock
-    private RSet<OrderResult> orderResultSet;
+
     @Mock
     private CurrentOrderEventManageService currentOrderEventManageService;
     @InjectMocks
     private OrderResultCommandService orderResultCommandService;
+    @Mock
+    private OrderResultRepository orderResultRepository;
 
     private Long quizId=1L;
     private Long eventId =1L;

@@ -163,7 +163,6 @@ public class OrderEvent extends BaseEntity {
                 "id=" + id +
                 ", orderEventReward=" + orderEventReward +
                 ", quiz=" + quiz +
-                ", orderEventWinner=" + orderEventWinner +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", winnerCount=" + winnerCount +

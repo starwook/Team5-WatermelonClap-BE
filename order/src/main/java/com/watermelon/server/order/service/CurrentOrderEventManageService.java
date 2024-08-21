@@ -26,7 +26,6 @@ public class CurrentOrderEventManageService {
     @Getter
     private OrderEvent currentOrderEvent;
 
-//    private final RSet<String> applyTickets;
     private final OrderResultRepository orderResultRepository;
     private final OrderApplyCountRepository orderApplyCountRepository;
 
@@ -38,7 +37,7 @@ public class CurrentOrderEventManageService {
 
     @Transactional
     public boolean isOrderApplyNotFullThenPlusCount(){
-
+//        if(isOrderApplyFull()) return false; // 커넥션을 얻자마자 바로 검사
         Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
         log.info("Locked OrderApplyCount record");
         OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
@@ -52,11 +51,9 @@ public class CurrentOrderEventManageService {
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
-
-
     @Transactional
     public int getCurrentApplyTicketSizeNoLock() {
-        log.info("current event id "+ getCurrentOrderEvent());
+        log.info("current event id "+ getCurrentOrderEventId());
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
