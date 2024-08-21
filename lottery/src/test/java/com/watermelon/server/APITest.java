@@ -54,9 +54,28 @@ public abstract class APITest {
     protected abstract void givenLink();
     protected abstract void givenOriginUri();
 
+    protected abstract void givenExpectationNotExistForLotteryApplier(String uid);
+    protected abstract void givenExpectationAlreadyExistForLotteryApplier(String uid);
+
     private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_VALID_TOKEN);
+    }
+
+    protected void whenGetExpectationCheck(String uid) throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/expectations/check")));
+    }
+
+    protected void thenExpectationNotExist() throws Exception {
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exist").value(false));
+    }
+
+    protected void thenExpectationAlreadyExist() throws Exception {
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("exist").value(true));
     }
 
     protected void whenLotteryAppliersRankIsRetrieved() throws Exception {

@@ -1,5 +1,10 @@
 server:
   port: 8080 # port number
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore.p12
+    key-store-password: "1111"
 spring:
   profiles:
     active: ${name:local}

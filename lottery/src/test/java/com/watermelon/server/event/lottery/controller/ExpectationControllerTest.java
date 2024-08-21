@@ -22,16 +22,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExpectationController.class)
 class ExpectationControllerTest extends ControllerTest {
-
-    @MockBean
-    private ExpectationService expectationService;
 
     @Test
     @DisplayName("[DOC] 사용자 기대평을 만든다")
@@ -112,4 +111,45 @@ class ExpectationControllerTest extends ControllerTest {
                         )));
     }
 
+    @Test
+    @DisplayName("[DOC] 사용자의 기대평이 존재하는 경우")
+    void getExpectationCheckTestAlreadyExistCase() throws Exception {
+
+        givenExpectationAlreadyExistForLotteryApplier(TEST_UID);
+
+        whenGetExpectationCheck(TEST_UID);
+
+        thenExpectationAlreadyExist();
+
+        resultActions
+                .andDo(MockMvcRestDocumentationWrapper.document("사용자의 기대평이 존재하는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_EXPECTATION)
+                                        .description("사용자 기대평 존재 여부 조회")
+                                        .build()
+                        )));
+
+    }
+
+    @Test
+    @DisplayName("[DOC] 사용자의 기대평이 존재하지 않는 경우")
+    void getExpectationCheckTestNotExistCase() throws Exception {
+
+        givenExpectationNotExistForLotteryApplier(TEST_UID);
+
+        whenGetExpectationCheck(TEST_UID);
+
+        thenExpectationNotExist();
+
+        resultActions
+                .andDo(MockMvcRestDocumentationWrapper.document("사용자의 기대평이 존재하지 않는 경우",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_EXPECTATION)
+                                        .description("사용자 기대평 존재 여부 조회")
+                                        .build()
+                        )));
+
+    }
 }
