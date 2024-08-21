@@ -40,6 +40,7 @@ jobs:
           cd gateway
           ls -l
           mkdir -p src/main/resources
+          echo "${{ secrets.SSL_KEYSTORE }}" | base64 --decode > src/main/resources/keystore.p12
           find src
 
       # Gradle wrapper 파일 실행 권한주기
