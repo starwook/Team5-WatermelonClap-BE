@@ -1,5 +1,5 @@
 server:
-  port: 443 # port number
+  port: 8080 # port number
   ssl:
     enabled: true
     key-store-type: PKCS12
