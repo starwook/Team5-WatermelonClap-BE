@@ -19,6 +19,7 @@ public class PathConstants {
     public static String ADMIN_EXPECTATIONS_CHECK = "/admin/expectations/:expectationId/toggle";
 
     public static String EXPECTATIONS = "/expectations";
+    public static String EXPECTATIONS_CHECK = "/expectations/check";
 
     public static String MY_LINK = "/link";
 
