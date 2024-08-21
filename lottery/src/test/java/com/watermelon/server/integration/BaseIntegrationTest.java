@@ -6,6 +6,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.APITest;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
+import com.watermelon.server.event.lottery.service.ExpectationService;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.parts.domain.Parts;
 import com.watermelon.server.event.parts.domain.PartsCategory;
@@ -174,6 +175,16 @@ public class BaseIntegrationTest extends APITest {
 
     @Override
     protected void givenOriginUri() {
+
+    }
+
+    @Override
+    protected void givenExpectationNotExistForLotteryApplier(String uid) {
+
+    }
+
+    @Override
+    protected void givenExpectationAlreadyExistForLotteryApplier(String uid) {
 
     }
 }

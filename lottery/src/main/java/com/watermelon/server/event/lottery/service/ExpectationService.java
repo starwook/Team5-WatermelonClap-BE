@@ -4,6 +4,7 @@ import com.watermelon.server.admin.dto.response.ResponseAdminExpectationApproved
 import com.watermelon.server.event.lottery.domain.Expectation;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.dto.request.RequestExpectationDto;
+import com.watermelon.server.event.lottery.dto.response.ResponseExpectationCheckDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseExpectationDto;
 import com.watermelon.server.event.lottery.error.ExpectationAlreadyExistError;
 import com.watermelon.server.event.lottery.error.ExpectationNotExist;
@@ -31,6 +32,12 @@ public class ExpectationService {
     }
     public void saveExpectation(Expectation expectation) {
         expectationRepository.save(expectation);
+    }
+
+    public ResponseExpectationCheckDto isExpectationAlreadyExist(String uid) {
+        return ResponseExpectationCheckDto.from(
+                isExpectationAlreadyExist(lotteryService.findLotteryApplierByUid(uid))
+        );
     }
 
     private static boolean isExpectationAlreadyExist(LotteryApplier lotteryApplier) {

@@ -8,13 +8,11 @@ import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.config.MockAdminAuthorizationInterceptorConfig;
 import com.watermelon.server.config.MockLoginInterceptorConfig;
-import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInfoDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
+import com.watermelon.server.event.lottery.dto.response.*;
 import com.watermelon.server.event.link.dto.MyLinkDto;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.lottery.exception.LotteryRewardNotFoundException;
+import com.watermelon.server.event.lottery.service.ExpectationService;
 import com.watermelon.server.event.parts.dto.response.ResponseMyPartsListDto;
 import com.watermelon.server.event.parts.dto.response.ResponsePartsDrawDto;
 import com.watermelon.server.event.parts.dto.response.ResponseRemainChanceDto;
@@ -63,6 +61,9 @@ public class ControllerTest extends APITest{
 
     @MockBean
     protected LotteryEventService lotteryEventService;
+
+    @MockBean
+    protected ExpectationService expectationService;
 
     protected final String TAG_LOTTERY = "추첨 이벤트";
     protected final String TAG_PARTS = "파츠 이벤트";
@@ -223,6 +224,20 @@ public class ControllerTest extends APITest{
 
     protected void givenOriginUri(){
         Mockito.when(linkService.getRedirectUrl(TEST_SHORTED_URI)).thenReturn(TEST_REDIRECTION_URL);
+    }
+
+    @Override
+    protected void givenExpectationNotExistForLotteryApplier(String uid) {
+        Mockito.when(expectationService.isExpectationAlreadyExist(uid)).thenReturn(
+                ResponseExpectationCheckDto.from(false)
+        );
+    }
+
+    @Override
+    protected void givenExpectationAlreadyExistForLotteryApplier(String uid) {
+        Mockito.when(expectationService.isExpectationAlreadyExist(uid)).thenReturn(
+                ResponseExpectationCheckDto.from(true)
+        );
     }
 
 }

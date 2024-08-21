@@ -31,8 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AdminExpectationController.class)
 class AdminExpectationControllerTest extends ControllerTest {
-    @MockBean
-    private ExpectationService expectationService;
 
     @Test
     @DisplayName("[DOC] 기대평을 가져온다.")

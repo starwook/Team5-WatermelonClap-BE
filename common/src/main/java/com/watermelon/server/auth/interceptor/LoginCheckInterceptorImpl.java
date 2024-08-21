@@ -14,7 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Profile({"deploy", "local"})
 public class LoginCheckInterceptorImpl implements LoginCheckInterceptor {
 
     private final TokenVerifier tokenVerifier;
