@@ -23,7 +23,7 @@ public class Scheduler {
             log.info("changed current order event id is {}", newCurrentEventId);
         }
     }
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 30000)
     public void checkCurrentOrderEvent(){
         Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         log.info("current order event id is {}", currentEventId);

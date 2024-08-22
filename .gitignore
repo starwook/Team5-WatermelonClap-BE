@@ -36,6 +36,7 @@ derby.log
 /common/src/main/resources/application-deploy.yml
 /common/src/main/resources/application-test.yml
 
+/gateway/src/main/resources/keystore.p12
 
 # Gradle artifacts
 .gradle

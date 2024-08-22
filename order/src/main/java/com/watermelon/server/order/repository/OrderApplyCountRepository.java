@@ -13,8 +13,10 @@ import java.util.Optional;
 @Repository
 public interface OrderApplyCountRepository extends JpaRepository<OrderApplyCount,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE) //InnoDb는 레코드락만 건다
-    @Query("select oac from OrderApplyCount oac")
+    @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
     Optional<OrderApplyCount> findWithExclusiveLock();
-    @Query("select oac from OrderApplyCount oac")
+    @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
     Optional<OrderApplyCount> findCurrent();
+
+
 }
