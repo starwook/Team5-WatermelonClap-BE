@@ -1,5 +1,6 @@
 package com.watermelon.server.event.lottery.controller;
 
+import com.amazonaws.Response;
 import com.watermelon.server.auth.annotations.Uid;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
@@ -62,6 +63,11 @@ public class LotteryController {
             @PathVariable int rank
     ){
         return new ResponseEntity<>(lotteryRewardService.getRewardInfo(rank), HttpStatus.OK);
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<Void> loginCheck(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ExceptionHandler(LotteryApplierNotFoundException.class)

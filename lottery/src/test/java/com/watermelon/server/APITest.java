@@ -15,10 +15,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.nio.charset.StandardCharsets;
 
+import static com.watermelon.server.auth.service.TestTokenVerifier.*;
 import static com.watermelon.server.constants.Constants.*;
 import static com.watermelon.server.common.constants.PathConstants.*;
-import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
-import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_VALID_TOKEN;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,6 +59,24 @@ public abstract class APITest {
     private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_VALID_TOKEN);
+    }
+
+    private MockHttpServletRequestBuilder notAuthedRequest(MockHttpServletRequestBuilder requestBuilder) {
+        return requestBuilder
+                .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_INVALID_TOKEN);
+    }
+
+    protected void whenCheckLoginNotAuthed() throws Exception {
+        resultActions = mvc.perform(notAuthedRequest(get("/event/lotteries/login")));
+    }
+
+    protected void whenCheckLoginAuthed() throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/event/lotteries/login")));
+    }
+
+    protected void thenSuccess() throws Exception {
+        resultActions
+                .andExpect(status().isOk());
     }
 
     protected void whenGetExpectationCheck(String uid) throws Exception {
