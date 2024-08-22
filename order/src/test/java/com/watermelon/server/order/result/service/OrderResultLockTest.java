@@ -6,7 +6,9 @@ import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
+
 import com.watermelon.server.order.result.domain.OrderApplyCount;
+
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
 import org.assertj.core.api.Assertions;
@@ -34,11 +36,13 @@ class OrderResultLockTest {
     private OrderApplyCountRepository orderApplyCountRepository;
 
     private OrderEvent orderEvent;
+
     private OrderApplyCount orderApplyCount;
 
     @BeforeEach
     void setUp() {
          orderApplyCount= orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
+
          orderEvent = orderEventRepository.save(OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
@@ -49,7 +53,9 @@ class OrderResultLockTest {
     }
     @AfterEach
     void delete(){
+
         orderApplyCountRepository.delete(orderApplyCount);
+
        orderEventRepository.delete(orderEvent);
     }
     @Test

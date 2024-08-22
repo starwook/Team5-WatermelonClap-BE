@@ -34,9 +34,8 @@ public class OrderApplyCount {
     public void addCount(){
         this.count++;
     }
+
     public void clearCount(){
         this.count = 0;
     }
-
-
 }

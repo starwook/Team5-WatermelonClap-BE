@@ -37,8 +37,10 @@ class OrderResultCommandServiceTest {
     private OrderResultCommandService orderResultCommandService;
     @Mock
     private OrderResultRepository orderResultRepository;
+
     @Mock
     private OrderResultSaveService orderResultSaveService;
+
 
     private Long quizId=1L;
     private Long eventId =1L;

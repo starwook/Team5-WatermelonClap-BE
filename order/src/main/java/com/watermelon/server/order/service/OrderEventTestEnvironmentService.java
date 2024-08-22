@@ -32,7 +32,9 @@ public class OrderEventTestEnvironmentService {
     @Transactional
     public void setTestEnvironment() {
 //        orderEventRepository.deleteAll();
+
         makeOrderEvent();
+
 //        setApplyCount();
     }
 //    @Transactional
