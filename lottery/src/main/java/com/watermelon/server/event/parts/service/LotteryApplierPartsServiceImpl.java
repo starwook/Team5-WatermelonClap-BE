@@ -80,7 +80,7 @@ public class LotteryApplierPartsServiceImpl implements LotteryApplierPartsServic
 
     @Override
     public List<LotteryApplierParts> getListByApplier(String uid) {
-        return lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUid(uid);
+        return lotteryApplierPartsRepository.findLotteryApplierPartsByLotteryApplierUidFetchJoin(uid);
     }
 
     /**
