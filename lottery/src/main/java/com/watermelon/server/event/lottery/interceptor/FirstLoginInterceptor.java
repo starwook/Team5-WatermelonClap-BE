@@ -57,6 +57,7 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
 
         //링크 아이디가 존재한다면
         linkService.addLinkViewCount(linkId);
+        lotteryService.addRemainChance(uid);
 
     }
 

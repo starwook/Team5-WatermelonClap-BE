@@ -66,4 +66,10 @@ public interface LotteryService {
      */
     boolean isExist(String uid);
 
+    /**
+     * uid를 가진 추첨 응모자의 뽑기권을 증가시킨다.
+     * @param uid 응모자의 uid
+     */
+    void addRemainChance(String uid);
+
 }
