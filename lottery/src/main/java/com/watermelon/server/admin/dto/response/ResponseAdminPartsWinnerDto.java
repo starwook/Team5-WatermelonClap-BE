@@ -2,6 +2,7 @@ package com.watermelon.server.admin.dto.response;
 
 import com.watermelon.server.event.lottery.domain.AdminCheckStatus;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
+import com.watermelon.server.event.parts.domain.PartsReward;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class ResponseAdminPartsWinnerDto {
     private String address;
     private int rank;
     private AdminCheckStatus status;
+    private String reward;
 
     public static ResponseAdminPartsWinnerDto createTestDto() {
 
@@ -26,6 +28,7 @@ public class ResponseAdminPartsWinnerDto {
                 .email("email")
                 .address("address")
                 .rank(1)
+                .reward("reward")
                 .status(AdminCheckStatus.READY)
                 .build();
 
@@ -40,6 +43,7 @@ public class ResponseAdminPartsWinnerDto {
                 .email(lotteryApplier.getEmail())
                 .address(lotteryApplier.getAddress())
                 .rank(1)
+                .reward("아반떼 N 미니어처")
                 .status(AdminCheckStatus.getStatus(lotteryApplier.isPartsWinnerCheckedByAdmin()))
                 .build();
 
