@@ -7,7 +7,9 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.domain.Quiz;
 import com.watermelon.server.order.dto.request.*;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
+import com.watermelon.server.order.result.domain.OrderApplyCount;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -55,12 +57,16 @@ public class OrderEventTotalTest {
     private OrderEvent soonOpenOrderEvent;
     private OrderEvent openOrderEvent;
     private OrderEvent unOpenOrderEvent;
-
+    private OrderApplyCount orderApplyCount;
+    @Autowired
+    private OrderApplyCountRepository orderApplyCountRepository;
 
 
     @CacheEvict(value = "orderEvents",allEntries = true)
     @BeforeEach
     public void setUp(){
+        orderApplyCount = OrderApplyCount.createWithNothing();
+        orderApplyCountRepository.save(orderApplyCount);
         openOrderEvent = OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(),
@@ -83,6 +89,10 @@ public class OrderEventTotalTest {
                         )
         );
         orderEventRepository.deleteAll();
+    }
+    @AfterEach
+    public void tearDown(){
+        orderApplyCountRepository.delete(orderApplyCount);
     }
     @CacheEvict(value = "orderEvents",allEntries = true)
     @AfterEach
