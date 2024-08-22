@@ -33,7 +33,7 @@ public class LotteryApplier extends BaseEntity {
     private boolean isLotteryApplier = false;
 
     @Builder.Default
-    private int remainChance = 1;
+    private int remainChance = 3;
 
     private String email;
 

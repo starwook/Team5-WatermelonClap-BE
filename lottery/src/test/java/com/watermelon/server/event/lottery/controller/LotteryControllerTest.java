@@ -221,4 +221,41 @@ class LotteryControllerTest extends ControllerTest {
 
     }
 
+    @Test
+    @DisplayName("로그인 여부 검사 - 성공 시")
+    void checkLoginSuccess() throws Exception {
+
+        whenCheckLoginAuthed();
+
+        thenSuccess();
+
+        resultActions
+                .andDo(document("로그인 성공",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("로그인 여부 검사")
+                                        .build()
+                        )));
+    }
+
+    @Test
+    @DisplayName("로그인 여부 검사 - 실패 시")
+    void checkLoginFail() throws Exception {
+
+        whenCheckLoginNotAuthed();
+
+        thenClientError();
+
+        resultActions
+                .andDo(document("로그인 실패 (유효하지 않은 토큰)",
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("로그인 여부 검사")
+                                        .build()
+                        )));
+
+    }
+
 }

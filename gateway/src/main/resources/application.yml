@@ -24,6 +24,8 @@ spring:
                 - 'http://localhost:5173'
                 - 'http://localhost:63342'
                 - 'https://watermelon-clap.web.app' # 허용하려는 도메인
+                - 'https://watermelon-clap-admin.web.app'
+                - 'https://watermelon-s3-bucket.s3.ap-northeast-2.amazonaws.com' #스웨거
               allow-credentials: true # 요청 시 인증 정보를 전송하도록 허가
               # 허용하려는 헤더
               allowedHeaders: '*'

@@ -44,6 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
                         PARTS_REMAIN,
                         MY_LINK,
                         EXPECTATIONS_CHECK,
+                        LOGIN,
                         "/admin/**"
                 );
 
@@ -60,6 +61,7 @@ public class WebConfig implements WebMvcConfigurer {
                         PARTS_EQUIP,
                         PARTS_REMAIN,
                         MY_LINK,
+                        LOGIN,
                         "/admin/**"
                 );
 

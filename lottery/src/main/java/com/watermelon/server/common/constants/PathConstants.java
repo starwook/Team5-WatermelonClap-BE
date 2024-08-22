@@ -20,6 +20,7 @@ public class PathConstants {
 
     public static String EXPECTATIONS = "/expectations";
     public static String EXPECTATIONS_CHECK = "/expectations/check";
+    public static String LOGIN = "/event/lotteries/login";
 
     public static String MY_LINK = "/link";
 

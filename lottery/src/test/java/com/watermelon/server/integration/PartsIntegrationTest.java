@@ -132,6 +132,8 @@ public class PartsIntegrationTest extends BaseIntegrationTest {
 
         //given
         postPartsLotteryRequestTestUser();
+        postPartsLotteryRequestTestUser();
+        postPartsLotteryRequestTestUser();
 
         //when
         mvc.perform(post(PARTS)
