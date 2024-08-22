@@ -187,4 +187,8 @@ public class BaseIntegrationTest extends APITest {
     protected void givenExpectationAlreadyExistForLotteryApplier(String uid) {
 
     }
+
+    @Override
+    protected void givenLotteryEvent() {
+    }
 }

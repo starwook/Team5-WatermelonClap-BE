@@ -6,8 +6,10 @@ import com.watermelon.server.admin.controller.LotteryEventService;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.admin.dto.response.ResponseLotteryEventDto;
 import com.watermelon.server.config.MockAdminAuthorizationInterceptorConfig;
 import com.watermelon.server.config.MockLoginInterceptorConfig;
+import com.watermelon.server.event.lottery.domain.LotteryEvent;
 import com.watermelon.server.event.lottery.dto.response.*;
 import com.watermelon.server.event.link.dto.MyLinkDto;
 import com.watermelon.server.event.link.service.LinkService;
@@ -42,7 +44,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 @AutoConfigureRestDocs
 @MockBean(JpaMetamodelMappingContext.class)
 @Import({MockLoginInterceptorConfig.class, MockAdminAuthorizationInterceptorConfig.class})
-public class ControllerTest extends APITest{
+public class ControllerTest extends APITest {
 
     @MockBean
     protected LotteryService lotteryService;
@@ -78,7 +80,7 @@ public class ControllerTest extends APITest{
         );
     }
 
-    protected ResourceSnippet resourceSnippetAuthed(String description){
+    protected ResourceSnippet resourceSnippetAuthed(String description) {
 
         return resource(
                 ResourceSnippetParameters.builder()
@@ -101,7 +103,7 @@ public class ControllerTest extends APITest{
                         ), pageable, TEST_PAGE_SIZE));
     }
 
-    protected void givenPartsWinnerList(){
+    protected void givenPartsWinnerList() {
         Mockito.when(partsService.getAdminPartsWinners())
                 .thenReturn(List.of(
                         ResponseAdminPartsWinnerDto.createTestDto(),
@@ -110,13 +112,13 @@ public class ControllerTest extends APITest{
     }
 
 
-    protected void givenLotteryRewardInfo(){
+    protected void givenLotteryRewardInfo() {
         Mockito.when(lotteryRewardService.getRewardInfo(TEST_RANK)).thenReturn(
                 new ResponseRewardInfoDto(TEST_IMGSRC, TEST_NAME)
         );
     }
 
-    protected void givenLotteryRewardInfoNotExists(){
+    protected void givenLotteryRewardInfoNotExists() {
         Mockito.doThrow(new LotteryRewardNotFoundException())
                 .when(lotteryRewardService).getRewardInfo(TEST_RANK);
     }
@@ -161,25 +163,25 @@ public class ControllerTest extends APITest{
         );
     }
 
-    protected void givenLotteryWinner(){
+    protected void givenLotteryWinner() {
         Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
                 ResponseLotteryRankDto.createLotteryWinnerTest()
         );
     }
 
-    protected void givenLotteryAndPartsWinner(){
+    protected void givenLotteryAndPartsWinner() {
         Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
                 ResponseLotteryRankDto.createPartsAndLotteryWinnerTest()
         );
     }
 
-    protected void givenOnlyPartsWinner(){
+    protected void givenOnlyPartsWinner() {
         Mockito.when(lotteryService.getLotteryRank(TEST_UID)).thenReturn(
                 ResponseLotteryRankDto.createPartsWinnerTest()
         );
     }
 
-    protected void givenPartsListForUri(){
+    protected void givenPartsListForUri() {
         Mockito.when(partsService.getPartsList(TEST_URI)).thenReturn(
                 ResponseMyPartsListDto.createTestDtoList()
         );
@@ -190,16 +192,16 @@ public class ControllerTest extends APITest{
 
     }
 
-    protected void givenEquipPartsNotExist(){
+    protected void givenEquipPartsNotExist() {
         Mockito.doThrow(new PartsNotExistException()).when(partsService)
                 .toggleParts(TEST_UID, TEST_PARTS_ID);
     }
 
-    protected void givenLotteryApplierWhoHasNoRemainChance(){
+    protected void givenLotteryApplierWhoHasNoRemainChance() {
         Mockito.when(partsService.drawParts(TEST_UID)).thenThrow(new PartsDrawLimitExceededException());
     }
 
-    protected void givenLotteryApplierWhoDrawsPartsFirst(){
+    protected void givenLotteryApplierWhoDrawsPartsFirst() {
         Mockito.when(partsService.drawParts(TEST_UID)).thenReturn(
                 ResponsePartsDrawDto.createResponsePartsDrawDtoTest()
         );
@@ -211,18 +213,18 @@ public class ControllerTest extends APITest{
         );
     }
 
-    protected void givenMyPartsList(){
+    protected void givenMyPartsList() {
         Mockito.when(partsService.getMyParts(TEST_UID)).thenReturn(
                 ResponseMyPartsListDto.createTestDtoList()
         );
     }
 
-    protected void givenLink(){
+    protected void givenLink() {
         Mockito.when(linkService.getShortedLink(TEST_UID))
                 .thenReturn(MyLinkDto.createTestDto());
     }
 
-    protected void givenOriginUri(){
+    protected void givenOriginUri() {
         Mockito.when(linkService.getRedirectUrl(TEST_SHORTED_URI)).thenReturn(TEST_REDIRECTION_URL);
     }
 
@@ -237,6 +239,17 @@ public class ControllerTest extends APITest{
     protected void givenExpectationAlreadyExistForLotteryApplier(String uid) {
         Mockito.when(expectationService.isExpectationAlreadyExist(uid)).thenReturn(
                 ResponseExpectationCheckDto.from(true)
+        );
+    }
+
+    @Override
+    protected void givenLotteryEvent() {
+        Mockito.when(lotteryEventService.getLotteryEvents()).thenReturn(
+                ResponseLotteryEventDto.from(
+                        List.of(
+                                LotteryEvent.createTest()
+                        )
+                )
         );
     }
 

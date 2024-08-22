@@ -56,6 +56,8 @@ public abstract class APITest {
     protected abstract void givenExpectationNotExistForLotteryApplier(String uid);
     protected abstract void givenExpectationAlreadyExistForLotteryApplier(String uid);
 
+    protected abstract void givenLotteryEvent();
+
     private MockHttpServletRequestBuilder authedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_VALID_TOKEN);
@@ -64,6 +66,17 @@ public abstract class APITest {
     private MockHttpServletRequestBuilder notAuthedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_INVALID_TOKEN);
+    }
+
+    protected void whenGetLotteryEvents() throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/admin/event/lotteries")));
+    }
+
+    protected void thenGetLotteryEvents() throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("[0].name").isString())
+                .andExpect(jsonPath("[0].startTime").isString())
+                .andExpect(jsonPath("[0].endTime").isString());
     }
 
     protected void whenCheckLoginNotAuthed() throws Exception {
