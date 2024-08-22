@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 파츠 서비스")
 class PartsServiceImplTest {
 
     @Mock
@@ -38,7 +39,7 @@ class PartsServiceImplTest {
     private PartsServiceImpl partsService;
 
     @Test
-    @DisplayName("remain chance 가 존재한다면 존재하는 파츠 중 랜덤으로 하나를 뽑아서 저장하고 반환한다.")
+    @DisplayName("파츠 뽑기 - 성공")
     void drawParts() {
 
         //given
@@ -68,7 +69,7 @@ class PartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("remain chance 가 존재하지 않으면 예외를 발생한다.")
+    @DisplayName("파츠 뽑기 - 실패 (뽑기권 없음)")
     void drawPartsFailureCase(){
 
         //given
