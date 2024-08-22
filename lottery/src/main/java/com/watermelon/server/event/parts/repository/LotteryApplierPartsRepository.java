@@ -15,6 +15,9 @@ public interface LotteryApplierPartsRepository extends JpaRepository<LotteryAppl
     List<LotteryApplierParts> findLotteryApplierPartsByLotteryApplierId(Long lotteryApplierId);
     List<LotteryApplierParts> findLotteryApplierPartsByLotteryApplierUid(String lotteryApplierUid);
 
+    @Query("select lap from LotteryApplierParts lap join fetch lap.parts where lap.lotteryApplier.uid = :lotteryApplierUid")
+    List<LotteryApplierParts> findLotteryApplierPartsByLotteryApplierUidFetchJoin(String lotteryApplierUid);
+
     Optional<LotteryApplierParts> findLotteryApplierPartsByLotteryApplierUidAndPartsId(String lotteryApplierUid,Long partsId);
 
     @Query("SELECT COUNT(DISTINCT lap.parts.category) FROM LotteryApplierParts lap WHERE lap.lotteryApplier = :lotteryApplier")
