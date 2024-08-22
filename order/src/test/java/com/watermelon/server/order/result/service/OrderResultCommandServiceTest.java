@@ -24,6 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 선착순 결과 커맨드 서비스")
 class OrderResultCommandServiceTest {
 
 
