@@ -76,7 +76,7 @@ public class LotteryApplier extends BaseEntity {
     }
 
     public void partsWinnerCheck(){
-        this.isPartsWinner = true;
+        this.isPartsWinnerCheckedByAdmin = true;
     }
 
     public void lotteryWin(LotteryReward reward, String email) {
