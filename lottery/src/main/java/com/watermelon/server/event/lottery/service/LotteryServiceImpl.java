@@ -10,6 +10,7 @@ import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LotteryServiceImpl implements LotteryService{
@@ -98,6 +100,7 @@ public class LotteryServiceImpl implements LotteryService{
 
     @Override
     public void registration(String uid) {
+        log.info("registration uid: {}", uid);
         lotteryApplierRepository.save(LotteryApplier.createLotteryApplier(uid));
     }
 

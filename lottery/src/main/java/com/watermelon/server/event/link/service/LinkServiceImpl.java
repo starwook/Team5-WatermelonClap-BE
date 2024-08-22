@@ -9,9 +9,11 @@ import com.watermelon.server.event.link.utils.LinkUtils;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LinkServiceImpl implements LinkService {
@@ -41,6 +43,7 @@ public class LinkServiceImpl implements LinkService {
     @Override
     @Transactional
     public void addLinkViewCount(String uri) {
+        log.info("Add link view count: {}", uri);
         Link link = findLink(uri);
         link.addLinkViewCount();
         linkRepository.save(link);
