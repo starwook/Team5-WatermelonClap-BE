@@ -101,7 +101,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 이벤트 오픈된 이벤트 가져오기 - quiz = not exist")
+    @DisplayName("선착순 이벤트 오픈된 이벤트 가져오기 - quiz = not exist")
     public void getOpenOrderEvent() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         mvc.perform(get("/event/order"))
@@ -114,7 +114,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 이벤트 캐싱된지 확인 ")
+    @DisplayName("선착순 이벤트 캐싱된지 확인 ")
     public void isOrderEventCached() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         mvc.perform(get("/event/order"))
@@ -127,7 +127,7 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
     @Test
-    @DisplayName("[통합] 선착순 이벤트 퀴즈 - answer = null")
+    @DisplayName("선착순 이벤트 퀴즈 - answer = null")
     public void getOpenOrderEventQuizAnswerNotExit() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
 
@@ -137,7 +137,7 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
     @Test
-    @DisplayName("[통합] 선착순 이벤트 오픈 안 된 이벤트 가져오기 - quiz = null")
+    @DisplayName("선착순 이벤트 오픈 안 된 이벤트 가져오기 - quiz = null")
     public void getUnOpenOrderEvent() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
 
@@ -151,7 +151,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 존재하는 선착순 이벤트 가져오기")
+    @DisplayName("존재하는 선착순 이벤트 가져오기")
     public void getExistOpenOrderEvent() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
         mvc.perform(get("/event/order/{eventId}",unOpenOrderEvent.getId()))
@@ -159,7 +159,7 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
     @Test
-    @DisplayName("[통합] 존재하는 선착순 이벤트 가져오기")
+    @DisplayName("존재하는 선착순 이벤트 가져오기")
     public void getNotExistOpenOrderEvent() throws Exception {
         orderEventRepository.save(unOpenOrderEvent);
         mvc.perform(get("/event/order/{eventId}",unOpenOrderEvent.getId()+1))
@@ -168,7 +168,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 번호 제출 - 성공")
+    @DisplayName("선착순 퀴즈 번호 제출 - 성공")
     public void orderEventApplyTicketNotWrong() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
@@ -186,7 +186,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 번호 제출-  전화 번호 형식 잘못됨 (에러)")
+    @DisplayName("선착순 퀴즈 번호 제출-  전화 번호 형식 잘못됨 (에러)")
     public void orderEventApplyPhoneNumberFormatWrong() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         OrderEventWinnerRequestDto emptyPhoneNumberDto =
@@ -216,7 +216,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 번호 제출 - ApplyTicket 형식 맞지 않음(다른 Claim key)")
+    @DisplayName("선착순 퀴즈 번호 제출 - ApplyTicket 형식 맞지 않음(다른 Claim key)")
     public void orderEventApplyTicketEventIdWrong() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
@@ -233,7 +233,7 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 번호 제출 - 이미 참여함)")
+    @DisplayName("선착순 퀴즈 번호 제출 - 이미 참여함)")
     public void orderEventApplyTicketAlreadyParticipate() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         String applyTicket = applyTokenProvider.createTokenByOrderEventId(
@@ -259,7 +259,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 제출 - 성공")
+    @DisplayName("선착순 퀴즈 제출 - 성공")
     public void orderEventApply() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
@@ -275,7 +275,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
+    @DisplayName("선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
     public void orderEventApplyWrongEventId() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
@@ -289,7 +289,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(에러 - 기간이 틀림)")
+    @DisplayName("선착순 퀴즈 제출 - 실패(에러 - 기간이 틀림)")
     public void orderEventApplyWrongDuration() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(unOpenOrderEvent);
@@ -303,7 +303,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(정답이 틀림)")
+    @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
     public void orderEventApplyWrongAnswer() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
@@ -319,7 +319,7 @@ public class OrderEventTotalTest {
     }
 
     @Test
-    @DisplayName("[통합] 선착순 퀴즈 제출 - 실패(선착순 마감)")
+    @DisplayName("선착순 퀴즈 제출 - 실패(선착순 마감)")
     public void orderEventApplyClosed() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
