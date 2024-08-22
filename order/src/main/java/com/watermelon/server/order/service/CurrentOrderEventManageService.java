@@ -6,11 +6,8 @@ import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
-import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderApplyCount;
-import com.watermelon.server.order.result.domain.OrderResult;
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceUnit;
 import lombok.*;
@@ -31,22 +28,25 @@ public class CurrentOrderEventManageService {
     private OrderEvent currentOrderEvent;
 
     private final OrderApplyCountRepository orderApplyCountRepository;
+
     private final HikariDataSource dataSource;
 
     @PersistenceUnit
     private final EntityManagerFactory entityManagerFactory;
 
-//    @MysqlNamedLock(key ="orderResult")
+
 
     @Transactional
     public boolean isOrderApplyNotFullThenPlusCount(){
-//        if(isOrderApplyFull()) return false; // 커넥션을 얻자마자 바로 검사
+        if(isOrderApplyFull()) {
+            return false;
+        }
         Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
         OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
         if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
              orderApplyCount.addCount();
              orderApplyCountRepository.save(orderApplyCount);
-            return true;
+             return true;
         }
         // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
         // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
@@ -57,7 +57,7 @@ public class CurrentOrderEventManageService {
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
         //동일한 이벤트라면
         if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
-            if(getCurrentApplyTicketSizeNoLock()<currentOrderEvent.getWinnerCount()){
+            if(getCurrentApplyCount()<currentOrderEvent.getWinnerCount()){
                 this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
             //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
@@ -65,15 +65,14 @@ public class CurrentOrderEventManageService {
             return;
         }
         currentOrderEvent = orderEventFromDB;
-        clearOrderResultRepository();
+        clearOrderApplyCount();
     }
-    public int getCurrentApplyTicketSizeNoLock() {
-        log.info("current event id "+ getCurrentOrderEventId());
+    public int getCurrentApplyCount() {
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
 
-    public void clearOrderResultRepository() {
+    public void clearOrderApplyCount() {
         orderApplyCountRepository.findCurrent().get().clearCount();
 
     }
