@@ -46,6 +46,7 @@ public class LinkServiceImpl implements LinkService {
         log.info("Add link view count: {}", uri);
         Link link = findLink(uri);
         link.addLinkViewCount();
+        lotteryService.addRemainChance(getApplierByLinkKey(uri).getUid());
         linkRepository.save(link);
     }
 

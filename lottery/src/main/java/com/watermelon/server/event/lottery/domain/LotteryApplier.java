@@ -131,4 +131,8 @@ public class LotteryApplier extends BaseEntity {
                 .build();
     }
 
+    public void addRemainChance(){
+        this.remainChance++;
+    }
+
 }
