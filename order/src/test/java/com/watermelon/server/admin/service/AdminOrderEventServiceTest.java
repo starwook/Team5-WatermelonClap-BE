@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 선착순 서비스")
 class AdminOrderEventServiceTest {
 
     @InjectMocks
@@ -43,7 +44,7 @@ class AdminOrderEventServiceTest {
         Assertions.assertThat(orderEvents.size()).isEqualTo(1);
     }
 
-    @DisplayName("Admin용 Response가 quiz answer를 포함하여 오는 것을 확인")
+    @DisplayName("선착순 이벤트 조회 - 성공 (quiz answer 포함)")
     @Test
     void getOrderEvents() {
         when(orderEventRepository.findAll()).thenReturn(orderEvents);
