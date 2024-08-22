@@ -240,7 +240,7 @@ class AdminLotteryControllerTest extends ControllerTest {
                         resource(
                                 ResourceSnippetParameters.builder()
                                         .tag(TAG_LOTTERY)
-                                        .description("파츠 이벤트 응모자에 대해 추첨")
+                                        .description("추첨 이벤트 조회")
                                         .build()
                         )));
 
