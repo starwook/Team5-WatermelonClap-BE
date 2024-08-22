@@ -62,6 +62,7 @@ jobs:
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
+        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
         with:
           files: lottery/build/test-results/**/*.xml
 
