@@ -109,6 +109,14 @@ public class LotteryServiceImpl implements LotteryService{
         return lotteryApplierRepository.existsByUid(uid);
     }
 
+    @Override
+    @Transactional
+    public void addRemainChance(String uid) {
+        LotteryApplier lotteryApplier = findByUid(uid);
+        lotteryApplier.addRemainChance();
+        lotteryApplierRepository.save(lotteryApplier);
+    }
+
     private LotteryApplier findByUid(String uid) {
         return lotteryApplierRepository.findByUid(uid).orElseThrow(LotteryApplierNotFoundException::new);
     }
