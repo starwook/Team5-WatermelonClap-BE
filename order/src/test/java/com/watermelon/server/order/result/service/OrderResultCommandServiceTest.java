@@ -7,6 +7,7 @@ import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
+import com.watermelon.server.order.service.OrderResultSaveService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,8 @@ class OrderResultCommandServiceTest {
     private OrderResultCommandService orderResultCommandService;
     @Mock
     private OrderResultRepository orderResultRepository;
+    @Mock
+    private OrderResultSaveService orderResultSaveService;
 
     private Long quizId=1L;
     private Long eventId =1L;
