@@ -112,6 +112,7 @@ public class PartsServiceImpl implements PartsService {
     @Transactional
     @Override
     public void partsLottery() {
+        partsRepository.updateAllIsPartsWinnerFalse();
         List<LotteryApplier> candidates = getPartsLotteryCandidates();
         partsLotteryForCandidates(candidates);
     }

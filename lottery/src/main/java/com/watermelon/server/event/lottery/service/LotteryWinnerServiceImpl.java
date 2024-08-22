@@ -61,7 +61,7 @@ public class LotteryWinnerServiceImpl implements LotteryWinnerService{
         Map<Integer, LotteryReward> rankRewardMap = new HashMap<>();
         lotteryRewardRepository.findAll().forEach(r -> rankRewardMap.put(r.getLotteryRank(), r));
 
-        return lotteryApplierRepository.findByLotteryRankNotOOrderByLotteryRank(NOT_RANKED).stream()
+        return lotteryApplierRepository.findByLotteryRankNotOrderByLotteryRank(NOT_RANKED).stream()
                 .map(l -> ResponseAdminLotteryWinnerDto.from(l, rankRewardMap.get(l.getLotteryRank())))
                 .collect(Collectors.toList());
     }

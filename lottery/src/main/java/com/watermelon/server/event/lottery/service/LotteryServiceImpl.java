@@ -55,6 +55,7 @@ public class LotteryServiceImpl implements LotteryService{
     @Transactional
     @Override
     public void lottery() {
+        lotteryApplierRepository.initAllLotteryRank(-1);
         List<LotteryApplier> candidates = getLotteryCandidates();
         lotteryForCandidates(candidates);
     }
