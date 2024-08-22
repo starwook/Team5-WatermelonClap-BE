@@ -170,7 +170,7 @@ openapi3 {
 	title = 'Watermelon REST API'
 	description = 'Watermelon API 문서입니다.'
 	version = '0.1.0'
-	servers = [ { url = 'http://3.36.51.22:8080' } ]
+	servers = [ { url = 'https://softeer.store:8080' } ]
 	format = 'yaml'
 	contact = {
 		name = 'watermelon'
