@@ -133,11 +133,12 @@ public class PartsServiceImpl implements PartsService {
         List<LotteryApplier> lotteryWinners = new ArrayList<>();
 
         int all_count=0;
+        int candidates_count=candidates.size();
 
         //당첨 정보를 설정하고, 당첨자 인원만큼 리스트에 담는다.
         for(PartsReward reward : rewards){
             int winnerCount = reward.getWinnerCount();
-            for(int i=0; i<winnerCount; i++, all_count++){
+            for(int i=0; i<winnerCount&&all_count<candidates_count; i++, all_count++){
                 LotteryApplier winner = candidates.get(all_count);
                 winner.partsLotteryWin(authUserService.getUserEmail(winner.getUid()));
                 lotteryWinners.add(winner);

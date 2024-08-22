@@ -72,11 +72,12 @@ public class LotteryServiceImpl implements LotteryService{
         List<LotteryApplier> lotteryWinners = new ArrayList<>();
 
         int all_count=0;
+        int candidate_count=candidates.size();
 
         //당첨 정보를 설정하고, 당첨자 인원만큼 리스트에 담는다.
         for(LotteryReward reward : rewards){
             int winnerCount = reward.getWinnerCount();
-            for(int i=0; i<winnerCount; i++, all_count++){
+            for(int i=0; i<winnerCount&&all_count<candidate_count; i++, all_count++){
                 LotteryApplier winner = candidates.get(all_count);
                 winner.lotteryWin(reward, authUserService.getUserEmail(winner.getUid()));
                 lotteryWinners.add(winner);
