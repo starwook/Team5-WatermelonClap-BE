@@ -68,7 +68,6 @@ public class CurrentOrderEventManageService {
         clearOrderResultRepository();
     }
     public int getCurrentApplyTicketSizeNoLock() {
-        log.info("current event id "+ getCurrentOrderEventId());
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
