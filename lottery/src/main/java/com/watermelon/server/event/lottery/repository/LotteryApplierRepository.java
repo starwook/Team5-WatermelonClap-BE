@@ -14,6 +14,8 @@ public interface LotteryApplierRepository extends JpaRepository<LotteryApplier, 
 
     List<LotteryApplier> findByLotteryRankNot(int rank);
 
+    List<LotteryApplier> findByLotteryRankNotOOrderByLotteryRank(int rank);
+
     Optional<LotteryApplier> findByUid(String uid);
 
     Page<LotteryApplier> findByIsLotteryApplierTrue(Pageable pageable);
