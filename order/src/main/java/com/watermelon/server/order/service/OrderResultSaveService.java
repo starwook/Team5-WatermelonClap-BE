@@ -17,7 +17,7 @@ public class OrderResultSaveService {
     private static final Logger log = LoggerFactory.getLogger(OrderResultSaveService.class);
     private final OrderResultRepository orderResultRepository;
 
-    @Async
+
     @Transactional
     public void saveOrderResult(OrderResult orderResult){
         orderResultRepository.save(orderResult);
