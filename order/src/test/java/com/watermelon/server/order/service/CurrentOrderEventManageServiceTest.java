@@ -36,6 +36,7 @@ class CurrentOrderEventManageServiceTest {
     private OrderApplyCountRepository orderApplyCountRepository;
     @BeforeEach
     void setUp() {
+        when(orderApplyCountRepository.findCurrent()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
         currentOrderEventManageService.refreshOrderEventInProgress(
                 OrderEvent.makeOrderEventWithOutImage(
                         RequestOrderEventDto.makeForTestOpened(

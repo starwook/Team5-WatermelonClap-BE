@@ -9,6 +9,10 @@ import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderApplyCount;
 import com.watermelon.server.order.result.domain.OrderResult;
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +30,11 @@ public class CurrentOrderEventManageService {
     @Getter
     private OrderEvent currentOrderEvent;
 
-    private final OrderResultRepository orderResultRepository;
     private final OrderApplyCountRepository orderApplyCountRepository;
+    private final HikariDataSource dataSource;
 
-
-
-
+    @PersistenceUnit
+    private final EntityManagerFactory entityManagerFactory;
 
 //    @MysqlNamedLock(key ="orderResult")
 
@@ -39,7 +42,6 @@ public class CurrentOrderEventManageService {
     public boolean isOrderApplyNotFullThenPlusCount(){
 //        if(isOrderApplyFull()) return false; // 커넥션을 얻자마자 바로 검사
         Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
-        log.info("Locked OrderApplyCount record");
         OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
         if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
              orderApplyCount.addCount();
@@ -51,12 +53,6 @@ public class CurrentOrderEventManageService {
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
-    @Transactional
-    public int getCurrentApplyTicketSizeNoLock() {
-        log.info("current event id "+ getCurrentOrderEventId());
-        return orderApplyCountRepository.findCurrent().get().getCount();
-    }
-
     @Transactional
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
         //동일한 이벤트라면
@@ -71,9 +67,15 @@ public class CurrentOrderEventManageService {
         currentOrderEvent = orderEventFromDB;
         clearOrderResultRepository();
     }
+    public int getCurrentApplyTicketSizeNoLock() {
+        log.info("current event id "+ getCurrentOrderEventId());
+        return orderApplyCountRepository.findCurrent().get().getCount();
+    }
+
+
     public void clearOrderResultRepository() {
-        orderApplyCountRepository.deleteAll();
-        orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
+        orderApplyCountRepository.findCurrent().get().clearCount();
+
     }
 
     public boolean checkPrevious(String submitAnswer){

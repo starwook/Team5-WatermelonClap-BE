@@ -3,6 +3,7 @@ package com.watermelon.server.order.result.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import lombok.*;
 @RequiredArgsConstructor
 public class OrderResult {
 
-    @Id@GeneratedValue
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String applyToken;
