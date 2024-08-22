@@ -1,4 +1,4 @@
-package com.watermelon.server.event.order.controller;
+package com.watermelon.server.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippet;
