@@ -72,10 +72,7 @@ public class OrderResultCommandService {
         return false;
     }
 
-    @Transactional
-    public void saveOrderResult(OrderResult orderResult){
-        orderResultRepository.save(orderResult);
-    }
+
 
 //    //저장 할시에 확실하게 돌려주어야함 - 하지만 돌려주지 못 할시에는 어떻게?( 로그인이 안 되어있음)
 //
