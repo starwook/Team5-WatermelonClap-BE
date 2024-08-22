@@ -40,19 +40,12 @@ public class CurrentOrderEventManageService {
 
     @Transactional
     public boolean isOrderApplyNotFullThenPlusCount(){
-//        EntityManager entityManager = entityManagerFactory.createEntityManager();
-//        entityManager.getTransaction().begin();
 //        if(isOrderApplyFull()) return false; // 커넥션을 얻자마자 바로 검사
         Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
         OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
         if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
              orderApplyCount.addCount();
              orderApplyCountRepository.save(orderApplyCount);
-//             entityManager.persist(orderApplyCount);
-//             entityManager.flush();
-//             entityManager.clear();
-//             entityManager.getTransaction().commit();
-//             entityManager.close();
             return true;
         }
         // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)

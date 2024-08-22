@@ -56,26 +56,12 @@ public class OrderResultCommandService {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
         OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
         if(saveOrderResultIfCan(orderResult)){
-
             orderResultSaveService.saveOrderResult(orderResult);
-
             return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
     }
 
-
-//    @RedisDistributedLock(key = "orderResultLock")
-//    @Transactional //getLock과 release Lock을 하나의 커밋으로 포함해야함
-//    public boolean saveOrderResultWithLock(OrderResult orderResult){
-//        try{
-//            orderResultRepository.getLock("orderResult",3);
-//            return currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(orderResult);
-//        }
-//        finally {
-//            orderResultRepository.releaseLock("orderResult");
-//        }
-//    }
     public boolean saveOrderResultIfCan(OrderResult orderResult){
         if(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
             return true;
