@@ -31,21 +31,23 @@ public class CurrentOrderEventManageService {
     private OrderEvent currentOrderEvent;
 
     private final OrderApplyCountRepository orderApplyCountRepository;
+    private final OrderResultSaveService orderResultSaveService;
     private final HikariDataSource dataSource;
 
     @PersistenceUnit
     private final EntityManagerFactory entityManagerFactory;
 
-//    @MysqlNamedLock(key ="orderResult")
+
 
     @Transactional
-    public boolean isOrderApplyNotFullThenPlusCount(){
-//        if(isOrderApplyFull()) return false; // 커넥션을 얻자마자 바로 검사
+    public boolean isOrderApplyNotFullThenPlusCount(OrderResult orderResult){
+
         Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
         OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
         if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
              orderApplyCount.addCount();
              orderApplyCountRepository.save(orderApplyCount);
+            orderResultSaveService.saveOrderResult(orderResult);
             return true;
         }
         // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)

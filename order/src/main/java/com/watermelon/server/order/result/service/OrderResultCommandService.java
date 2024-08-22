@@ -29,20 +29,18 @@ public class OrderResultCommandService {
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
 
-    private final OrderResultSaveService orderResultSaveService;
+
 
 
     private final HikariDataSource dataSource;
-
-
-
-    @Transactional
-    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
 //        log.info("HikariCP Pool Status: ");
 //        log.info("Active Connections: {}", dataSource.getHikariPoolMXBean().getActiveConnections());
 //        log.info("Idle Connections: {}", dataSource.getHikariPoolMXBean().getIdleConnections());
 //        log.info("Total Connections: {}", dataSource.getHikariPoolMXBean().getTotalConnections());
 //        log.info("Threads Awaiting Connection: {}", dataSource.getHikariPoolMXBean().getThreadsAwaitingConnection());
+
+
+    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
         // 퀴즈 틀릴 시에ApplyNotFullThenSave())
         if(currentOrderEventManageService.isOrderApplyFull()){ //
@@ -58,22 +56,11 @@ public class OrderResultCommandService {
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
         OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
-        if(saveOrderResultIfCan(orderResult)){
-            orderResultSaveService.saveOrderResult(orderResult);
+        if(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(orderResult)){ //처음 커넥션을 얻는 메소드
             return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
     }
-
-    public boolean saveOrderResultIfCan(OrderResult orderResult){
-        if(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
-            return true;
-        }
-        return false;
-    }
-
-
-
 //    //저장 할시에 확실하게 돌려주어야함 - 하지만 돌려주지 못 할시에는 어떻게?( 로그인이 안 되어있음)
 //
 //    @Transactional
