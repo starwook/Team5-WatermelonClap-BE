@@ -38,4 +38,15 @@ public class LotteryEvent extends BaseEntity {
         return event;
     }
 
+    public static LotteryEvent createTest(){
+
+        return LotteryEvent.create(
+                "test",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                null
+        );
+
+    }
+
 }

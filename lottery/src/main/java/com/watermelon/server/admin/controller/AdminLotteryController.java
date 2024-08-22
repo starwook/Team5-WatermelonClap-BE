@@ -3,6 +3,7 @@ package com.watermelon.server.admin.controller;
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.admin.dto.response.ResponseLotteryEventDto;
 import com.watermelon.server.exception.S3ImageFormatException;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.parts.service.PartsService;
@@ -64,6 +65,11 @@ public class AdminLotteryController {
     public ResponseEntity<Void> lottery() {
         lotteryService.lottery();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/event/lotteries")
+    public ResponseEntity<List<ResponseLotteryEventDto>> getLotteryEvent(){
+        return new ResponseEntity<>(lotteryEventService.getLotteryEvents(), HttpStatus.OK);
     }
 
     @PostMapping("/admin/event/parts")

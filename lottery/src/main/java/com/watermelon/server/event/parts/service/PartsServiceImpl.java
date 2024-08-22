@@ -1,6 +1,7 @@
 package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
+import com.watermelon.server.auth.service.AuthUserService;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.parts.domain.PartsReward;
@@ -35,6 +36,7 @@ public class PartsServiceImpl implements PartsService {
     private final LotteryService lotteryService;
     private final LotteryApplierPartsService lotteryApplierPartsService;
     private final LinkService linkService;
+    private final AuthUserService authUserService;
 
     @Override
     @Transactional //remain chance 를 조회하는 쿼리와 파츠를 저장하는 쿼리 원자성 보장 필요
@@ -110,6 +112,7 @@ public class PartsServiceImpl implements PartsService {
     @Transactional
     @Override
     public void partsLottery() {
+        partsRepository.updateAllIsPartsWinnerFalse();
         List<LotteryApplier> candidates = getPartsLotteryCandidates();
         partsLotteryForCandidates(candidates);
     }
@@ -130,13 +133,14 @@ public class PartsServiceImpl implements PartsService {
         List<LotteryApplier> lotteryWinners = new ArrayList<>();
 
         int all_count=0;
+        int candidates_count=candidates.size();
 
         //당첨 정보를 설정하고, 당첨자 인원만큼 리스트에 담는다.
         for(PartsReward reward : rewards){
             int winnerCount = reward.getWinnerCount();
-            for(int i=0; i<winnerCount; i++, all_count++){
+            for(int i=0; i<winnerCount&&all_count<candidates_count; i++, all_count++){
                 LotteryApplier winner = candidates.get(all_count);
-                winner.partsLotteryWin();
+                winner.partsLotteryWin(authUserService.getUserEmail(winner.getUid()));
                 lotteryWinners.add(winner);
             }
         }
