@@ -1,4 +1,4 @@
-name: Deploy
+name: Lottery-Deploy
 
 on:
   pull_request:

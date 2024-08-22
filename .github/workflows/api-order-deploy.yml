@@ -1,4 +1,4 @@
-name: Deploy
+name: Order-Deploy
 
 on:
   pull_request:
