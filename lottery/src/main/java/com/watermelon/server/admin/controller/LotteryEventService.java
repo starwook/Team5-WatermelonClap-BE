@@ -1,5 +1,6 @@
 package com.watermelon.server.admin.controller;
 
+import com.watermelon.server.admin.dto.response.ResponseLotteryEventDto;
 import com.watermelon.server.exception.S3ImageFormatException;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,5 +16,7 @@ public interface LotteryEventService {
      * @throws S3ImageFormatException
      */
     void createLotteryEvent(RequestLotteryEventDto requestLotteryEventDto, List<MultipartFile> images) throws S3ImageFormatException;
+
+    List<ResponseLotteryEventDto> getLotteryEvents();
 
 }

@@ -225,4 +225,26 @@ class AdminLotteryControllerTest extends ControllerTest {
 
     }
 
+    @Test
+    @DisplayName("추첨 이벤트 조회")
+    void getLotteryEventsTest() throws Exception {
+
+        givenLotteryEvent();
+
+        whenGetLotteryEvents();
+
+        thenGetLotteryEvents();
+
+        resultActions
+                .andDo(document(DOCUMENT_NAME_PARTS_LOTTERY,
+                        resource(
+                                ResourceSnippetParameters.builder()
+                                        .tag(TAG_LOTTERY)
+                                        .description("추첨 이벤트 조회")
+                                        .build()
+                        )));
+
+
+    }
+
 }

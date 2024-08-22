@@ -2,15 +2,19 @@ package com.watermelon.server.event.lottery.service;
 
 import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
+import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
+import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 public class LotteryWinnerServiceImpl implements LotteryWinnerService{
 
     private final LotteryApplierRepository lotteryApplierRepository;
+    private final LotteryRewardRepository lotteryRewardRepository;
 
     private final int NOT_RANKED = -1;
 
@@ -50,9 +55,14 @@ public class LotteryWinnerServiceImpl implements LotteryWinnerService{
     }
 
     @Override
+    @Transactional
     public List<ResponseAdminLotteryWinnerDto> getAdminLotteryWinners() {
-        return lotteryApplierRepository.findByLotteryRankNot(NOT_RANKED).stream()
-                .map(ResponseAdminLotteryWinnerDto::from)
+
+        Map<Integer, LotteryReward> rankRewardMap = new HashMap<>();
+        lotteryRewardRepository.findAll().forEach(r -> rankRewardMap.put(r.getLotteryRank(), r));
+
+        return lotteryApplierRepository.findByLotteryRankNotOrderByLotteryRank(NOT_RANKED).stream()
+                .map(l -> ResponseAdminLotteryWinnerDto.from(l, rankRewardMap.get(l.getLotteryRank())))
                 .collect(Collectors.toList());
     }
 
