@@ -215,6 +215,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].uid").isString())
                 .andExpect(jsonPath("[0].name").isString())
                 .andExpect(jsonPath("[0].phoneNumber").isString())
+                .andExpect(jsonPath("[0].email").isString())
                 .andExpect(jsonPath("[0].address").isString())
                 .andExpect(jsonPath("[0].rank").isNumber())
                 .andExpect(jsonPath("[0].status").isString());
@@ -229,6 +230,7 @@ public abstract class APITest {
                 .andExpect(jsonPath("[0].uid").isString())
                 .andExpect(jsonPath("[0].name").isString())
                 .andExpect(jsonPath("[0].phoneNumber").isString())
+                .andExpect(jsonPath("[0].email").isString())
                 .andExpect(jsonPath("[0].address").isString())
                 .andExpect(jsonPath("[0].rank").isNumber())
                 .andExpect(jsonPath("[0].status").isString());

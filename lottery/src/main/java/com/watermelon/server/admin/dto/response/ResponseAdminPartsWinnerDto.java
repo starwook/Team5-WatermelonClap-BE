@@ -12,6 +12,7 @@ public class ResponseAdminPartsWinnerDto {
     private String uid;
     private String name;
     private String phoneNumber;
+    private String email;
     private String address;
     private int rank;
     private AdminCheckStatus status;
@@ -22,6 +23,7 @@ public class ResponseAdminPartsWinnerDto {
                 .uid("uid")
                 .name("name")
                 .phoneNumber("phoneNumber")
+                .email("email")
                 .address("address")
                 .rank(1)
                 .status(AdminCheckStatus.READY)
@@ -35,6 +37,7 @@ public class ResponseAdminPartsWinnerDto {
                 .uid(lotteryApplier.getUid())
                 .name(lotteryApplier.getName())
                 .phoneNumber(lotteryApplier.getPhoneNumber())
+                .email(lotteryApplier.getEmail())
                 .address(lotteryApplier.getAddress())
                 .rank(1)
                 .status(AdminCheckStatus.getStatus(lotteryApplier.isPartsWinnerCheckedByAdmin()))
