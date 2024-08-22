@@ -19,7 +19,7 @@ public class OrderEventRepositoryTest
     private OrderEventRepository orderEventRepository;
 
     @Test
-    @DisplayName("전체 삭제")
+    @DisplayName("전체 삭제 - 성공")
     public void deleteEventWithQuiz(){
         orderEventRepository.deleteAll();
         Assertions.assertThat(orderEventRepository.findAll().size()).isEqualTo(0);
