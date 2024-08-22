@@ -1,6 +1,7 @@
 package com.watermelon.server.event.parts.service;
 
 import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
+import com.watermelon.server.auth.service.AuthUserService;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.parts.domain.PartsReward;
@@ -35,6 +36,7 @@ public class PartsServiceImpl implements PartsService {
     private final LotteryService lotteryService;
     private final LotteryApplierPartsService lotteryApplierPartsService;
     private final LinkService linkService;
+    private final AuthUserService authUserService;
 
     @Override
     @Transactional //remain chance 를 조회하는 쿼리와 파츠를 저장하는 쿼리 원자성 보장 필요
@@ -136,7 +138,7 @@ public class PartsServiceImpl implements PartsService {
             int winnerCount = reward.getWinnerCount();
             for(int i=0; i<winnerCount; i++, all_count++){
                 LotteryApplier winner = candidates.get(all_count);
-                winner.partsLotteryWin();
+                winner.partsLotteryWin(authUserService.getUserEmail(winner.getUid()));
                 lotteryWinners.add(winner);
             }
         }

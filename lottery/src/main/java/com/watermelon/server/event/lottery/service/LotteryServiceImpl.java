@@ -1,6 +1,7 @@
 package com.watermelon.server.event.lottery.service;
 
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
+import com.watermelon.server.auth.service.AuthUserService;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
@@ -23,6 +24,7 @@ public class LotteryServiceImpl implements LotteryService{
 
     private final LotteryApplierRepository lotteryApplierRepository;
     private final LotteryRewardRepository lotteryRewardRepository;
+    private final AuthUserService authUserService;
 
     @Override
     public ResponseLotteryRankDto getLotteryRank(String uid) {
@@ -75,7 +77,7 @@ public class LotteryServiceImpl implements LotteryService{
             int winnerCount = reward.getWinnerCount();
             for(int i=0; i<winnerCount; i++, all_count++){
                 LotteryApplier winner = candidates.get(all_count);
-                winner.setLotteryReward(reward);
+                winner.lotteryWin(reward, authUserService.getUserEmail(winner.getUid()));
                 lotteryWinners.add(winner);
             }
         }
