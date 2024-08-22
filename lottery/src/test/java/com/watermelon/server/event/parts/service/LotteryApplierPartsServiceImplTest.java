@@ -22,8 +22,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-//TODO 구현필요
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 응모자-파츠 서비스")
 class LotteryApplierPartsServiceImplTest {
 
     @Mock
@@ -39,7 +39,7 @@ class LotteryApplierPartsServiceImplTest {
     private LotteryApplierPartsServiceImpl lotteryApplierPartsService;
 
     @Test
-    @DisplayName("만약 응모자가 가지고 있는 기존 파츠 중 신규 파츠가 카테고리의 첫 번째 파츠라면, 장착함.")
+    @DisplayName("첫 번째 파츠 추가 - 성공")
     void addPartsAndGetFirstPartsCase() {
 
         final PartsCategory CATEGORY2 = PartsCategory.COLOR;
@@ -78,7 +78,7 @@ class LotteryApplierPartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("첫 번째 파츠가 아니라면, 장착하지 않음.")
+    @DisplayName("첫 번째 이후 파츠 추가 - 성공")
     void addPartsAndGetNotFirstPartsCase() {
 
         //given
@@ -107,7 +107,7 @@ class LotteryApplierPartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("모든 종류의 파츠를 모으면 파츠 응모권을 부여한다.")
+    @DisplayName("파츠 응모권 부여 - 성공")
     void addPartsAndGetHasAllPartsCase() {
 
         //given
@@ -126,7 +126,7 @@ class LotteryApplierPartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("모든 종류의 파츠를 모으지 않으면 파츠 응모권을 부여하지 않는다.")
+    @DisplayName("파츠 응모권 부여 - 실패")
     void addPartsAndGetHasNotAllPartsCase() {
 
         //given
@@ -145,7 +145,7 @@ class LotteryApplierPartsServiceImplTest {
     }
 
     @Test
-    @DisplayName("이미 같은 파츠가 존재하면 저장하지 않는다.")
+    @DisplayName("파츠 중복 저장 방지 - 성공")
     void partsAlreadyExist(){
 
         //given
