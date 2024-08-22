@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("[단위] 선착순 서비스")
+@DisplayName("[단위] 선착순 어드민 서비스")
 class AdminOrderEventServiceTest {
 
     @InjectMocks
