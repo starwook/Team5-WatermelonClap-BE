@@ -59,12 +59,13 @@ class OrderResultLockTest {
     }
     @AfterEach
     void delete(){
-//        orderApplyCount.clearCount();
+        orderApplyCount.clearCount();
        orderEventRepository.delete(orderEvent);
     }
     @Test
     void 선착순_이벤트_락_적용_3배_신청() throws InterruptedException {
         currentOrderEventManageService.clearOrderApplyCount();
+
         int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*3;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -72,8 +73,7 @@ class OrderResultLockTest {
             int finalI = i;
             executorService.submit(()->{
                 try{
-                    orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(String.valueOf(finalI));
-
+                    orderResultCommandService.createTokenAndMakeTicket(orderEvent.getId());
                 }
                 finally {
                     latch.countDown();
