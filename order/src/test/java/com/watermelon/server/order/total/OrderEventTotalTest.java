@@ -341,7 +341,7 @@ public class OrderEventTotalTest {
         }
 
 
-        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyTicketSizeNoLock()).isEqualTo(100);
+        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(100);
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))

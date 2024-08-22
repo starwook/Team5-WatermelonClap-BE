@@ -9,8 +9,8 @@ import com.watermelon.server.order.repository.OrderEventRepository;
 
 import com.watermelon.server.order.result.domain.OrderApplyCount;
 
-import com.watermelon.server.order.result.domain.OrderResult;
 import com.watermelon.server.order.service.CurrentOrderEventManageService;
+import com.watermelon.server.order.service.OrderResultSaveService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,29 +39,32 @@ class OrderResultLockTest {
     private OrderEvent orderEvent;
 
     private OrderApplyCount orderApplyCount;
+    private OrderResultSaveService orderResultSaveService;
 
     @BeforeEach
     void setUp() {
-         orderApplyCount= orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
-
+         Optional<OrderApplyCount> applyCount = orderApplyCountRepository.findCurrent();
+         if(applyCount.isPresent()) {
+             orderApplyCount = applyCount.get();
+         }
+         else {
+             orderApplyCount = orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
+         }
          orderEvent = orderEventRepository.save(OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
                 )
         ));
          currentOrderEventManageService.refreshOrderEventInProgress(orderEvent);
-
     }
     @AfterEach
     void delete(){
-
-        orderApplyCountRepository.delete(orderApplyCount);
-
+//        orderApplyCount.clearCount();
        orderEventRepository.delete(orderEvent);
     }
     @Test
     void 선착순_이벤트_락_적용_3배_신청() throws InterruptedException {
-        currentOrderEventManageService.clearOrderResultRepository();
+        currentOrderEventManageService.clearOrderApplyCount();
         int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*3;
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -68,8 +72,8 @@ class OrderResultLockTest {
             int finalI = i;
             executorService.submit(()->{
                 try{
-                    orderResultCommandService.
-                            saveOrderResultIfCan(OrderResult.makeOrderEventApply(String.valueOf(finalI)));
+                    orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(String.valueOf(finalI));
+
                 }
                 finally {
                     latch.countDown();
@@ -77,9 +81,8 @@ class OrderResultLockTest {
             });
         }
         latch.await();
-
-        System.out.println("응모 당첨 개수: "+currentOrderEventManageService.getCurrentApplyTicketSizeNoLock());
-        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyTicketSizeNoLock()).isEqualTo(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
+        System.out.println("응모 당첨 개수: "+currentOrderEventManageService.getCurrentApplyCount());
+        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
     }
 //    @Test
 //    void 선착순_이벤트_락_미적용_100명() throws InterruptedException {
