@@ -1,5 +1,6 @@
 package com.watermelon.server.admin.controller;
 
+import com.watermelon.server.admin.dto.response.ResponseLotteryEventDto;
 import com.watermelon.server.exception.S3ImageFormatException;
 import com.watermelon.server.S3ImageService;
 import com.watermelon.server.event.lottery.domain.LotteryEvent;
@@ -45,5 +46,10 @@ public class LotteryEventServiceImpl implements LotteryEventService{
 
         lotteryEventRepository.save(lotteryEvent);
 
+    }
+
+    @Override
+    public List<ResponseLotteryEventDto> getLotteryEvents() {
+        return ResponseLotteryEventDto.from(lotteryEventRepository.findAll());
     }
 }
