@@ -16,11 +16,11 @@ public class AuthUserService {
     public String getUserEmail(String uid) {
 
         try {
-            UserRecord userRecord = firebaseAuth.getUserByProviderUid("google.com", uid);
+            UserRecord userRecord = firebaseAuth.getUser(uid);
             return userRecord.getEmail();
 
         }catch (FirebaseAuthException e) {
-            throw new AuthenticationException();
+            throw new AuthenticationException(e.getMessage());
         }
 
     }
