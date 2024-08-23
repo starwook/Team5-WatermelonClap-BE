@@ -3,6 +3,9 @@ spring:
     active: ${name:local}
 server:
   port: 8080
+#  tomcat:
+#    accept-count: 1
+#    max-connections: 250
 management:
   endpoints:
     web:
