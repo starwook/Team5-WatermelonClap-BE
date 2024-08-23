@@ -4,9 +4,9 @@ package com.watermelon.server.integration;
 import com.epages.restdocs.apispec.ResourceSnippet;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.watermelon.server.APITest;
+import com.watermelon.server.event.link.repository.LinkRepository;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
-import com.watermelon.server.event.lottery.service.ExpectationService;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.parts.domain.Parts;
 import com.watermelon.server.event.parts.domain.PartsCategory;
@@ -39,6 +39,8 @@ public class BaseIntegrationTest extends APITest {
     protected LotteryApplierPartsRepository lotteryApplierPartsRepository;
     @Autowired
     private LotteryRewardRepository lotteryRewardRepository;
+    @Autowired
+    private LinkRepository linkRepository;
 
     protected ResourceSnippet resourceSnippet(String description) {
         return resource(
@@ -121,6 +123,14 @@ public class BaseIntegrationTest extends APITest {
     @Override
     protected void givenLotteryApplierNotExist() {
         saveTestLotteryApplier();
+    }
+
+    protected String givenLotteryApplierHasUri(){
+
+        LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier("TEST_URI_OWNER");
+        lotteryApplierRepository.save(lotteryApplier);
+        return lotteryApplier.getLink().getUri();
+
     }
 
     @Override

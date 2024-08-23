@@ -4,6 +4,7 @@ package com.watermelon.server;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryEventDto;
 import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -66,6 +67,12 @@ public abstract class APITest {
     private MockHttpServletRequestBuilder notAuthedRequest(MockHttpServletRequestBuilder requestBuilder) {
         return requestBuilder
                 .header(HEADER_NAME_AUTHORIZATION, HEADER_VALUE_BEARER + HEADER_VALUE_SPACE + TEST_INVALID_TOKEN);
+    }
+
+    protected void whenFirstUserWithLinkIdDrawParts(String uri) throws Exception {
+        resultActions = mvc.perform(authedRequest(get("/event/parts")
+                .cookie(new Cookie("link_id", uri)))
+        );
     }
 
     protected void whenGetLotteryEvents() throws Exception {
