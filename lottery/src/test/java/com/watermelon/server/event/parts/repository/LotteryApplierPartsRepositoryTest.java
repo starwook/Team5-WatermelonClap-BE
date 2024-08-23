@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+@DisplayName("[단위] 응모자-파츠 레포지토리")
 @DataJpaTest
 class LotteryApplierPartsRepositoryTest {
 
@@ -27,7 +28,7 @@ class LotteryApplierPartsRepositoryTest {
     private LotteryApplierRepository lotteryApplierRepository;
 
     @Test
-    @DisplayName("카테고리별 중복 없는 파츠 수를 반환한다.")
+    @DisplayName("응모자의 파츠 수 조회 - 성공")
     void countDistinctPartsCategoryByLotteryApplier() {
 
         //given

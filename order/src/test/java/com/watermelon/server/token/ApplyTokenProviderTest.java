@@ -12,13 +12,14 @@ import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
 @ContextConfiguration(classes = OrderApplication.class)
+@DisplayName("[통합] 티켓 프로바이더")
 class ApplyTokenProviderTest {
 
     @Autowired
     ApplyTokenProvider applyTokenProvider;
 
     @Test
-    @DisplayName("정상적으로 JWT APPLY TOKEN 토큰 발급 검증")
+    @DisplayName("JWT APPLY TOKEN 토큰 발급 - 성공")
     void createApplyToken() throws ApplyTicketWrongException {
         String testEventId = "testEventId";
         JwtPayload payload = JwtPayload.builder()
@@ -32,7 +33,7 @@ class ApplyTokenProviderTest {
 
     }
     @Test
-    @DisplayName("Wrong secret key로 발급한 JWT APPLY TOKEN 토큰 발급 검증")
+    @DisplayName("JWT APPLY TOKEN 토큰 발급 - 실패 (Wrong secret key 로 발급)")
     void wrongSecretKey(){
         String testEventId = "testQuizId";
         JwtPayload payload = JwtPayload.builder()

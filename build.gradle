@@ -113,27 +113,26 @@ subprojects {
 		runtimeOnly "io.jsonwebtoken:jjwt-impl:${JJWT_VERSION}"
 	}
 
-//	jacocoTestReport {
-//		dependsOn test // tests are required to run before generating the report
-//		dependsOn 'copySwaggerUI'
-//		reports {
-//			xml.required = true
-//			csv.required = false
-//			html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
-//		}
-//
-//		afterEvaluate {
-//			classDirectories.setFrom(
-//					files(classDirectories.files.collect {
-//						fileTree(dir: it, excludes: [
-//								'**/*Application*',
-//								'**/*Exception*',
-//								'**/dto/**',
-//						])
-//					})
-//			)
-//		}
-//	}
+	jacocoTestReport {
+		dependsOn test // tests are required to run before generating the report
+		reports {
+			xml.required = true
+			csv.required = false
+			html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+		}
+
+		afterEvaluate {
+			classDirectories.setFrom(
+					files(classDirectories.files.collect {
+						fileTree(dir: it, excludes: [
+								'**/*Application*',
+								'**/*Exception*',
+								'**/dto/**',
+						])
+					})
+			)
+		}
+	}
 
 }
 

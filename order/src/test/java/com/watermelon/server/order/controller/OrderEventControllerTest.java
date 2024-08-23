@@ -1,4 +1,4 @@
-package com.watermelon.server.event.order.controller;
+package com.watermelon.server.order.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippet;
@@ -38,9 +38,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-
 @WebMvcTest(OrderEventController.class)
+@DisplayName("[단위] 선착순 컨트롤러")
 class OrderEventControllerTest extends ControllerTest {
     private final String TAG_ORDER ="선착순 이벤트";
     @MockBean
@@ -101,7 +100,7 @@ class OrderEventControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 목록을 가져온다 - 성공")
+    @DisplayName("선착순 이벤트 목록 조회 - 성공")
     void getOrderEvents() throws Exception {
         final String PATH = "/event/order";
         final String DOCUMENT_NAME ="success";
@@ -120,7 +119,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 특정 선착순 이벤트를 가져온다 - 성공")
+    @DisplayName("선착순 이벤트 조회 - 성공")
     void getOrderEvent() throws Exception {
         final String PATH = "/event/order/{eventId}";
         final String DOCUMENT_NAME ="success}";
@@ -140,7 +139,7 @@ class OrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 존재하지 않는 선착순 이벤트를 가져온다")
+    @DisplayName("선착순 이벤트 조회 - 실패 (존재하지 않음)")
     void getOrderEventNotExist() throws Exception {
         final String PATH = "/event/order/{eventId}";
         final String DOCUMENT_NAME ="event-not-exist";
@@ -158,7 +157,7 @@ class OrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 성공 ")
+    @DisplayName("선착순 이벤트 번호 제출 - 성공 ")
     void makeApplyTicket() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME ="success";
@@ -204,7 +203,7 @@ class OrderEventControllerTest extends ControllerTest {
 //                        resourceSnippet("선착순 퀴즈 번호 제출")));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(apply 토큰 유효하지 않음)")
+    @DisplayName("선착순 이벤트 번호 제출 - 에러(apply 토큰 유효하지 않음)")
     void makeApplyTicketApplyTokenNotVerified() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME = "apply-ticket-not-verified";
@@ -224,7 +223,7 @@ class OrderEventControllerTest extends ControllerTest {
                         orderNumberSubmitResource()));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(이미 참여함)")
+    @DisplayName("선착순 이벤트 번호 제출 - 에러(이미 참여함)")
     void makeApplyTicketAlreadyParticipate() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME = "already-participate";
@@ -244,7 +243,7 @@ class OrderEventControllerTest extends ControllerTest {
                         orderNumberSubmitResource()));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 않음)")
+    @DisplayName("선착순 이벤트 번호 제출 - 에러(phone number 형식 맞지 않음)")
     void makeApplyTicketWrongPhoneNumberFormat() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME = "phone-number-wrong-format";
@@ -266,7 +265,7 @@ class OrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 번호 제출 - 에러(존재하지 않는 이벤트)")
+    @DisplayName("선착순 이벤트 번호 제출 - 에러(존재하지 않는 이벤트)")
     void makeApplyTicketWrongOrderEvent() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}/apply";
         final String DOCUMENT_NAME = "phone-number-wrong-format";
@@ -285,7 +284,7 @@ class OrderEventControllerTest extends ControllerTest {
 
     }
         @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 성공")
+    @DisplayName("선착순 이벤트 퀴즈 정답 제출 - 성공")
     void makeApply() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="success";
@@ -309,7 +308,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 선착순 마감")
+    @DisplayName("선착순 이벤트 퀴즈 정답 제출 - 선착순 마감")
     void makeApplyClosed() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="full-apply";
@@ -332,7 +331,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 - 정답 틀림")
+    @DisplayName("선착순 이벤트 퀴즈 정답 제출 - 정답 틀림")
     void makeApplyWrongAnswer() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="wrong-answer";
@@ -355,7 +354,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
+    @DisplayName("선착순 이벤트 퀴즈 정답 제출 -에러(기간이 틀림)")
     void makeApplyNotDuringDuration() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="not-during-duration";
@@ -378,7 +377,7 @@ class OrderEventControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 퀴즈 정답 제출 -에러(현재 진행중인 이벤트 아님)")
+    @DisplayName("선착순 이벤트 퀴즈 정답 제출 -에러(현재 진행중인 이벤트 아님)")
     void makeApplyWrongCurrentEvent() throws Exception {
         final String Path = "/event/order/{eventId}/{quizId}";
         final String DOCUMENT_NAME ="wrong-current-event";

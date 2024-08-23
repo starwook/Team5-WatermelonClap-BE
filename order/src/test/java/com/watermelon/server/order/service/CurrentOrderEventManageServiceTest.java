@@ -24,6 +24,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 선착순 관리 서비스")
 class CurrentOrderEventManageServiceTest {
 
     @Mock
@@ -47,14 +48,14 @@ class CurrentOrderEventManageServiceTest {
     }
 
     @Test
-    @DisplayName("선착순 이벤트 제한수 확인")
+    @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
         when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isTrue();
     }
 
     @Test
-    @DisplayName("선착순 이벤트 제한수 확인(꽉참)")
+    @DisplayName("선착순 이벤트 제한수 확인 - 실패 (꽉참)")
     public void checkIsOrderApplyFull() {
         ArrayList<OrderResult> orderResults = new ArrayList<>();
         OrderApplyCount orderApplyCount = OrderApplyCount.createWithNothing();

@@ -30,10 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(AdminExpectationController.class)
+@DisplayName("[단위] 기대평 컨트롤러")
 class AdminExpectationControllerTest extends ControllerTest {
 
     @Test
-    @DisplayName("[DOC] 기대평을 가져온다.")
+    @DisplayName("기대평 조회 - 성공")
     void getExpectationForAdmin() throws Exception {
         final String PATH ="/admin/expectations";
         final String DOCUMENT_NAME ="admin/expectations";
@@ -60,7 +61,7 @@ class AdminExpectationControllerTest extends ControllerTest {
                         )));
     }
     @Test
-    @DisplayName("[DOC] 기대평 상태를 변경한다.")
+    @DisplayName("기대평 상태 변경 - 성공")
     void toggleExpectation() throws Exception {
         final String PATH ="/admin/expectations/{expectationId}/toggle";
         final String DOCUMENT_NAME ="admin/expectations/{expectationId}/toggle";

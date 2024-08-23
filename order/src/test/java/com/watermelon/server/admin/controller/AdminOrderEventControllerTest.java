@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminOrderEventController.class)
-@DisplayName("[DOC] 선착순 이벤트 ")
+@DisplayName("[단위] 선착순 어드민 컨트롤러")
 class AdminOrderEventControllerTest extends ControllerTest {
 
     private final String TAG_ORDER ="선착순 이벤트";
@@ -84,7 +84,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트 당첨자를 가져온다.")
+    @DisplayName("선착순 이벤트 당첨자 조회 - 성공")
     void getOrderEventWinners() throws Exception {
         final String PATH = "/admin/event/order/{eventId}/winner";
         final String DOCUMENT_NAME ="event-winner";
@@ -118,7 +118,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 어드민 선착순 이벤트 목록을 가져온다")
+    @DisplayName("어드민 선착순 이벤트 목록 조회 - 성공")
     void getOrderEvents() throws Exception {
         final String PATH = "/admin/event/order";
         final String DOCUMENT_NAME ="admin/event/order";
@@ -139,7 +139,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 생성한다")
+    @DisplayName("선착순 이벤트 생성 - 성공")
     void makeOrderEvent() throws Exception {
         final String PATH = "/admin/event/order";
         final String DOCUMENT_NAME ="admin/event/order/create";
@@ -180,7 +180,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 삭제한다")
+    @DisplayName("선착순 이벤트 삭제 - 성공")
     void deleteOrderEvent() throws Exception {
         final String PATH = "/admin/event/order/{eventId}";
         final String DOCUMENT_NAME ="success";
@@ -199,7 +199,7 @@ class AdminOrderEventControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 선착순 이벤트를 삭제한다 - 에러")
+    @DisplayName("선착순 이벤트를 삭제 - 에러")
     void deleteOrderEventThrowError() throws Exception {
         final String PATH = "/admin/event/order/{eventId}";
         final String DOCUMENT_NAME ="not-exist";

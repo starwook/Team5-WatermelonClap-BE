@@ -20,6 +20,7 @@ import static com.watermelon.server.constants.Constants.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 첫 로그인 인터셉터")
 class FirstLoginInterceptorTest {
 
     @Mock
@@ -38,7 +39,7 @@ class FirstLoginInterceptorTest {
     private HttpServletResponse response;
 
     @Test
-    @DisplayName("처음 로그인할 경우 회원가입한다.")
+    @DisplayName("회원가입 - 성공")
     void preHandleFirstLoginCaseRegistrationTest(){
 
         //given
@@ -54,7 +55,7 @@ class FirstLoginInterceptorTest {
     }
 
     @Test
-    @DisplayName("처음 로그인하고, 특정 링크로 부터 접속했을 경우 해당 링크의 조회수를 증가시킨다.")
+    @DisplayName("링크 조회수 증가 - 성공")
     void preHandleFirstLoginCaseLinkViewTest(){
 
         //given

@@ -1,4 +1,4 @@
-name: Deploy
+name: Lottery-Deploy
 
 on:
   pull_request:
@@ -57,6 +57,26 @@ jobs:
           ./gradlew openapi3
           ./gradlew customGenerateSwaggerUI
           ls
+
+      # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
+        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
+        with:
+          files: |
+            order/build/test-results/**/*.xml
+            lottery/build/test-results/**/*.xml
+
+      - name: JaCoCo Report
+        uses: Madrapps/jacoco-report@v1.6.1
+        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
+        with:
+          paths: lottery/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "테스트 커버리지 측정"
+          min-coverage-overall: 70
+          min-coverage-changed-files: 50
 
       # 스웨거를 업로드한다.
       - name: Upload to S3
