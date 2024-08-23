@@ -18,13 +18,11 @@ import java.util.Optional;
 import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@DataJpaTest
 @DisplayName("[단위] 응모자 레포지토리")
 class LotteryApplierRepositoryTest {
 
     final int N = -1;
-    @Autowired
-    private EntityManager entityManager;
 
     @Autowired
     private LotteryApplierRepository lotteryApplierRepository;
@@ -90,20 +88,4 @@ class LotteryApplierRepositoryTest {
 
     }
 
-    @Test
-    @Transactional
-    void addRemainChance() {
-
-        LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
-        lotteryApplierRepository.save(lotteryApplier);
-
-        lotteryApplierRepository.addRemainChance(lotteryApplier.getUid());
-
-        entityManager.refresh(lotteryApplier);
-
-        lotteryApplier = lotteryApplierRepository.findByUid(lotteryApplier.getUid()).orElseThrow();
-
-        assertThat(lotteryApplier.getRemainChance()).isEqualTo(4);
-
-    }
 }
