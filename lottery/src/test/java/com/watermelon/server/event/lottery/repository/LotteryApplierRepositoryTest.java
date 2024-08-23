@@ -14,6 +14,7 @@ import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@DisplayName("[단위] 응모자 레포지토리")
 class LotteryApplierRepositoryTest {
 
     final int N = -1;

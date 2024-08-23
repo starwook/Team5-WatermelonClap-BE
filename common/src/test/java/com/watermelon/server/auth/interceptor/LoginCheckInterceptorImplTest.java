@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 로그인 검증 인터셉터")
 class LoginCheckInterceptorImplTest {
 
     @Mock
@@ -34,7 +35,7 @@ class LoginCheckInterceptorImplTest {
     private HttpServletResponse response;
 
     @Test
-    @DisplayName("tokenVerifier 가 UID 를 정상적으로 반환하면 true 를 반환한다.")
+    @DisplayName("로그인 검증 - 성공")
     void preHandleSuccessCase() {
 
         //given
@@ -50,7 +51,7 @@ class LoginCheckInterceptorImplTest {
     }
 
     @Test
-    @DisplayName("tokenVerifier 가 예외를 발생시키면 Authentication Exception 을 발생시킨다.")
+    @DisplayName("로그인 검증 - 실패")
     void preHandleFailureCase() {
 
         //given

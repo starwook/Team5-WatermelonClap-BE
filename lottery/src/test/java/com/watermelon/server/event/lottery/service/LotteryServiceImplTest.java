@@ -23,6 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 추첨 서비스")
 class LotteryServiceImplTest {
 
     @Mock
@@ -32,7 +33,7 @@ class LotteryServiceImplTest {
     private LotteryServiceImpl lotteryService;
 
     @Test
-    @DisplayName("uid 에 해당하는 참가자가 있으면, rank 와 참가여부를 반환한다.")
+    @DisplayName("순위 반환 - 성공")
     void getLotteryRankPresentationCase() {
 
         //given
@@ -50,7 +51,7 @@ class LotteryServiceImplTest {
     }
 
     @Test
-    @DisplayName("uid 에 해당하는 참가자가 없으면, NoSuchElementException 을 던진다.")
+    @DisplayName("순위 반환 - 실패")
     void getLotteryRankNotFoundCase() {
         //given
         Mockito.when(lotteryApplierRepository.findByUid(TEST_UID))
@@ -62,7 +63,7 @@ class LotteryServiceImplTest {
     }
 
     @Test
-    @DisplayName("처음 응모라면 응모로 처리된다.")
+    @DisplayName("응모 - 성공")
     void applyAndGet() {
 
         //given
@@ -85,7 +86,7 @@ class LotteryServiceImplTest {
     }
 
     @Test
-    @DisplayName("회원가입")
+    @DisplayName("회원가입 - 성공")
     void registration() {
 
         //given
@@ -102,7 +103,7 @@ class LotteryServiceImplTest {
     }
 
     @Test
-    @DisplayName("응모자가 이미 존재")
+    @DisplayName("응모자 존재 여부 - 성공")
     void isExist() {
 
         //when

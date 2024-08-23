@@ -11,6 +11,7 @@ import org.springframework.test.context.TestPropertySource;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //replace None 사용시 실제 DB사용
 @TestPropertySource("classpath:application-local-db.yml")
+@DisplayName("[단위] 선착순 레포지토리")
 public class OrderEventRepositoryTest
 {
 
@@ -18,7 +19,7 @@ public class OrderEventRepositoryTest
     private OrderEventRepository orderEventRepository;
 
     @Test
-    @DisplayName("전체 삭제")
+    @DisplayName("전체 삭제 - 성공")
     public void deleteEventWithQuiz(){
         orderEventRepository.deleteAll();
         Assertions.assertThat(orderEventRepository.findAll().size()).isEqualTo(0);

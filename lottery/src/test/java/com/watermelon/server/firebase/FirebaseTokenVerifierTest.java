@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("[단위] 파이어베이스 토큰 검증기")
 class FirebaseTokenVerifierTest {
 
     private final FirebaseToken firebaseToken;
@@ -27,7 +28,7 @@ class FirebaseTokenVerifierTest {
     }
 
     @Test
-    @DisplayName("검증된 토큰일 경우 해당하는 uid를 반환해야 한다.")
+    @DisplayName("토큰 검증 - 성공")
     void verify() throws FirebaseAuthException {
 
         //given
@@ -42,7 +43,7 @@ class FirebaseTokenVerifierTest {
     }
 
     @Test
-    @DisplayName("검증되지 않은 토큰인 경우에는 InvalidTokenException 을 던진다.")
+    @DisplayName("토큰 검증 - 실패")
     void verifyThrowException() throws FirebaseAuthException {
 
         //given

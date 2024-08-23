@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 
 @DataJpaTest
+@DisplayName("[단위] 기대평 레포지토리")
 class ExpectationRepositoryTest {
 
     @Autowired

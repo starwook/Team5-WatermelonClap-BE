@@ -20,6 +20,7 @@ import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 어드민 검증 인터셉터")
 class AdminAuthorizationInterceptorTest {
 
     @Mock
@@ -35,7 +36,7 @@ class AdminAuthorizationInterceptorTest {
     private HttpServletResponse response;
 
     @Test
-    @DisplayName("어드민에 등록된 UID 가 맞으면 true 를 반환한다.")
+    @DisplayName("어드민 검증 - 성공")
     void preHandleSuccessCase() {
 
         //given
@@ -50,7 +51,7 @@ class AdminAuthorizationInterceptorTest {
     }
 
     @Test
-    @DisplayName("어드민에 등록된 UID 가 틀리면 예외를 터뜨린다.")
+    @DisplayName("어드민 검증 - 실패")
     void preHandleFailureCase() {
 
         //given
