@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.watermelon.server.constants.Constants.TEST_NOT_UID;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 어드민 유저 서비스")
 class AdminUserServiceTest {
 
     @Mock
@@ -24,7 +25,7 @@ class AdminUserServiceTest {
     private AdminUserService adminUserService;
 
     @Test
-    @DisplayName("uid 를 가진 어드민 유저가 없으면 예외를 던진다.")
+    @DisplayName("어드민 검증 - 실패")
     void authorize() {
 
         //given

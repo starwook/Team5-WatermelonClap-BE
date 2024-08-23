@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 기대평 서비스")
 class ExpectationServiceTest {
 
     @InjectMocks
@@ -44,7 +45,7 @@ class ExpectationServiceTest {
     }
 
     @Test
-    @DisplayName("기대평 작성 정상")
+    @DisplayName("기대평 작성 - 성공")
     void makeExpectation() {
         Mockito.when(lotteryService.findLotteryApplierByUid(any())).thenReturn(applier);
         assertDoesNotThrow(()->
@@ -52,7 +53,7 @@ class ExpectationServiceTest {
     }
 
     @Test
-    @DisplayName("기대평 이미 작성됨")
+    @DisplayName("기대평 작성 - 실패 (이미 작성됨)")
     void expectationAlreadyExist()  {
         Mockito.when(lotteryService.findLotteryApplierByUid(any())).thenReturn(applier);
         Expectation.makeExpectation(requestExpectationDto,applier); //기대평 한 번 작성

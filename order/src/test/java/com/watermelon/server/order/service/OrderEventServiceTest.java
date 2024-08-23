@@ -27,6 +27,7 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //replace None 사용시 실제 DB사용
 @TestPropertySource("classpath:application-local-db.yml")
 @SpringBootTest(classes = OrderApplication.class)
+@DisplayName("[단위] 선착순 서비스")
 class OrderEventServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(OrderEventServiceTest.class);
@@ -40,7 +41,7 @@ class OrderEventServiceTest {
 
     private OrderEvent orderEvent;
     @BeforeEach
-    @DisplayName("선착순 이벤트 생성")
+    @DisplayName("선착순 이벤트 생성 - 성공")
     public void makeOrderEventsWithOutImageWithOutImage(){
         RequestQuizDto requestQuizDto = RequestQuizDto.makeForTest();
         RequestOrderRewardDto requestOrderRewardDto = RequestOrderRewardDto.makeForTest();
@@ -50,7 +51,7 @@ class OrderEventServiceTest {
     }
 
     @Test
-    @DisplayName("orderEventId를 통하여 생성 확인")
+    @DisplayName("이벤트 존재 여부 조회 - 성공")
     @Order(1)
     public void checkEventExist(){
         Long eventId = orderEvent.getId();
@@ -58,7 +59,7 @@ class OrderEventServiceTest {
     }
 
     @Test
-    @DisplayName("생성되지 않은 orderEventId 조회")
+    @DisplayName("이벤트 존재 여부 조회 - 실패 (생성되지 않은 orderEventId)")
     @Order(2)
     public void checkOrderEventNotExist(){
         Long orderEventId = orderEvent.getId()+100;
@@ -86,7 +87,7 @@ class OrderEventServiceTest {
 //    }
 
     @Test
-    @DisplayName("상태 변경")
+    @DisplayName("상태 변경 - 성공")
     @Order(3)
     public void changeStatus(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
@@ -96,7 +97,7 @@ class OrderEventServiceTest {
     }
 
     @Test
-    @DisplayName("전체 삭제")
+    @DisplayName("전체 삭제 - 성공")
     public void deleteEventWithQuiz(){
         orderEventRepository.deleteAll();
         Assertions.assertThat(orderEventRepository.findAll().size()).isEqualTo(0);

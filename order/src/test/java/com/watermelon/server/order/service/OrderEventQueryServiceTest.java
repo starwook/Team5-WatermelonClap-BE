@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 선착순 쿼리 서비스")
 class OrderEventQueryServiceTest {
 
 
@@ -47,7 +48,7 @@ class OrderEventQueryServiceTest {
         Assertions.assertThat(openEvents.size()).isEqualTo(1);
     }
 
-    @DisplayName("오픈 이벤트 quiz null인 것을 확인")
+    @DisplayName("오픈 이벤트 quiz - null 인 경우")
     @Test
     void getOrderEvents() {
         when(orderEventRepository.findAll()).thenReturn(openEvents);
@@ -56,7 +57,7 @@ class OrderEventQueryServiceTest {
                         Assertions.assertThat(responseOrderEventDto.getQuiz()).isNull()
                 );
     }
-    @DisplayName("오픈 이벤트 quiz에 정답이 없는 것을 확인")
+    @DisplayName("오픈 이벤트 quiz - 정답이 없는 경우")
     @Test
     void getOpenedOrderEvents() {
         when(orderEventRepository.findAll()).thenReturn(unOpenEvents);

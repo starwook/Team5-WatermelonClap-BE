@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 추첨 당첨자 서비스")
 class LotteryWinnerServiceImplTest {
 
     @Mock
@@ -33,7 +34,7 @@ class LotteryWinnerServiceImplTest {
     private LotteryWinnerServiceImpl lotteryWinnerServiceImpl;
 
     @Test
-    @DisplayName("레포지토리에서 반환된 값을 ResponseLotteryWinnerDto 로 감싸서 반환한다.")
+    @DisplayName("당첨자 목록 조회 - 성공")
     void getLotteryWinners() {
 
         //given
@@ -59,7 +60,7 @@ class LotteryWinnerServiceImplTest {
     }
 
     @Test
-    @DisplayName("레포지토리에서 반환된 Participant 엔티티를 ResponseLotteryWinnerInfoDto 로 감싸서 반환한다.")
+    @DisplayName("당첨자 정보 조회 - 성공")
     void getLotteryWinnerInfo() {
 
         //given
@@ -83,7 +84,7 @@ class LotteryWinnerServiceImplTest {
     }
 
     @Test
-    @DisplayName("uid 에 해당하는 참가자 정보를 변경하고 저장한다.")
+    @DisplayName("당첨자 정보 저장 - 성공")
     void createLotteryWinnerInfoSuccess(){
         //given
         LotteryApplier lotteryApplier = LotteryApplier.builder().uid(TEST_UID).build();
@@ -109,7 +110,7 @@ class LotteryWinnerServiceImplTest {
     }
 
     @Test
-    @DisplayName("uid 가 없으면 예외를 발생시킨다.")
+    @DisplayName("당첨자 정보 저장 - 실패")
     void createLotteryWinnerInfoFailure() {
         //given
         Mockito.when(lotteryApplierRepository.findByUid(TEST_UID)).thenReturn(Optional.empty());

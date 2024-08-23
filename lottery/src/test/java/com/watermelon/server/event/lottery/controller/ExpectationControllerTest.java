@@ -30,10 +30,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExpectationController.class)
+@DisplayName("[단위] 기대평 컨트롤러")
 class ExpectationControllerTest extends ControllerTest {
 
     @Test
-    @DisplayName("[DOC] 사용자 기대평을 만든다")
+    @DisplayName("기대평 생성 - 성공")
     void makeExpectation() throws Exception {
         final String PATH = "/expectations";
         final String DOCUMENT_NAME ="expectations/create";
@@ -56,7 +57,7 @@ class ExpectationControllerTest extends ControllerTest {
 
     }
     @Test
-    @DisplayName("[DOC] 사용자 기대평을 만든다")
+    @DisplayName("기대평 생성 - 실패")
     void makeExpectationMakeConflictError() throws Exception {
         final String PATH = "/expectations";
         final String DOCUMENT_NAME ="expectation-conflict";
@@ -81,7 +82,7 @@ class ExpectationControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 사용자 기대평을 가져온다")
+    @DisplayName("기대평 조회 - 성공")
     void getExpectationsForUser() throws Exception {
         final String PATH = "/expectations";
         final String DOCUMENT_NAME ="expectations";
@@ -112,7 +113,7 @@ class ExpectationControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 사용자의 기대평이 존재하는 경우")
+    @DisplayName("기대평 존재 여부 조회 - 성공")
     void getExpectationCheckTestAlreadyExistCase() throws Exception {
 
         givenExpectationAlreadyExistForLotteryApplier(TEST_UID);
@@ -133,7 +134,7 @@ class ExpectationControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("[DOC] 사용자의 기대평이 존재하지 않는 경우")
+    @DisplayName("기대평 존재 여부 조회 - 실패 (존재하지 않는 경우)")
     void getExpectationCheckTestNotExistCase() throws Exception {
 
         givenExpectationNotExistForLotteryApplier(TEST_UID);

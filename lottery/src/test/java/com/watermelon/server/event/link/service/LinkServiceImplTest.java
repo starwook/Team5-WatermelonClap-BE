@@ -24,6 +24,7 @@ import static com.watermelon.server.auth.service.TestTokenVerifier.TEST_UID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 링크 서비스")
 class LinkServiceImplTest {
 
     @Mock
@@ -42,7 +43,7 @@ class LinkServiceImplTest {
     }
 
     @Test
-    @DisplayName("응모자에 대한 링크를 반환한다.")
+    @DisplayName("응모자에 대한 링크 반환 - 성공")
     void getShortedLink() {
 
         //given
@@ -69,7 +70,7 @@ class LinkServiceImplTest {
     }
 
     @Test
-    @DisplayName("링크의 viewCount 가 1 증가한다.")
+    @DisplayName("링크 조회수 증가 - 성공")
     void addLinkViewCount() {
 
         //given

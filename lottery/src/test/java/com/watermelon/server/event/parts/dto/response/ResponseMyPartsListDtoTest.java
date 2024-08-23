@@ -13,10 +13,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("[단위] 파츠 리스트 Dto")
 class ResponseMyPartsListDtoTest {
 
     @Test
-    @DisplayName("카테고리 별로 분류한다.")
+    @DisplayName("카테고리 별로 분류 - 성공")
     void createDtoListByCategory() {
 
         //given
