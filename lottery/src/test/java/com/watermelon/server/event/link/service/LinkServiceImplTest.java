@@ -75,15 +75,12 @@ class LinkServiceImplTest {
 
         //given
         Link link = Link.createLink(Mockito.mock(LotteryApplier.class));
-        int originalViewCount = link.getViewCount();
         Mockito.when(linkRepository.findByUri(TEST_URI)).thenReturn(Optional.ofNullable(link));
 
         //when
         linkService.addLinkViewCount(TEST_URI);
-        int newViewCount = link.getViewCount();
 
         //then
-        Mockito.verify(linkRepository).save(link);
-        Assertions.assertThat(newViewCount).isEqualTo(originalViewCount+1);
+        Mockito.verify(linkRepository).incrementViewCount(TEST_URI);
     }
 }
