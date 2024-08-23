@@ -11,6 +11,7 @@ import com.watermelon.server.event.lottery.error.ExpectationNotExist;
 import com.watermelon.server.event.lottery.repository.ExpectationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,7 @@ public class ExpectationService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "expectations",allEntries = true)
     public ResponseAdminExpectationApprovedDto toggleExpectation(Long expectationId) throws ExpectationNotExist {
         Expectation expectation = expectationRepository.findById(expectationId).orElseThrow(ExpectationNotExist::new);
         expectation.toggleApproved();
