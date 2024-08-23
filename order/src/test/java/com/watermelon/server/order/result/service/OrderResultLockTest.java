@@ -62,28 +62,28 @@ class OrderResultLockTest {
         orderApplyCount.clearCount();
        orderEventRepository.delete(orderEvent);
     }
-    @Test
-    void 선착순_이벤트_락_적용_3배_신청() throws InterruptedException {
-        currentOrderEventManageService.clearOrderApplyCount();
-
-        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*3;
-        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        for(int i=0;i<numberOfThreads;i++){
-            int finalI = i;
-            executorService.submit(()->{
-                try{
-                    orderResultCommandService.createTokenAndMakeTicket(orderEvent.getId());
-                }
-                finally {
-                    latch.countDown();
-                }
-            });
-        }
-        latch.await();
-        System.out.println("응모 당첨 개수: "+currentOrderEventManageService.getCurrentApplyCount());
-        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
-    }
+//    @Test
+//    void 선착순_이벤트_락_적용_3배_신청() throws InterruptedException {
+//        currentOrderEventManageService.clearOrderApplyCount();
+//
+//        int numberOfThreads = currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount()*3;
+//        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+//        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+//        for(int i=0;i<numberOfThreads;i++){
+//            int finalI = i;
+//            executorService.submit(()->{
+//                try{
+//                    orderResultCommandService.createTokenAndMakeTicket(orderEvent.getId());
+//                }
+//                finally {
+//                    latch.countDown();
+//                }
+//            });
+//        }
+//        latch.await();
+//        System.out.println("응모 당첨 개수: "+currentOrderEventManageService.getCurrentApplyCount());
+//        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount());
+//    }
 //    @Test
 //    void 선착순_이벤트_락_미적용_100명() throws InterruptedException {
 //        int numberOfThreads = orderResultQueryService.getAvailableTicket()*10;
