@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Link extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     @Builder.Default

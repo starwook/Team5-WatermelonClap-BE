@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LotteryApplier extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String uid;

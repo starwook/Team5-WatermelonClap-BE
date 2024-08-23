@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Parts {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String name;

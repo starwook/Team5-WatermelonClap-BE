@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class LotteryApplierParts extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     @ManyToOne
