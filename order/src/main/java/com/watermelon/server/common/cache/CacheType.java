@@ -11,7 +11,7 @@ public enum CacheType {
     ),
     ORDER_EVENTS(
             "orderEvents",
-            10,
+            60,
             100
     ),
     TEST_FOR_EXPIRE(
