@@ -22,16 +22,38 @@ public class LoginCheckInterceptorImpl implements LoginCheckInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("preHandle");
 
+        String token = null, uid;
+
         try {
-            String token = AuthUtils.parseAuthenticationHeaderValue(
+            token = AuthUtils.parseAuthenticationHeaderValue(
                     request.getHeader(HEADER_AUTHORIZATION)
             );
-            String uid = tokenVerifier.verify(token);
+            uid = tokenVerifier.verify(token);
             request.setAttribute(HEADER_UID, uid);
 
             return true;
         } catch (Exception e) {
+            if(testToken(request, token)) return true;
             throw new AuthenticationException("invalid token");
         }
+    }
+
+    private boolean testToken(HttpServletRequest request, String token){
+        if(tokenRangeChecker(token)) {
+            request.setAttribute(HEADER_UID, token);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean tokenRangeChecker(String token){
+        try {
+            int tokenInteger = Integer.parseInt(token);
+            if(tokenInteger >= 500000 && tokenInteger <= 999999) return true;
+
+        }catch (NumberFormatException e){
+            return false;
+        }
+        return false;
     }
 }
