@@ -112,9 +112,7 @@ public class LotteryServiceImpl implements LotteryService{
     @Override
     @Transactional
     public void addRemainChance(String uid) {
-        LotteryApplier lotteryApplier = findByUid(uid);
-        lotteryApplier.addRemainChance();
-        lotteryApplierRepository.save(lotteryApplier);
+        lotteryApplierRepository.addRemainChance(uid);
     }
 
     private LotteryApplier findByUid(String uid) {
