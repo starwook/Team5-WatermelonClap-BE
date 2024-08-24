@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -38,10 +39,18 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
 
         log.info("linkId:{}", linkId);
 
-        lotteryService.firstLogin(
-                request.getAttribute(HEADER_UID).toString(),
-                linkId
-        );
+        boolean success = false;
+        for(int i=0; i<300&&!success; i++){
+            try {
+                lotteryService.firstLogin(
+                        request.getAttribute(HEADER_UID).toString(),
+                        linkId
+                );
+                success = true;
+            }catch (ObjectOptimisticLockingFailureException e){
+                log.info("first login failure:{}", i);
+            }
+        }
 
         return true;
     }
