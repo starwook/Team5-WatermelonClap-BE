@@ -1,6 +1,7 @@
 package com.watermelon.server.event.lottery.domain;
 
 import com.watermelon.server.BaseEntity;
+import com.watermelon.server.BaseEntityListener;
 import com.watermelon.server.event.parts.domain.LotteryApplierParts;
 import com.watermelon.server.event.parts.exception.PartsDrawLimitExceededException;
 import jakarta.persistence.*;
@@ -13,8 +14,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@EntityListeners(LotteryApplierListener.class)
 public class LotteryApplier extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
