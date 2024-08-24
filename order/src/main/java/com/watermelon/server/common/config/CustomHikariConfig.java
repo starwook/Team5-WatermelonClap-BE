@@ -25,10 +25,9 @@ public class CustomHikariConfig {
     @Bean(name = "orderEventQuizSubmitDatasource")
     public HikariDataSource orderEventQuizDatasource() {
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
-        hikariConfig.addDataSourceProperty("url", url);
-        hikariConfig.addDataSourceProperty("username", username);
-        hikariConfig.addDataSourceProperty("password", password);
+        hikariConfig.setJdbcUrl(url);
+        hikariConfig.setUsername(username);
+        hikariConfig.setPassword(password);
         hikariConfig.setConnectionTimeout(250L);
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);
