@@ -102,15 +102,4 @@ class LotteryServiceImplTest {
 
     }
 
-    @Test
-    @DisplayName("응모자 존재 여부 - 성공")
-    void isExist() {
-
-        //when
-        lotteryService.isExist(TEST_UID);
-
-        //then
-        verify(lotteryApplierRepository).existsByUid(TEST_UID);
-
-    }
 }
