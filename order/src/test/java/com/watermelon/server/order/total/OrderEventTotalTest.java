@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 //@Disabled
 @Transactional
+@TestPropertySource("classpath:application-local-db.yml")
 @AutoConfigureMockMvc
 public class OrderEventTotalTest {
 
@@ -92,7 +94,7 @@ public class OrderEventTotalTest {
     }
     @AfterEach
     public void tearDown(){
-        orderApplyCountRepository.delete(orderApplyCount);
+        orderApplyCountRepository.deleteAll();
     }
     @CacheEvict(value = "orderEvents",allEntries = true)
     @AfterEach
