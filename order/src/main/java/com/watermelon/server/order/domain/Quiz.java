@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "quiz")
 public class Quiz {
     @Id @GeneratedValue
     private Long id;

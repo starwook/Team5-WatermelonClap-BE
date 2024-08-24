@@ -1,18 +1,17 @@
-package com.watermelon.server.order.service;
+package com.watermelon.server.orderResult.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
 
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.order.repository.OrderApplyCountRepository;
-import com.watermelon.server.order.result.domain.OrderApplyCount;
+import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderResult.domain.OrderApplyCount;
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceUnit;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +28,8 @@ public class CurrentOrderEventManageService {
 
     private final OrderApplyCountRepository orderApplyCountRepository;
 
+//    @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     private final HikariDataSource dataSource;
-
-    @PersistenceUnit
-    private final EntityManagerFactory entityManagerFactory;
-
-
 
     @Transactional
     public boolean isOrderApplyNotFullThenPlusCount(){
@@ -74,7 +69,6 @@ public class CurrentOrderEventManageService {
 
     public void clearOrderApplyCount() {
         orderApplyCountRepository.findCurrent().get().clearCount();
-
     }
 
     public boolean checkPrevious(String submitAnswer){

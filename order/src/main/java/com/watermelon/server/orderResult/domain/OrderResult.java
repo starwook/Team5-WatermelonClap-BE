@@ -1,10 +1,7 @@
-package com.watermelon.server.order.result.domain;
+package com.watermelon.server.orderResult.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -12,6 +9,7 @@ import lombok.*;
 @Getter
 @Entity
 @RequiredArgsConstructor
+@Table(name ="order_result")
 public class OrderResult {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)

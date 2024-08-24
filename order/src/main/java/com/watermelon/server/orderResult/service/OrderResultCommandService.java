@@ -1,24 +1,19 @@
-package com.watermelon.server.order.result.service;
+package com.watermelon.server.orderResult.service;
 
 
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.order.service. CurrentOrderEventManageService;
 
 import com.watermelon.server.order.service.OrderResultSaveService;
 
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import javax.sql.DataSource;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +23,23 @@ public class OrderResultCommandService {
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
-
+    private final int toGetConnectionCount =5;
 
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
-        if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
-            return ResponseApplyTicketDto.applySuccess(applyToken);
+        for(int i=0;i<toGetConnectionCount;i++) {
+            try{
+                if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
+                    return ResponseApplyTicketDto.applySuccess(applyToken);
+                }
+            }
+            catch (Exception e){ //timeOut됐을시에
+                e.printStackTrace();
+                if(currentOrderEventManageService.isOrderApplyFull()){ //한 번 씩 더 검사한다
+                    return ResponseApplyTicketDto.fullApply();
+                }
+            }
         }
         return ResponseApplyTicketDto.fullApply();
     }

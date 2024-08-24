@@ -2,10 +2,7 @@ package com.watermelon.server.order.domain;
 
 
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "order_event_reward")
 public class OrderEventReward {
 
     @Id @GeneratedValue

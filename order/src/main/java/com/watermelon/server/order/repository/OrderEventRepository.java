@@ -4,10 +4,12 @@ import com.watermelon.server.order.domain.OrderEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Repository
 public interface OrderEventRepository extends JpaRepository<OrderEvent,Long> {
 
     @Query("SELECT e FROM OrderEvent e WHERE e.startDate <= :date AND e.endDate >= :date")
