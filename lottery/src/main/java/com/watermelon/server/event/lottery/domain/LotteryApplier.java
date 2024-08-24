@@ -13,6 +13,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EntityListeners(LotteryApplierListener.class)
 public class LotteryApplier extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
