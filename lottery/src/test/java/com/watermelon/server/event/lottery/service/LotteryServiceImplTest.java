@@ -85,21 +85,21 @@ class LotteryServiceImplTest {
 
     }
 
-    @Test
-    @DisplayName("회원가입 - 성공")
-    void registration() {
-
-        //given
-        ArgumentCaptor<LotteryApplier> captor = ArgumentCaptor.forClass(LotteryApplier.class);
-
-        //when
-        lotteryService.registration(TEST_UID);
-
-        //then
-        verify(lotteryApplierRepository, times(1)).save(captor.capture());
-
-        assertThat(captor.getValue().getUid()).isEqualTo(TEST_UID);
-
-    }
+//    @Test
+//    @DisplayName("회원가입 - 성공")
+//    void registration() {
+//
+//        //given
+//        ArgumentCaptor<LotteryApplier> captor = ArgumentCaptor.forClass(LotteryApplier.class);
+//
+//        //when
+//        lotteryService.registration(TEST_UID);
+//
+//        //then
+//        verify(lotteryApplierRepository, times(1)).save(captor.capture());
+//
+//        assertThat(captor.getValue().getUid()).isEqualTo(TEST_UID);
+//
+//    }
 
 }

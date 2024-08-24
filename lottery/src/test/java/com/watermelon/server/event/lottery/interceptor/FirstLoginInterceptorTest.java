@@ -26,9 +26,6 @@ class FirstLoginInterceptorTest {
     @Mock
     private LotteryService lotteryService;
 
-    @Mock
-    private LinkService linkService;
-
     @InjectMocks
     private FirstLoginInterceptor firstLoginInterceptor;
 
@@ -39,35 +36,35 @@ class FirstLoginInterceptorTest {
     private HttpServletResponse response;
 
     @Test
-    @DisplayName("회원가입 - 성공")
+    @DisplayName("첫 로그인 - 성공")
     void preHandleFirstLoginCaseRegistrationTest(){
 
         //given
         Mockito.when(request.getAttribute(HEADER_UID)).thenReturn(TEST_UID);
-        Mockito.when(lotteryService.isExist(TEST_UID)).thenReturn(false);
-
-        //when
-        firstLoginInterceptor.preHandle(request, response, null);
-
-        //then
-        verify(lotteryService).registration(TEST_UID);
-
-    }
-
-    @Test
-    @DisplayName("링크 조회수 증가 - 성공")
-    void preHandleFirstLoginCaseLinkViewTest(){
-
-        //given
-        Mockito.when(request.getAttribute(HEADER_UID)).thenReturn(HEADER_UID);
         Mockito.when(request.getCookies()).thenReturn(new Cookie[]{new Cookie(HEADER_LINK_ID, TEST_URI)});
 
         //when
         firstLoginInterceptor.preHandle(request, response, null);
 
         //then
-        verify(linkService).addLinkViewCount(TEST_URI);
+        verify(lotteryService).firstLogin(TEST_UID, TEST_URI);
 
     }
+
+//    @Test
+//    @DisplayName("링크 조회수 증가 - 성공")
+//    void preHandleFirstLoginCaseLinkViewTest(){
+//
+//        //given
+//        Mockito.when(request.getAttribute(HEADER_UID)).thenReturn(HEADER_UID);
+//        Mockito.when(request.getCookies()).thenReturn(new Cookie[]{new Cookie(HEADER_LINK_ID, TEST_URI)});
+//
+//        //when
+//        firstLoginInterceptor.preHandle(request, response, null);
+//
+//        //then
+//        verify(linkService).addLinkViewCount(TEST_URI);
+//
+//    }
 
 }
