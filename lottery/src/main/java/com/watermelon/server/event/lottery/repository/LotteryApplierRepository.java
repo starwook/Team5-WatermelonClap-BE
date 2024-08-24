@@ -19,13 +19,12 @@ public interface LotteryApplierRepository extends JpaRepository<LotteryApplier, 
 
     List<LotteryApplier> findByLotteryRankNotOrderByLotteryRank(int rank);
 
+    @Query("SELECT l FROM LotteryApplier l WHERE l.link.uri = :linkUri")
+    LotteryApplier findByLotteryApplierByLinkUri(@Param("linkUri") String linkUri);
+
     @Query("UPDATE LotteryApplier l SET l.lotteryRank = :rank")
     @Modifying
     void initAllLotteryRank(@Param("rank") int rank);
-
-    @Modifying
-    @Query("UPDATE LotteryApplier l SET l.remainChance = l.remainChance + 1 WHERE l.uid = :uid")
-    void addRemainChance(@Param("uid") String uid);
 
     Optional<LotteryApplier> findByUid(String uid);
 

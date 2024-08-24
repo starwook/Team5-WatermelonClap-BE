@@ -2,6 +2,7 @@ package com.watermelon.server.event.lottery.service;
 
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.auth.service.AuthUserService;
+import com.watermelon.server.event.link.repository.LinkRepository;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
@@ -27,6 +28,7 @@ public class LotteryServiceImpl implements LotteryService{
     private final LotteryApplierRepository lotteryApplierRepository;
     private final LotteryRewardRepository lotteryRewardRepository;
     private final AuthUserService authUserService;
+    private final LinkRepository linkRepository;
 
     @Override
     public ResponseLotteryRankDto getLotteryRank(String uid) {
@@ -99,27 +101,36 @@ public class LotteryServiceImpl implements LotteryService{
     }
 
     @Override
-    public void registration(String uid) {
+    @Transactional
+    public void firstLogin(String uid, String uri) {
+
+        if(isExist(uid)) return;
+
+        //만약 등록되지 않은 유저라면
+        registration(uid);
+
+        if(uri==null || uri.isEmpty()) return;
+
+        //링크 아이디가 존재한다면
+        linkRepository.incrementViewCount(uri);
+
+        LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByLinkUri(uri);
+        lotteryApplier.addRemainChance();
+        lotteryApplierRepository.save(lotteryApplier);
+
+    }
+
+    private void registration(String uid) {
         log.info("registration uid: {}", uid);
         lotteryApplierRepository.save(LotteryApplier.createLotteryApplier(uid));
-    }
-
-    @Override
-    public boolean isExist(String uid) {
-        return lotteryApplierRepository.existsByUid(uid);
-    }
-
-    @Override
-    @Transactional
-    public void addRemainChance(String uid) {
-        log.info("Add RemainChance: {}", uid);
-//        LotteryApplier lotteryApplier = findLotteryApplierByUid(uid);
-//        lotteryApplier.addRemainChance();
-//        lotteryApplierRepository.save(lotteryApplier);
-        lotteryApplierRepository.addRemainChance(uid);
     }
 
     private LotteryApplier findByUid(String uid) {
         return lotteryApplierRepository.findByUid(uid).orElseThrow(LotteryApplierNotFoundException::new);
     }
+
+    private boolean isExist(String uid) {
+        return lotteryApplierRepository.existsByUid(uid);
+    }
+
 }

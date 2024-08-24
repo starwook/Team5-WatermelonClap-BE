@@ -1,18 +1,10 @@
 package com.watermelon.server.event.lottery.service;
 
-import com.watermelon.server.admin.dto.response.ResponseAdminLotteryWinnerDto;
-import com.watermelon.server.admin.dto.response.ResponseAdminPartsWinnerDto;
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
-import com.watermelon.server.event.lottery.dto.request.RequestLotteryWinnerInfoDto;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseLotteryWinnerInfoDto;
-import com.watermelon.server.event.lottery.dto.response.ResponseRewardInfoDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface LotteryService {
 
@@ -54,22 +46,10 @@ public interface LotteryService {
     LotteryApplier findLotteryApplierByUid(String uid);
 
     /**
-     * 추첨 응모자를 등록한다.
-     * @param uid 응모자의 uid
+     * 처음 로그인했는지 판별한다.
+     * 만약 처음 로그인이라면 회원가입하고, 링크 uri 가 있다면 뽑기권을 증가시킨다.
+     * @param uid
      */
-    void registration(String uid);
-
-    /**
-     * uid를 가진 추첨 응모자의 존재 여부를 반환한다.
-     * @param uid 응모자의 uid
-     * @return 존재 여부
-     */
-    boolean isExist(String uid);
-
-    /**
-     * uid를 가진 추첨 응모자의 뽑기권을 증가시킨다.
-     * @param uid 응모자의 uid
-     */
-    void addRemainChance(String uid);
+    void firstLogin(String uid, String uri);
 
 }
