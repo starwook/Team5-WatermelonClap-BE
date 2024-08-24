@@ -29,7 +29,7 @@ public class CustomHikariConfig {
         hikariConfig.addDataSourceProperty("url", url);
         hikariConfig.addDataSourceProperty("username", username);
         hikariConfig.addDataSourceProperty("password", password);
-        hikariConfig.setConnectionTimeout(100L);
+        hikariConfig.setConnectionTimeout(250L);
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);
     }
