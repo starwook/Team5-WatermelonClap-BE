@@ -3,9 +3,11 @@ package com.watermelon.server.common.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
@@ -21,7 +23,7 @@ public class CustomHikariConfig {
     private String password;
 
     @Bean(name = "orderEventQuizSubmitDatasource")
-    public DataSource orderEventQuizDatasource() {
+    public HikariDataSource orderEventQuizDatasource() {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDataSourceClassName("com.mysql.cj.jdbc.Driver");
         hikariConfig.addDataSourceProperty("url", url);
@@ -31,4 +33,11 @@ public class CustomHikariConfig {
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);
     }
+    @Bean(name = "orderEventQuizSubmitTransactionManager")
+    public DataSourceTransactionManager transactionManager1(
+            @Qualifier("orderEventQuizSubmitDatasource") HikariDataSource hikariDataSource
+    ) {
+        return new DataSourceTransactionManager(hikariDataSource);
+    }
+
 }
