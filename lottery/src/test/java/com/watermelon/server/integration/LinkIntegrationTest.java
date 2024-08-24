@@ -3,6 +3,8 @@ package com.watermelon.server.integration;
 import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.link.utils.LinkUtils;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,14 +21,21 @@ public class LinkIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private LinkService linkService;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     @DisplayName("[예정] 공유된 링크를 통해 이벤트 페이지로 이동해 가입한 사람이 있다면 링크의 유저에게 뽑기권을 1개 지급한다.")
+    @Transactional
     void test2() throws Exception {
 
         String uri = givenLotteryApplierHasUri();
-        Assertions.assertThat(linkService.getApplierByLinkKey(uri).getRemainChance()).isEqualTo(3);
+        LotteryApplier lotteryApplier = linkService.getApplierByLinkKey(uri);
+        Assertions.assertThat(lotteryApplier.getRemainChance()).isEqualTo(3);
 
         whenFirstUserWithLinkIdDrawParts(uri);
+
+        entityManager.refresh(lotteryApplier);
 
         LotteryApplier uidOwner = linkService.getApplierByLinkKey(uri);
 

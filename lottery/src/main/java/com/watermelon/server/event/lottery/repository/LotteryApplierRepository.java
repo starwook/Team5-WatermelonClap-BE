@@ -23,8 +23,8 @@ public interface LotteryApplierRepository extends JpaRepository<LotteryApplier, 
     @Modifying
     void initAllLotteryRank(@Param("rank") int rank);
 
-    @Query("UPDATE LotteryApplier l SET l.remainChance = l.remainChance + 1 WHERE l.uid = :uid")
     @Modifying
+    @Query("UPDATE LotteryApplier l SET l.remainChance = l.remainChance + 1 WHERE l.uid = :uid")
     void addRemainChance(@Param("uid") String uid);
 
     Optional<LotteryApplier> findByUid(String uid);
