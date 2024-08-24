@@ -12,12 +12,6 @@ public interface LinkService {
      */
     MyLinkDto getShortedLink(String uid);
 
-    /**
-     * 링크 키에 대한 뷰 카운트를 증가시킨다.
-     * @param linkId 링크 키
-     */
-    void addLinkViewCount(String linkId);
-
     LotteryApplier getApplierByLinkKey(String linkKey);
 
     /**
