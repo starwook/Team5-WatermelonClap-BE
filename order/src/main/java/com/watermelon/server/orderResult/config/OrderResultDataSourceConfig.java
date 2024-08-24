@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -26,6 +27,7 @@ import java.util.Properties;
         basePackages = {"com.watermelon.server.orderResult.repository"}
 )
 @Configuration
+@Profile("!local")
 public class OrderResultDataSourceConfig {
     @Value("${spring.datasource1.url}")
     private String url;
