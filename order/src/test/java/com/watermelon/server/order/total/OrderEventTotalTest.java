@@ -304,52 +304,52 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
 
-//    @Test
-//    @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
-//    public void orderEventApplyWrongAnswer() throws Exception {
-//        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
-//        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
-//        Quiz quiz = openOrderEvent.getQuiz();
-//        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
-//        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.WRONG.toString()))
-//                .andExpect(jsonPath("$.applyTicket").doesNotExist())
-//                .andDo(print());
-//    }
-
     @Test
-    @DisplayName("선착순 퀴즈 제출 - 실패(선착순 마감)")
-    public void orderEventApplyClosed() throws Exception {
+    @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
+    public void orderEventApplyWrongAnswer() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
         currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
-
         Quiz quiz = openOrderEvent.getQuiz();
-        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
-
-        /**
-         * 선착순 최대 인원 수만큼 응모 추가
-         */
-        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
-            mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(requestAnswerDto)))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.result").value(ApplyTicketStatus.SUCCESS.toString()))
-                    .andExpect(jsonPath("$.applyTicket").exists());
-        }
-
-
-        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(100);
+        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestAnswerDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.CLOSED.toString()))
+                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.WRONG.toString()))
                 .andExpect(jsonPath("$.applyTicket").doesNotExist())
                 .andDo(print());
     }
+
+//    @Test
+//    @DisplayName("선착순 퀴즈 제출 - 실패(선착순 마감)")
+//    public void orderEventApplyClosed() throws Exception {
+//        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
+//        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
+//
+//        Quiz quiz = openOrderEvent.getQuiz();
+//        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
+//
+//        /**
+//         * 선착순 최대 인원 수만큼 응모 추가
+//         */
+//        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
+//            mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(objectMapper.writeValueAsString(requestAnswerDto)))
+//                    .andExpect(status().isOk())
+//                    .andExpect(jsonPath("$.result").value(ApplyTicketStatus.SUCCESS.toString()))
+//                    .andExpect(jsonPath("$.applyTicket").exists());
+//        }
+//
+//
+//        Assertions.assertThat(currentOrderEventManageService.getCurrentApplyCount()).isEqualTo(100);
+//        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.CLOSED.toString()))
+//                .andExpect(jsonPath("$.applyTicket").doesNotExist())
+//                .andDo(print());
+//    }
 
 }
