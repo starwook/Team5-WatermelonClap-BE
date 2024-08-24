@@ -2,9 +2,11 @@ package com.watermelon.server.order.service;
 
 import com.watermelon.server.order.repository.OrderResultRepository;
 import com.watermelon.server.order.result.domain.OrderResult;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +17,16 @@ public class OrderResultSaveService {
     private final OrderResultRepository orderResultRepository;
     private final CurrentOrderEventManageService currentOrderEventManageService;
 
-    @Transactional
+    @Qualifier("orderEventQuizSubmitDatasource") //timeOut이 다른 커넥션을 가져온다.
+    private final HikariDataSource dataSource;
+
+    @Transactional(transactionManager = "orderEventQuizSubmitTransactionManager") //transactional 매니저도 변경
     public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken){
         if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
             saveOrderResult(orderResult);
             return true;
         }
-
         return false;
     }
     public void saveOrderResult(OrderResult orderResult){
