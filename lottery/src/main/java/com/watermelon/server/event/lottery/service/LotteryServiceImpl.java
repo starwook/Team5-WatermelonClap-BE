@@ -2,7 +2,9 @@ package com.watermelon.server.event.lottery.service;
 
 import com.watermelon.server.admin.dto.response.ResponseLotteryApplierDto;
 import com.watermelon.server.auth.service.AuthUserService;
+import com.watermelon.server.event.link.exception.LinkNotFoundException;
 import com.watermelon.server.event.link.repository.LinkRepository;
+import com.watermelon.server.event.lottery.domain.Link;
 import com.watermelon.server.event.lottery.domain.LotteryApplier;
 import com.watermelon.server.event.lottery.domain.LotteryReward;
 import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
@@ -112,7 +114,9 @@ public class LotteryServiceImpl implements LotteryService{
         if(uri==null || uri.isEmpty()) return;
 
         //링크 아이디가 존재한다면
-        linkRepository.incrementViewCount(uri);
+        Link link = linkRepository.findByUri(uri).orElseThrow(LinkNotFoundException::new);
+        link.addLinkViewCount();
+        linkRepository.save(link);
 
         LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByLinkUri(uri);
         lotteryApplier.addRemainChance();

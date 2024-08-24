@@ -12,8 +12,4 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
     Optional<Link> findByUri(String uri);
 
-    @Modifying
-    @Query("UPDATE Link l SET l.viewCount = l.viewCount + 1 WHERE l.uri = :uri")
-    void incrementViewCount(@Param("uri") String uri);
-
 }
