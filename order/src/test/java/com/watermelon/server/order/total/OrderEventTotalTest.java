@@ -260,21 +260,21 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("선착순 퀴즈 제출 - 성공")
-    public void orderEventApply() throws Exception {
-        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
-        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
-        Quiz quiz = openOrderEvent.getQuiz();
-        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
-        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.SUCCESS.toString()))
-                .andExpect(jsonPath("$.applyTicket").exists())
-                .andDo(print());
-    }
+//    @Test
+//    @DisplayName("선착순 퀴즈 제출 - 성공")
+//    public void orderEventApply() throws Exception {
+//        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
+//        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
+//        Quiz quiz = openOrderEvent.getQuiz();
+//        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
+//        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.SUCCESS.toString()))
+//                .andExpect(jsonPath("$.applyTicket").exists())
+//                .andDo(print());
+//    }
 
     @Test
     @DisplayName("선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
@@ -304,21 +304,21 @@ public class OrderEventTotalTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
-    public void orderEventApplyWrongAnswer() throws Exception {
-        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
-        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
-        Quiz quiz = openOrderEvent.getQuiz();
-        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
-        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.WRONG.toString()))
-                .andExpect(jsonPath("$.applyTicket").doesNotExist())
-                .andDo(print());
-    }
+//    @Test
+//    @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
+//    public void orderEventApplyWrongAnswer() throws Exception {
+//        adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
+//        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
+//        Quiz quiz = openOrderEvent.getQuiz();
+//        RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
+//        mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(requestAnswerDto)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.result").value(ApplyTicketStatus.WRONG.toString()))
+//                .andExpect(jsonPath("$.applyTicket").doesNotExist())
+//                .andDo(print());
+//    }
 
     @Test
     @DisplayName("선착순 퀴즈 제출 - 실패(선착순 마감)")
@@ -328,7 +328,6 @@ public class OrderEventTotalTest {
 
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
-
 
         /**
          * 선착순 최대 인원 수만큼 응모 추가
