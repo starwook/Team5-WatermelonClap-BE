@@ -4,6 +4,7 @@ package com.watermelon.server.orderResult.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,7 @@ public class OrderResultDataSourceConfig {
         hikariConfig.setPassword(password);
         hikariConfig.setMaximumPoolSize(maximumPoolSize);
         hikariConfig.setConnectionTimeout(250L);
+        hikariConfig.setPoolName("orderResultPool");
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);
     }
@@ -66,8 +68,8 @@ public class OrderResultDataSourceConfig {
     }
     @Bean(name = "orderResultTransactionManager")
     public JpaTransactionManager orderResultTransactionManager(
-            EntityManagerFactory entityManagerFactory
+            @Qualifier("orderResultEntityManager") LocalContainerEntityManagerFactoryBean entityManagerFactory
     ) {
-        return new JpaTransactionManager(entityManagerFactory);
+        return new JpaTransactionManager(entityManagerFactory.getObject());
     }
 }

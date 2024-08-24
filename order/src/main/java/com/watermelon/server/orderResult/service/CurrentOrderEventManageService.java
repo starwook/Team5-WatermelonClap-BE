@@ -28,10 +28,10 @@ public class CurrentOrderEventManageService {
 
     private final OrderApplyCountRepository orderApplyCountRepository;
 
-//    @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
+   @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     private final HikariDataSource dataSource;
 
-    @Transactional
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
         if(isOrderApplyFull()) {
             return false;
@@ -62,11 +62,13 @@ public class CurrentOrderEventManageService {
         currentOrderEvent = orderEventFromDB;
         clearOrderApplyCount();
     }
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public int getCurrentApplyCount() {
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
 
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public void clearOrderApplyCount() {
         orderApplyCountRepository.findCurrent().get().clearCount();
     }

@@ -51,6 +51,7 @@ public class DatasourceConfig {
         hikariConfig.setPassword(password);
         hikariConfig.setMaximumPoolSize(maximumPoolSize);
         hikariConfig.setLeakDetectionThreshold(leakDetectionThreshold);
+        hikariConfig.setPoolName("orderPool");
         return new HikariDataSource(hikariConfig);
     }
 
