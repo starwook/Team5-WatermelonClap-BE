@@ -10,17 +10,17 @@ public class BaseEntityListener {
 
     @PrePersist
     public void prePersist(BaseEntity entity) {
-        log.debug("Pre Persist: {}", entity.toString());
+        log.info("Pre Persist: {}", entity.toString());
     }
 
     @PreUpdate
     public void preUpdate(BaseEntity entity) {
-        log.debug("Pre Update: {}", entity.toString());
+        log.info("Pre Update: {}", entity.toString());
     }
 
     @PostLoad
     public void postLoad(BaseEntity entity) {
-        log.debug("Post Load: {}", entity.toString());
+        log.info("Post Load: {}", entity.toString());
     }
 
 }
