@@ -110,7 +110,7 @@ public class LotteryServiceImpl implements LotteryService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public void firstLogin(String uid, String uri) {
 
         //lotteryApplier 조회
@@ -121,15 +121,9 @@ public class LotteryServiceImpl implements LotteryService {
 
         if (uri == null || uri.isEmpty()) return;
 
-        //lotteryApplier 조회
-        Link link = linkRepository.findByUri(uri).orElseThrow(LinkNotFoundException::new);
-
-        //lotteryApplier 에 락 적용
-        LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByIdForUpdate(link.getLotteryApplier().getId());
-        entityManager.refresh(lotteryApplier);
+        LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByLinkUri(uri);
         lotteryApplier.addRemainChance();
         lotteryApplierRepository.save(lotteryApplier);
-        entityManager.flush();
 
     }
 

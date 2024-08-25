@@ -50,6 +50,11 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
                 success = true;
             }catch (ObjectOptimisticLockingFailureException e){
                 log.info("first login failure:{}", i);
+                try {
+                    Thread.sleep(50);
+                }catch (InterruptedException e1){
+                    throw new RuntimeException(e1);
+                }
             }catch (CannotAcquireLockException e){
                 log.info("cannot acquire lock:{}", i);
             }

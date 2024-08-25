@@ -29,6 +29,9 @@ public interface LotteryApplierRepository extends JpaRepository<LotteryApplier, 
     @Modifying
     void initAllLotteryRank(@Param("rank") int rank);
 
+    @Query("SELECT l FROM LotteryApplier l WHERE l.link.uri = :linkUri")
+    LotteryApplier findByLotteryApplierByLinkUri(@Param("linkUri") String linkUri);
+
     Optional<LotteryApplier> findByUid(String uid);
 
     Page<LotteryApplier> findByIsLotteryApplierTrue(Pageable pageable);

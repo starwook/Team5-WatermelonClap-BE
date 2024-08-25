@@ -61,6 +61,9 @@ public class LotteryApplier extends BaseEntity {
     @OneToMany(mappedBy = "lotteryApplier")
     private List<LotteryApplierParts> lotteryApplierParts;
 
+    @Version
+    private Long version;
+
 
     public void addNewExpectation(Expectation expectation) {
         this.expectation = expectation;
