@@ -38,7 +38,8 @@ public class OrderResultCommandService {
                 return ResponseApplyTicketDto.fullApply();
             }
             catch (CannotCreateTransactionException e){ //timeOut됐을시에
-//                e.printStackTrace();
+
+                e.printStackTrace();
                 if(currentOrderEventManageService.isOrderApplyFull()){
                     return ResponseApplyTicketDto.fullApply();
                 }
