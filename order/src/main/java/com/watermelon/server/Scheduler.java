@@ -16,7 +16,7 @@ public class Scheduler {
 
     private final OrderEventSchedulingService orderEventSchedulingService;
     private final CurrentOrderEventManageService currentOrderEventManageService;
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 500)
     public void checkOrderEvent(){
         Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         orderEventSchedulingService.changeOrderStatusByTime();
