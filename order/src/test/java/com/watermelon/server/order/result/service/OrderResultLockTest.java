@@ -4,25 +4,21 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.order.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
-import com.watermelon.server.order.result.domain.OrderApplyCount;
+import com.watermelon.server.orderResult.domain.OrderApplyCount;
 
-import com.watermelon.server.order.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
 import com.watermelon.server.order.service.OrderResultSaveService;
-import org.assertj.core.api.Assertions;
+import com.watermelon.server.orderResult.service.OrderResultCommandService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 @SpringBootTest

@@ -11,7 +11,7 @@ import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
 import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.order.result.service.OrderResultCommandService;
+import com.watermelon.server.orderResult.service.OrderResultCommandService;
 import com.watermelon.server.order.service.OrderEventCommandService;
 import com.watermelon.server.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;

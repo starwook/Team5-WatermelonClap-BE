@@ -4,11 +4,13 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.order.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
-import com.watermelon.server.order.repository.OrderResultRepository;
-import com.watermelon.server.order.result.domain.OrderApplyCount;
-import com.watermelon.server.order.result.domain.OrderResult;
+import com.watermelon.server.orderResult.repository.OrderResultRepository;
+import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderResult.domain.OrderResult;
+import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -24,6 +28,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+//@TestPropertySource("classpath:application-local-db.yml")
 @DisplayName("[단위] 선착순 관리 서비스")
 class CurrentOrderEventManageServiceTest {
 
@@ -64,6 +69,9 @@ class CurrentOrderEventManageServiceTest {
         }
         when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(orderApplyCount));
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
+//        org.junit.jupiter.api.Assertions.assertThrows(
+//                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
+//        );
 
     }
 }

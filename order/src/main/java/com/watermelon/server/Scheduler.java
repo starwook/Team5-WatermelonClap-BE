@@ -1,6 +1,6 @@
 package com.watermelon.server;
 
-import com.watermelon.server.order.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
 import com.watermelon.server.order.service.OrderEventSchedulingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
+
+
     private final OrderEventSchedulingService orderEventSchedulingService;
     private final CurrentOrderEventManageService currentOrderEventManageService;
     @Scheduled(fixedRate = 1000)
@@ -23,7 +25,7 @@ public class Scheduler {
             log.info("changed current order event id is {}", newCurrentEventId);
         }
     }
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 300000)
     public void checkCurrentOrderEvent(){
         Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
         log.info("current order event id is {}", currentEventId);
