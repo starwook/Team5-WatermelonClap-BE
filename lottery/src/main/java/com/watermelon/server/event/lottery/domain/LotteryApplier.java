@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(BaseEntityListener.class)
+//@EntityListeners(BaseEntityListener.class)
 //@ToString
 public class LotteryApplier extends BaseEntity {
 
