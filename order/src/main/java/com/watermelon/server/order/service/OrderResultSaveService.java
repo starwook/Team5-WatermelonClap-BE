@@ -10,7 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLTransientConnectionException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class OrderResultSaveService {
     private final HikariDataSource dataSource;
 
     @Transactional(transactionManager = "orderResultTransactionManager") //transactional 매니저도 변경
-    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken){
+    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken) throws CannotCreateTransactionException {
         if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
             saveOrderResult(orderResult);
