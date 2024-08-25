@@ -43,6 +43,7 @@ public class CurrentOrderEventManageService {
              orderApplyCountRepository.save(orderApplyCount);
              return true;
         }
+        if(!dataSource.isClosed()) dataSource.close();
         // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
         // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
