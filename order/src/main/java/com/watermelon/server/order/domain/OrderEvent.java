@@ -1,8 +1,8 @@
 package com.watermelon.server.order.domain;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.watermelon.server.BaseEntity;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
-import com.watermelon.server.order.result.domain.OrderApplyCount;
 import jakarta.persistence.*;
 import lombok.*;
 import org.slf4j.Logger;
@@ -15,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "order_event")
 @RequiredArgsConstructor
 public class OrderEvent extends BaseEntity {
 
@@ -33,8 +34,10 @@ public class OrderEvent extends BaseEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int winnerCount;
+
     private int currentWinnerCount;
     @Setter
+//    @Enumerated(EnumType.STRING)
     private OrderEventStatus orderEventStatus;
 
     public OrderEvent(Quiz quiz, LocalDateTime startDate, LocalDateTime endDate) {
@@ -53,8 +56,6 @@ public class OrderEvent extends BaseEntity {
         this.orderEventStatus = OrderEventStatus.UPCOMING;
 
     }
-
-
 
     public static OrderEvent makeOrderEventWithOutImage(RequestOrderEventDto requestOrderEventDto){
         Quiz quiz = Quiz.makeQuiz(requestOrderEventDto.getQuiz());
@@ -115,9 +116,6 @@ public class OrderEvent extends BaseEntity {
                 .winnerCount(requestOrderEventDto.getWinnerCount())
                 .build();
     }
-
-
-
 
 
     @Transactional

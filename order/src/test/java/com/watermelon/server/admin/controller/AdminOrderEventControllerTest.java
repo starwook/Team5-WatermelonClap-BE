@@ -220,22 +220,5 @@ class AdminOrderEventControllerTest extends ControllerTest {
     }
 
 
-    //    RestDocumentationRequestBuilders.post(PATH)
-//            .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(
-//            RequestOrderEventDto.makeForTestOpened(
-//            RequestQuizDto.makeForTest(),RequestOrderRewardDto.makeForTest()
-//                                )
-//                                        ))
-    @Test
-    void testGetOrderEventForAdmin() {
-    }
 
-    @Test
-    void getOrderEventWinnersForAdmin() {
-    }
-
-    @Test
-    void handleWrongPhoneNumberFormatException() {
-    }
 }

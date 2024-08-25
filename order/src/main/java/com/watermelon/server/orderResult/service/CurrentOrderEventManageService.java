@@ -1,19 +1,19 @@
-package com.watermelon.server.order.service;
+package com.watermelon.server.orderResult.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
 
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.order.repository.OrderApplyCountRepository;
-import com.watermelon.server.order.result.domain.OrderApplyCount;
+import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderResult.domain.OrderApplyCount;
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceUnit;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -29,14 +29,10 @@ public class CurrentOrderEventManageService {
 
     private final OrderApplyCountRepository orderApplyCountRepository;
 
+   @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     private final HikariDataSource dataSource;
 
-    @PersistenceUnit
-    private final EntityManagerFactory entityManagerFactory;
-
-
-
-    @Transactional
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
         if(isOrderApplyFull()) {
             return false;
@@ -48,6 +44,7 @@ public class CurrentOrderEventManageService {
              orderApplyCountRepository.save(orderApplyCount);
              return true;
         }
+
         // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
         // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
@@ -67,14 +64,15 @@ public class CurrentOrderEventManageService {
         currentOrderEvent = orderEventFromDB;
         clearOrderApplyCount();
     }
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public int getCurrentApplyCount() {
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
 
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public void clearOrderApplyCount() {
         orderApplyCountRepository.findCurrent().get().clearCount();
-
     }
 
     public boolean checkPrevious(String submitAnswer){

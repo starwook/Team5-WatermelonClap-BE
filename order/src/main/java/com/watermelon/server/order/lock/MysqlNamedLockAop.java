@@ -1,7 +1,7 @@
 package com.watermelon.server.order.lock;
 
 
-import com.watermelon.server.order.repository.OrderResultRepository;
+import com.watermelon.server.orderResult.repository.OrderResultRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

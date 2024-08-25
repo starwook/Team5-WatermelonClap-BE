@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Getter
+@Table(name = "order_event_winner")
 public class OrderEventWinner extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +40,4 @@ public class OrderEventWinner extends BaseEntity {
                 .applyTicket(applyTicket)
                 .build();
     }
-
-
 }

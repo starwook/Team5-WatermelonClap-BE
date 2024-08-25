@@ -1,6 +1,6 @@
-package com.watermelon.server.order.repository;
+package com.watermelon.server.orderResult.repository;
 
-import com.watermelon.server.order.result.domain.OrderResult;
+import com.watermelon.server.orderResult.domain.OrderResult;
 
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;

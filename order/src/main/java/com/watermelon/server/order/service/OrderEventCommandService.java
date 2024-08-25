@@ -11,6 +11,7 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
 
+import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +48,6 @@ public class OrderEventCommandService {
     public Long findOrderEventToMakeInProgress(){
         List<OrderEvent> orderEvents = orderEventRepository.findAll();
         if(orderEvents.isEmpty()) return currentOrderEventManageService.getCurrentOrderEventId();// 이벤트 없을시 스킵
-
         for(OrderEvent orderEvent : orderEvents){
             //현재 이벤트중 시간에 맞는 이벤트가 있다면 현재 이벤트로 설정한다
             if(orderEvent.isTimeInEventTime(LocalDateTime.now())){

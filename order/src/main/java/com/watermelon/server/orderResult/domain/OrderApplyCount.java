@@ -1,15 +1,16 @@
-package com.watermelon.server.order.result.domain;
+package com.watermelon.server.orderResult.domain;
+
 
 
 import com.watermelon.server.order.domain.OrderEvent;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
+@Table(name="order_apply_count")
 public class OrderApplyCount {
     @Id
     @GeneratedValue
@@ -17,7 +18,6 @@ public class OrderApplyCount {
 
     @Setter
     private int count;
-//
 
     public static OrderApplyCount create(OrderEvent orderEvent) {
         return OrderApplyCount.builder()
