@@ -26,7 +26,7 @@ public class OrderResultCommandService {
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
-    private final int toGetConnectionCount = 5;
+    private final int toGetConnectionCount = 120;
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
@@ -39,7 +39,6 @@ public class OrderResultCommandService {
             }
             catch (CannotCreateTransactionException e){ //timeOut됐을시에
 //                e.printStackTrace();
-                log.info(i+"/1차 시도 실패");//한 번 씩 더 검사한다
                 if(currentOrderEventManageService.isOrderApplyFull()){
                     return ResponseApplyTicketDto.fullApply();
                 }
