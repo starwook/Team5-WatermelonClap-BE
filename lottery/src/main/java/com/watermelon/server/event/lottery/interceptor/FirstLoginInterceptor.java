@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -40,7 +41,7 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
         log.info("linkId:{}", linkId);
 
         boolean success = false;
-        for(int i=0; i<300&&!success; i++){
+        for(int i=0; i<30&&!success; i++){
             try {
                 lotteryService.firstLogin(
                         request.getAttribute(HEADER_UID).toString(),
@@ -49,6 +50,8 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
                 success = true;
             }catch (ObjectOptimisticLockingFailureException e){
                 log.info("first login failure:{}", i);
+            }catch (CannotAcquireLockException e){
+                log.info("cannot acquire lock:{}", i);
             }
         }
 

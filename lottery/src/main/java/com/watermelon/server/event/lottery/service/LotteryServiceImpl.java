@@ -11,8 +11,8 @@ import com.watermelon.server.event.lottery.dto.response.ResponseLotteryRankDto;
 import com.watermelon.server.event.lottery.exception.LotteryApplierNotFoundException;
 import com.watermelon.server.event.lottery.repository.LotteryApplierRepository;
 import com.watermelon.server.event.lottery.repository.LotteryRewardRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +36,8 @@ public class LotteryServiceImpl implements LotteryService {
     private final LotteryRewardRepository lotteryRewardRepository;
     private final AuthUserService authUserService;
     private final LinkRepository linkRepository;
+
+    private final EntityManager entityManager;
 
     @Override
     public ResponseLotteryRankDto getLotteryRank(String uid) {
@@ -106,9 +110,10 @@ public class LotteryServiceImpl implements LotteryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void firstLogin(String uid, String uri) {
 
+        //lotteryApplier 조회
         if (isExist(uid)) return;
 
         //만약 등록되지 않은 유저라면
@@ -116,17 +121,17 @@ public class LotteryServiceImpl implements LotteryService {
 
         if (uri == null || uri.isEmpty()) return;
 
-        //링크 아이디가 존재한다면
-//        Link link = linkRepository.findByUri(uri).orElseThrow(LinkNotFoundException::new);
-//        link.addLinkViewCount();
-//        linkRepository.save(link);
+        //lotteryApplier 조회
+        Link link = linkRepository.findByUri(uri).orElseThrow(LinkNotFoundException::new);
 
-        LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByLinkUri(uri);
+        //lotteryApplier 에 락 적용
+        LotteryApplier lotteryApplier = lotteryApplierRepository.findByLotteryApplierByIdForUpdate(link.getLotteryApplier().getId());
+        entityManager.refresh(lotteryApplier);
         lotteryApplier.addRemainChance();
         lotteryApplierRepository.save(lotteryApplier);
+        entityManager.flush();
 
     }
-
 
     private void registration(String uid) {
         log.info("registration uid: {}", uid);
