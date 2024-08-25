@@ -47,7 +47,7 @@ public class OrderResultDataSourceConfig {
         hikariConfig.setUsername(username);
         hikariConfig.setPassword(password);
         hikariConfig.setMaximumPoolSize(maximumPoolSize);
-        hikariConfig.setConnectionTimeout(2500L);
+        hikariConfig.setConnectionTimeout(250L);
         hikariConfig.setPoolName("orderResultPool");
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);

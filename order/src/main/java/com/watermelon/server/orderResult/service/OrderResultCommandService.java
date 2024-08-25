@@ -10,9 +10,12 @@ import com.watermelon.server.order.service.OrderResultSaveService;
 
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
+import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 
@@ -27,6 +30,9 @@ public class OrderResultCommandService {
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
     private final int toGetConnectionCount = 120;
+    @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
+    @Getter
+    private final HikariDataSource dataSource;
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
@@ -38,6 +44,7 @@ public class OrderResultCommandService {
                 return ResponseApplyTicketDto.fullApply();
             }
             catch (CannotCreateTransactionException e){ //timeOut됐을시에
+                if(dataSource.isClosed()) return ResponseApplyTicketDto.fullApply();
 
                 e.printStackTrace();
                 if(currentOrderEventManageService.isOrderApplyFull()){
