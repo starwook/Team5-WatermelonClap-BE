@@ -68,10 +68,10 @@ class CurrentOrderEventManageServiceTest {
             orderApplyCount.addCount();
         }
         when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(orderApplyCount));
-//        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
-        org.junit.jupiter.api.Assertions.assertThrows(
-                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
-        );
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
+//        org.junit.jupiter.api.Assertions.assertThrows(
+//                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
+//        );
 
     }
 }
