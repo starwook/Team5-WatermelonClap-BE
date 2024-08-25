@@ -28,7 +28,7 @@ class HikariDataSourceTest {
 
 
     @Test
-    @DisplayName("")
+    @DisplayName("분리된 커넥션 풀 확인")
     public void isCustomHikariDataSource() {
         Assertions.assertThat(originalHikariDataSource.getConnectionTimeout()).isNotEqualTo(originalHikariDataSource.getDataSource());
 
