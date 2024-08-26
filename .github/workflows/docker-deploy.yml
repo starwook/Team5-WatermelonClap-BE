@@ -83,8 +83,10 @@ jobs:
         run: |
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^lottery/'; then
             echo "lottery_changed=true" >> $GITHUB_ENV
+            echo "lottery_changed=true"
           else
             echo "lottery_changed=false" >> $GITHUB_ENV
+            echo "lottery_changed=false"
           fi
 
       - name: Check if order directory changed
@@ -92,8 +94,10 @@ jobs:
         run: |
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^order/'; then
             echo "order_changed=true" >> $GITHUB_ENV
+            echo "order_changed=true"
           else
             echo "order_changed=false" >> $GITHUB_ENV
+            echo "order_changed=false"
           fi
 
       - name: Check if gateway directory changed
@@ -101,8 +105,10 @@ jobs:
         run: |
           if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^gateway/'; then
             echo "gateway_changed=true" >> $GITHUB_ENV
+            echo "gateway_changed=true"
           else
             echo "gateway_changed=false" >> $GITHUB_ENV
+            echo "gateway_changed=false"
           fi
 
       # 게이트웨이 배포
