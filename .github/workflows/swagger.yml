@@ -47,7 +47,7 @@ jobs:
 
       - name: Generate Swagger Document
         run: |
-          ./gradlew openapi3
+          ./gradlew openapi3 -x test
           ./gradlew customGenerateSwaggerUI
           ls
 
