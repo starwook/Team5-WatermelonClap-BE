@@ -1,4 +1,4 @@
-name: Order-Deploy
+name: Order-Test
 
 on:
   pull_request:
