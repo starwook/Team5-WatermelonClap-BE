@@ -105,4 +105,7 @@ res: 리소스 관련 (String, Color 등) 파일 `안드로이드 한정`
 3. 테스트를 기반으로 동작하는 안정적인 서비스 배포 (Spring Rest Docs 사용)
 
 ## 📌 아키텍처
+### 서버 아키텍처
 ![_최종_아키텍처 drawio (1)](https://github.com/user-attachments/assets/f5b3034c-4733-43a7-aa47-236213145130)
+### 배포 아키텍처
+<img width="701" alt="스크린샷 2024-08-26 오후 2 39 01" src="https://github.com/user-attachments/assets/095964c5-8a99-4e2c-aeac-91fa4e6841f2">
