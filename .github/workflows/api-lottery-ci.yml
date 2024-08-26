@@ -69,7 +69,7 @@ jobs:
 
       - name: Upload files to S3
         run: |
-          aws s3 cp order/build/generated-snippets/ s3://watermelon-s3-bucket/snippets/ --recursive
+          aws s3 cp lottery/build/generated-snippets/ s3://watermelon-s3-bucket/snippets/ --recursive
 
       # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
       - name: Publish Unit Test Results
