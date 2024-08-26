@@ -69,18 +69,18 @@ class LinkServiceImplTest {
 
     }
 
-    @Test
-    @DisplayName("링크 조회수 증가 - 성공")
-    void addLinkViewCount() {
-
-        //given
-        Link link = Link.createLink(Mockito.mock(LotteryApplier.class));
-        Mockito.when(linkRepository.findByUri(TEST_URI)).thenReturn(Optional.ofNullable(link));
-
-        //when
-        linkService.addLinkViewCount(TEST_URI);
-
-        //then
-        Mockito.verify(linkRepository).incrementViewCount(TEST_URI);
-    }
+//    @Test
+//    @DisplayName("링크 조회수 증가 - 성공")
+//    void addLinkViewCount() {
+//
+//        //given
+//        Link link = Link.createLink(Mockito.mock(LotteryApplier.class));
+//        Mockito.when(linkRepository.findByUri(TEST_URI)).thenReturn(Optional.ofNullable(link));
+//
+//        //when
+//        linkService.addLinkViewCount(TEST_URI);
+//
+//        //then
+//        Mockito.verify(linkRepository).incrementViewCount(TEST_URI);
+//    }
 }

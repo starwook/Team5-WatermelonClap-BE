@@ -41,14 +41,6 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    @Transactional
-    public void addLinkViewCount(String uri) {
-        log.info("Add link view count: {}", uri);
-        lotteryService.addRemainChance(getApplierByLinkKey(uri).getUid());
-        linkRepository.incrementViewCount(uri);
-    }
-
-    @Override
     public LotteryApplier getApplierByLinkKey(String uri) {
         Link link = findLink(uri);
         return link.getLotteryApplier();

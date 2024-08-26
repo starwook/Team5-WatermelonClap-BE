@@ -1,18 +1,20 @@
 package com.watermelon.server.event.lottery.interceptor;
 
-import com.watermelon.server.event.link.service.LinkService;
 import com.watermelon.server.event.lottery.service.LotteryService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
 
-import static com.watermelon.server.common.constants.HttpConstants.*;
+import static com.watermelon.server.common.constants.HttpConstants.HEADER_LINK_ID;
+import static com.watermelon.server.common.constants.HttpConstants.HEADER_UID;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +22,6 @@ import static com.watermelon.server.common.constants.HttpConstants.*;
 public class FirstLoginInterceptor implements HandlerInterceptor {
 
     private final LotteryService lotteryService;
-    private final LinkService linkService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -39,25 +40,27 @@ public class FirstLoginInterceptor implements HandlerInterceptor {
 
         log.info("linkId:{}", linkId);
 
-        checkFirstLogin(
-                request.getAttribute(HEADER_UID).toString(),
-                linkId
-        );
+        boolean success = false;
+        for(int i=0; i<30&&!success; i++){
+            try {
+                lotteryService.firstLogin(
+                        request.getAttribute(HEADER_UID).toString(),
+                        linkId
+                );
+                success = true;
+            }catch (ObjectOptimisticLockingFailureException e){
+                log.info("first login failure:{}", i);
+                try {
+                    Thread.sleep(50);
+                }catch (InterruptedException e1){
+                    throw new RuntimeException(e1);
+                }
+            }catch (CannotAcquireLockException e){
+                log.info("cannot acquire lock:{}", i);
+            }
+        }
 
         return true;
-    }
-
-    private void checkFirstLogin(String uid, String linkId){
-        if(lotteryService.isExist(uid)) return;
-
-        //만약 등록되지 않은 유저라면
-        lotteryService.registration(uid);
-
-        if(linkId==null || linkId.isEmpty()) return;
-
-        //링크 아이디가 존재한다면
-        linkService.addLinkViewCount(linkId);
-
     }
 
 }
