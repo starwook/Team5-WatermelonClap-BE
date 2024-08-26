@@ -81,6 +81,7 @@ public class S3ImageService {
 
     }
 
+
     public void validateImageFileExtension(String fileName) throws S3ImageFormatException {
         int lastDotIndex = fileName.lastIndexOf('.');
         if(lastDotIndex == -1){
