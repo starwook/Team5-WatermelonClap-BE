@@ -1,4 +1,4 @@
-name: Order-Deploy
+name: Upload Swagger
 
 on:
   pull_request:
