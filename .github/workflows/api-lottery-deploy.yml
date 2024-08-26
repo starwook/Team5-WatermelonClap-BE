@@ -1,8 +1,11 @@
 name: Lottery-Deploy
 
 on:
-  push:
-    branches: [deploy] # deploy branch에 머지했을 때 실행
+  pull_request:
+    branches:
+      - deploy
+    types:
+      - closed
     paths:
       - "lottery/**"
       - "common/**"
@@ -12,6 +15,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check if the pull request was merged
+        id: check_pr_merged
+        run: |
+          # Check if the PR was merged
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "pr_merged=true" >> $GITHUB_ENV
+          else
+            echo "pr_merged=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run some action if the PR was merged
+        if: env.pr_merged == 'true'
+        run: |
+          echo "The pull request was merged. Running additional actions..."  
+
       - uses: actions/checkout@v2
 
       - name: Set up JDK 17
