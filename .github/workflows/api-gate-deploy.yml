@@ -1,8 +1,8 @@
 name: Gateway-Deploy
 
 on:
-  pull_request:
-    branches: [dev] # master branch에 PR을 보낼 때 실행
+  push:
+    branches: [deploy] # deploy branch에 머지했을 때 실행
     paths:
       - "gateway/**"
 #  push:
