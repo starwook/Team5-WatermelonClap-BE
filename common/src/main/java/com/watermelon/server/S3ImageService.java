@@ -91,5 +91,4 @@ public class S3ImageService {
             throw new S3ImageFormatException("Invalid image file extension");
         }
     }
-
 }
