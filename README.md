@@ -1,20 +1,21 @@
 # 협업 관련
+
 ## 📌 github 규칙
 
 - main에 커밋 금지(보호 걸어놓음, 메인 빌드용)
 - 브랜치 네이밍 컨벤션 준수
-    - 이슈 번호
-    - `WB-1`
+  - 이슈 번호
+  - `WB-1`
 
 ## 📌 이슈 관리
 
 - [JIRA 활용](https://watermelon-clap.atlassian.net/jira/software/projects/CLAP/boards/1)
-    - 에픽을 스프린트 단위로 한다.
-    - 에픽은 도메인 단위로 한다.
-    - 스프린트는 1주일의 주기를 가진다.
-    - 스프린트 시작 시 백로그에서 이번주에 진행할 작업을 가져와 스프린트에 채운다.
-    - 스프린트 종료 시 회고를 통해 작업 진행속도 및 작업 분배에 대해 논의한다.
-    
+  - 에픽을 스프린트 단위로 한다.
+  - 에픽은 도메인 단위로 한다.
+  - 스프린트는 1주일의 주기를 가진다.
+  - 스프린트 시작 시 백로그에서 이번주에 진행할 작업을 가져와 스프린트에 채운다.
+  - 스프린트 종료 시 회고를 통해 작업 진행속도 및 작업 분배에 대해 논의한다.
+
 <img width="691" alt="image" src="https://github.com/user-attachments/assets/637d80b6-e830-4dea-aea1-e49798aa4c3a">
 
 ## 📌 커밋 컨벤션
@@ -42,11 +43,13 @@ res: 리소스 관련 (String, Color 등) 파일 `안드로이드 한정`
 ```
 
 ### 서버 종류 설명
+
 ```
 [api-server] : api 서버
 [gateway-server] : gateway 서버
 [all] : 레포 전체 적용 ex) README
 ```
+
 ### 커밋 한번에는 100줄 이상의 변화를 넣지 않는다.
 
 <br/>
@@ -57,7 +60,6 @@ res: 리소스 관련 (String, Color 등) 파일 `안드로이드 한정`
 - PR을 기준으로 CI/CD가 작동하므로 타 패키지에 불필요한 수정을 하지 않는다.
 - 최소 한명의 Reviewer을 설정한다.
 - 해당 Reviewer의 Approve와 빌드 및 테스트 성공이 되었을 경우에만 Merge 가능
-
 
 <br/>
 
@@ -88,12 +90,22 @@ res: 리소스 관련 (String, Color 등) 파일 `안드로이드 한정`
 # 설계
 
 ## 📌 ERD
+
 <img width="1376" alt="image" src="https://github.com/user-attachments/assets/07372ccf-ff02-4b97-9583-ec6cdaef8511">
 
 ## 📌 API 명세서
+
 <img width="715" alt="image" src="https://github.com/user-attachments/assets/225a4b1c-4cf6-4577-9035-6922136f127f">
 <img width="712" alt="image" src="https://github.com/user-attachments/assets/688df485-feaf-4176-a70b-77874658803e">
 
 ## 📌 개발 중점 사항
-1. 비용, 관리해야하는 리소스의 최소화
-2. 테스트를 기반으로 동작하는 안정적인 서비스 배포 (Spring Rest Docs 사용)
+
+1. 기획, 유저의 입장을 충분히 이해하며 개발하기
+2. 비용, 관리해야하는 리소스의 최소화
+3. 테스트를 기반으로 동작하는 안정적인 서비스 배포 (Spring Rest Docs 사용)
+
+## 📌 아키텍처
+### 서버 아키텍처
+![_최종_아키텍처 drawio (1)](https://github.com/user-attachments/assets/f5b3034c-4733-43a7-aa47-236213145130)
+### 배포 아키텍처
+<img width="701" alt="스크린샷 2024-08-26 오후 2 39 01" src="https://github.com/user-attachments/assets/095964c5-8a99-4e2c-aeac-91fa4e6841f2">

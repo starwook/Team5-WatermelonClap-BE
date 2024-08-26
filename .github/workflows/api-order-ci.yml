@@ -53,6 +53,18 @@ jobs:
       - name: Test
         run: ./gradlew --info order:test
 
+      - name: List files to be uploaded
+        run: |
+          echo "Files in order/build/generated-snippets/:"
+          ls -la order/build/generated-snippets/
+
+      # 스웨거 소스 업로드
+      - name: Upload multiple files as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: order-snippets
+          path: order/build/generated-snippets/*
+
       # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
