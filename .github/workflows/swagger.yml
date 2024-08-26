@@ -34,6 +34,10 @@ jobs:
           echo "Download Files"
           ls -la ./merged-api-spec
 
+      # Gradle wrapper 파일 실행 권한주기
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Generate Swagger Document
         run: |
           ./gradlew openapi3
