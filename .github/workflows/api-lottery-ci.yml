@@ -54,6 +54,18 @@ jobs:
         run: |
           ./gradlew --info lottery:test
 
+      - name: List files to be uploaded
+        run: |
+          echo "Files in lottery/build/generated-snippets/:"
+          ls -la lottery/build/generated-snippets/
+
+      # 스웨거 소스 업로드
+      - name: Upload multiple files as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: lottery-snippets
+          path: lottery/build/generated-snippets/*
+
       # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
