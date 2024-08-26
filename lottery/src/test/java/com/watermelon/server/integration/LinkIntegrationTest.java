@@ -21,12 +21,8 @@ public class LinkIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private LinkService linkService;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @Test
-    @DisplayName("[예정] 공유된 링크를 통해 이벤트 페이지로 이동해 가입한 사람이 있다면 링크의 유저에게 뽑기권을 1개 지급한다.")
-    @Transactional
+    @DisplayName("뽑기권 지급 - 성공")
     void test2() throws Exception {
 
         String uri = givenLotteryApplierHasUri();
@@ -35,8 +31,6 @@ public class LinkIntegrationTest extends BaseIntegrationTest {
 
         whenFirstUserWithLinkIdDrawParts(uri);
 
-        entityManager.refresh(lotteryApplier);
-
         LotteryApplier uidOwner = linkService.getApplierByLinkKey(uri);
 
         Assertions.assertThat(uidOwner.getRemainChance()).isEqualTo(4);
@@ -44,7 +38,7 @@ public class LinkIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @DisplayName("유저의 링크를 조회하면 단축된 링크를 반환한다.")
+    @DisplayName("단축 링크 조회 - 성공")
     void test4() throws Exception {
 
         LotteryApplier lotteryApplier = LotteryApplier.createLotteryApplier(TEST_UID);
