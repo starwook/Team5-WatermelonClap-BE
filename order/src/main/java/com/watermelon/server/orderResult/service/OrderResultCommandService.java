@@ -36,18 +36,21 @@ public class OrderResultCommandService {
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
-        for(int i=0;i<toGetConnectionCount;i++) {
-            try{
-                if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
-                    return ResponseApplyTicketDto.applySuccess(applyToken);
-                }
-                return ResponseApplyTicketDto.fullApply();
-            }
-            catch (CannotCreateTransactionException e){
-                if(currentOrderEventManageService.isOrderApplyFull()){
-                    return ResponseApplyTicketDto.fullApply();
-                }
-            }
+//        for(int i=0;i<toGetConnectionCount;i++) {
+//            try{
+//                if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
+//                    return ResponseApplyTicketDto.applySuccess(applyToken);
+//                }
+//                return ResponseApplyTicketDto.fullApply();
+//            }
+//            catch (CannotCreateTransactionException e){
+//                if(currentOrderEventManageService.isOrderApplyFull()){
+//                    return ResponseApplyTicketDto.fullApply();
+//                }
+//            }
+//        }
+        if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
+            return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
     }

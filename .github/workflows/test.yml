@@ -1,0 +1,107 @@
+name: Order-Deploy
+
+on:
+  pull_request:
+    branches:
+      - WB-299-api-server
+    types:
+      - closed
+    paths:
+      - "order/**"
+      - "common/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check if the pull request was merged
+        id: check_pr_merged
+        run: |
+          # Check if the PR was merged
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "pr_merged=true" >> $GITHUB_ENV
+          else
+            echo "pr_merged=false" >> $GITHUB_ENV
+          fi
+
+      - name: Run some action if the PR was merged
+        if: env.pr_merged == 'true'
+        run: |
+          echo "The pull request was merged. Running additional actions..."  
+
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: 💾 Cache Gradle & Spring
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set YML
+        run: |
+          cd common
+          ls -l
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > src/main/resources/application-local.yml
+          echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > src/main/resources/application-local-db.yml
+          echo "${{ secrets.APPLICATION_LOCAL_TOKEN }}" | base64 --decode > src/main/resources/application-local-token.yml
+
+          echo "${{ secrets.DEPLOY }}" | base64 --decode > src/main/resources/application-deploy.yml
+          echo "${{ secrets.DEPLOY_DB }}" | base64 --decode > src/main/resources/application-deploy-db.yml
+          echo "${{ secrets.DEPLOY_JWT_TOKEN }}" | base64 --decode > src/main/resources/application-deploy-token.yml
+          echo "${{ secrets.FIREBASE }}" | base64 --decode > src/main/resources/firebase.json
+          find src
+          cd ..
+
+      # Gradle wrapper 파일 실행 권한주기
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 애플리케이션을 Build 한다.
+      - name: 🔧 Build Spring server
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean order:build 
+
+      # 도커로 빌드한다.
+      - name: Docker build
+        run: |
+          cd /home/runner/work/Team5-WatermelonClap-BE/Team5-WatermelonClap-BE/order
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+          docker build --no-cache --platform linux/arm64/v8 -t app .
+          
+          docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-order:latest
+          docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-order:latest
+
+      # aws 에 업로드한다.
+      - name: deploy in aws
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{secrets.SSH_KEY}}
+          host: ${{secrets.SSH_API_ORDER_HOST}}
+          username: ${{secrets.SSH_USER}}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest
+            docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest watermelon-api-order:latest
+            docker stop $(docker ps -a -q) 
+            
+            docker run -i -d --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-order -p 8092:8092 watermelon-api-order:latest
+            
+            
+            docker rm $(docker ps --filter 'status=exited' -a -q)
+            # 실행 중이지 않으 모든 컨테인 삭제
+            docker image prune -a -f
+            # 사용하지않은 모든 이미지 삭제
