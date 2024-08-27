@@ -44,7 +44,6 @@ public class OrderResultCommandService {
                 return ResponseApplyTicketDto.fullApply();
             }
             catch (CannotCreateTransactionException e){
-                e.printStackTrace();
                 if(currentOrderEventManageService.isOrderApplyFull()){
                     return ResponseApplyTicketDto.fullApply();
                 }
@@ -58,7 +57,7 @@ public class OrderResultCommandService {
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
         // 퀴즈 틀릴 시에ApplyNotFullThenSave())
-        if(currentOrderEventManageService.isOrderApplyFull()){ //
+        if(currentOrderEventManageService.isOrderApplyFull()){
             return ResponseApplyTicketDto.fullApply();
         }
         if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
