@@ -1,7 +1,7 @@
 name: Order-Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - WB-299-api-server
     types:
