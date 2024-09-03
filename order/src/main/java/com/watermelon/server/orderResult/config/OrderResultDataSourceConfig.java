@@ -29,13 +29,13 @@ import java.util.Properties;
 @Configuration
 @Profile("!local")
 public class OrderResultDataSourceConfig {
-    @Value("${spring.datasource1.url}")
+    @Value("${spring.datasource.url}")
     private String url;
 
-    @Value("${spring.datasource1.username}")
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("${spring.datasource1.password}")
+    @Value("${spring.datasource.password}")
     private String password;
 
     @Value("${spring.jpa.show-sql}")

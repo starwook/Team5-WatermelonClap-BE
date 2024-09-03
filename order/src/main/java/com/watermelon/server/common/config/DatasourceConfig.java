@@ -29,19 +29,19 @@ import java.util.Properties;
 @Profile("!local")
 public class DatasourceConfig {
 
-    @Value("${spring.datasource1.url}")
+    @Value("${spring.datasource.url}")
     private String url;
 
-    @Value("${spring.datasource1.username}")
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("${spring.datasource1.password}")
+    @Value("${spring.datasource.password}")
     private String password;
 
-    @Value("${spring.datasource1.hikari.maximum-pool-size}")
+    @Value("${spring.datasource.hikari.maximum-pool-size}")
     private int maximumPoolSize;
 
-    @Value("${spring.datasource1.hikari.leak-detection-threshold}")
+    @Value("${spring.datasource.hikari.leak-detection-threshold}")
     private long leakDetectionThreshold;
 
     @Value("${spring.jpa.show-sql}")
