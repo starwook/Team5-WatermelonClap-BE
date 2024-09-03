@@ -72,7 +72,6 @@ jobs:
 
       - name: deploy in aws
         uses: appleboy/ssh-action@v1.0.3
-
         with:
           host: ${{ secrets.SSH_API_ORDER_HOST }}
           username: ${{secrets.SSH_USER}}
@@ -83,7 +82,7 @@ jobs:
                     docker stop $(docker ps -a -q)
                     
                     docker run -i -d  -p 8092:8092 watermelon-api-order:latest
-            #            --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-order
+#              --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-order
                     
                     docker rm $(docker ps --filter 'status=exited' -a -q)
             # 실행 중이지 않으 모든 컨테인 삭제
