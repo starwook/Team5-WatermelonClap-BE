@@ -86,11 +86,11 @@ jobs:
 
       # aws 에 업로드한다.
       - name: deploy in aws
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_API_ORDER_HOST }}
-          password: ${{secrets.SSH_API_ORDER_PASSWORD}}
           username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_API_ORDER_PASSWORD}}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest
             docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest watermelon-api-order:latest
