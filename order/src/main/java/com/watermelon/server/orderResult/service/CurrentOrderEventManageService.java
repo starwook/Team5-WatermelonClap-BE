@@ -66,6 +66,7 @@ public class CurrentOrderEventManageService {
     }
     @Transactional(transactionManager = "orderResultTransactionManager")
     public int getCurrentApplyCount() {
+        if(orderApplyCountRepository.findAll().isEmpty()) orderApplyCountRepository.save(OrderApplyCount.builder().build());
         return orderApplyCountRepository.findCurrent().get().getCount();
     }
 
