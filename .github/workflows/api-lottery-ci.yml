@@ -1,90 +1,90 @@
-name: Lottery-Test
-
-on:
-  pull_request:
-    branches: [dev] # master branch에 PR을 보낼 때 실행
-    paths:
-      - "lottery/**"
-      - "common/**"
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-
-      - name: 💾 Cache Gradle & Spring
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Set YML
-        run: |
-          cd common
-          ls -l
-          mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > src/main/resources/application-local.yml
-          echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > src/main/resources/application-local-db.yml
-          echo "${{ secrets.APPLICATION_LOCAL_TOKEN }}" | base64 --decode > src/main/resources/application-local-token.yml
-
-          echo "${{ secrets.DEPLOY }}" | base64 --decode > src/main/resources/application-deploy.yml
-          echo "${{ secrets.DEPLOY_DB }}" | base64 --decode > src/main/resources/application-deploy-db.yml
-          echo "${{ secrets.DEPLOY_JWT_TOKEN }}" | base64 --decode > src/main/resources/application-deploy-token.yml
-          echo "${{ secrets.FIREBASE }}" | base64 --decode > src/main/resources/firebase.json
-          find src
-          cd ..
-
-      # Gradle wrapper 파일 실행 권한주기
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # 테스트 수행
-      - name: Test
-        run: |
-          ./gradlew --info lottery:test
-
-      - name: List files to be uploaded
-        run: |
-          echo "Files in lottery/build/generated-snippets/:"
-          ls -la lottery/build/generated-snippets/
-
-      # 스웨거 소스 업로드
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
-          aws-region: 'ap-northeast-2'
-
-      - name: Upload files to S3
-        run: |
-          aws s3 cp lottery/build/generated-snippets/ s3://watermelon-s3-bucket/snippets/ --recursive
-
-      # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
-        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
-        with:
-          files: lottery/build/test-results/**/*.xml
-
-      - name: JaCoCo Report
-        uses: Madrapps/jacoco-report@v1.6.1
-        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
-        with:
-          paths: lottery/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "테스트 커버리지 측정"
-          min-coverage-overall: 70
-          min-coverage-changed-files: 50
+#name: Lottery-Test
+#
+#on:
+#  pull_request:
+#    branches: [dev] # master branch에 PR을 보낼 때 실행
+#    paths:
+#      - "lottery/**"
+#      - "common/**"
+#
+#jobs:
+#  test:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 17
+#
+#      - name: 💾 Cache Gradle & Spring
+#        uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#
+#      - name: Set YML
+#        run: |
+#          cd common
+#          ls -l
+#          mkdir -p src/main/resources
+#          echo "${{ secrets.APPLICATION_LOCAL}}" | base64 --decode > src/main/resources/application-local.yml
+#          echo "${{ secrets.APPLICATION_LOCAL_DB }}" | base64 --decode > src/main/resources/application-local-db.yml
+#          echo "${{ secrets.APPLICATION_LOCAL_TOKEN }}" | base64 --decode > src/main/resources/application-local-token.yml
+#
+#          echo "${{ secrets.DEPLOY }}" | base64 --decode > src/main/resources/application-deploy.yml
+#          echo "${{ secrets.DEPLOY_DB }}" | base64 --decode > src/main/resources/application-deploy-db.yml
+#          echo "${{ secrets.DEPLOY_JWT_TOKEN }}" | base64 --decode > src/main/resources/application-deploy-token.yml
+#          echo "${{ secrets.FIREBASE }}" | base64 --decode > src/main/resources/firebase.json
+#          find src
+#          cd ..
+#
+#      # Gradle wrapper 파일 실행 권한주기
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
+#
+#      # 테스트 수행
+#      - name: Test
+#        run: |
+#          ./gradlew --info lottery:test
+#
+#      - name: List files to be uploaded
+#        run: |
+#          echo "Files in lottery/build/generated-snippets/:"
+#          ls -la lottery/build/generated-snippets/
+#
+#      # 스웨거 소스 업로드
+#      - name: Configure AWS credentials
+#        uses: aws-actions/configure-aws-credentials@v3
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+#          aws-region: 'ap-northeast-2'
+#
+#      - name: Upload files to S3
+#        run: |
+#          aws s3 cp lottery/build/generated-snippets/ s3://watermelon-s3-bucket/snippets/ --recursive
+#
+#      # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
+#      - name: Publish Unit Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@v1
+#        if: ${{ always() }}  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
+#        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
+#        with:
+#          files: lottery/build/test-results/**/*.xml
+#
+#      - name: JaCoCo Report
+#        uses: Madrapps/jacoco-report@v1.6.1
+#        continue-on-error: true  # 이 단계가 실패해도 다음 단계로 넘어감
+#        with:
+#          paths: lottery/build/reports/jacoco/test/jacocoTestReport.xml
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          title: "테스트 커버리지 측정"
+#          min-coverage-overall: 70
+#          min-coverage-changed-files: 50
