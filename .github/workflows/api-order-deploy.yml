@@ -2,10 +2,7 @@ name: Order-Deploy
 
 on:
   pull_request:
-    branches:
-      - dev
-    types:
-      - closed
+    branches: [dev]
     paths:
       - "order/**"
       - "common/**"
@@ -17,6 +14,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
 
 #      - name: Check if the pull request was merged
 #        id: check_pr_merged
