@@ -73,6 +73,7 @@ jobs:
       - name: deploy in aws
         uses: appleboy/ssh-action@v1.0.3
         with:
+
           host: ${{ secrets.SSH_API_ORDER_HOST }}
           username: ${{secrets.SSH_USER}}
           password: ${{secrets.SSH_API_ORDER_PASSWORD}}
