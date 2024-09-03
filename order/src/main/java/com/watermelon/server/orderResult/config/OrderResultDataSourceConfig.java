@@ -38,6 +38,9 @@ public class OrderResultDataSourceConfig {
     @Value("${spring.datasource1.password}")
     private String password;
 
+    @Value("${spring.jpa.show-sql}")
+    private boolean showSql;
+
     private int maximumPoolSize =10;
 
     @Bean(name = "orderResultDatasource")
@@ -47,7 +50,7 @@ public class OrderResultDataSourceConfig {
         hikariConfig.setUsername(username);
         hikariConfig.setPassword(password);
         hikariConfig.setMaximumPoolSize(maximumPoolSize);
-        hikariConfig.setConnectionTimeout(250L);
+        hikariConfig.setConnectionTimeout(3000L);
         hikariConfig.setPoolName("orderResultPool");
         //orderEventQuiz만을 위한 설정 0.1초마다 확인
         return new HikariDataSource(hikariConfig);
@@ -56,7 +59,7 @@ public class OrderResultDataSourceConfig {
     public LocalContainerEntityManagerFactoryBean orderResultEntityManager(EntityManagerFactoryBuilder builder)  {
         Map<String,Object> properties = new HashMap<>();
         properties.put("dialect", "org.hibernate.dialect.MySQL8InnoDBDialect");
-        properties.put("hibernate.show_sql", true);
+        properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.format_sql", true);
 //        properties.put("hibernate.ddl-auto", "create");
         properties.put("open_in_view", "false");
