@@ -8,7 +8,7 @@ on:
       - "common/**"
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -64,6 +64,10 @@ jobs:
           docker tag app ${{secrets.DOCKER_USERNAME}}/watermelon-api-order:latest
           docker push ${{secrets.DOCKER_USERNAME}}/watermelon-api-order:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       # aws 에 업로드한다.
       - name: deploy in aws
         uses: appleboy/ssh-action@master
@@ -72,14 +76,14 @@ jobs:
           username: ${{secrets.SSH_USER}}
           password: ${{secrets.SSH_API_ORDER_PASSWORD}}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest
-            docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest watermelon-api-order:latest
-            docker stop $(docker ps -a -q)
-
-            docker run -i -d  -p 8092:8092 watermelon-api-order:latest
-#            --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-order
-
-            docker rm $(docker ps --filter 'status=exited' -a -q)
+                    docker pull ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest
+                    docker tag ${{ secrets.DOCKER_USERNAME }}/watermelon-api-order:latest watermelon-api-order:latest
+                    docker stop $(docker ps -a -q)
+                    
+                    docker run -i -d  -p 8092:8092 watermelon-api-order:latest
+            #            --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=watermelon-cloudwatch  --log-opt awslogs-stream=watermelon-order
+                    
+                    docker rm $(docker ps --filter 'status=exited' -a -q)
             # 실행 중이지 않으 모든 컨테인 삭제
-            docker image prune -a -f
+                    docker image prune -a -f
             # 사용하지않은 모든 이미지 삭제
