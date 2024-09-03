@@ -10,28 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-
-#      - name: Check if the pull request was merged
-#        id: check_pr_merged
-#        run: |
-#          # Check if the PR was merged
-#          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
-#            echo "pr_merged=true" >> $GITHUB_ENV
-#          else
-#            echo "pr_merged=false" >> $GITHUB_ENV
-#          fi
-#
-#      - name: Run some action if the PR was merged
-#        if: env.pr_merged == 'true'
-#        run: |
-#          echo "The pull request was merged. Running additional actions..."
-
-#      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: Set up JDK 17
         uses: actions/setup-java@v1
@@ -86,7 +66,7 @@ jobs:
 
       # aws 에 업로드한다.
       - name: deploy in aws
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_API_ORDER_HOST }}
           username: ${{secrets.SSH_USER}}
