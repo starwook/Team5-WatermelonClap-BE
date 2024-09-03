@@ -44,6 +44,9 @@ public class DatasourceConfig {
     @Value("${spring.datasource1.hikari.leak-detection-threshold}")
     private long leakDetectionThreshold;
 
+    @Value("${spring.jpa.show-sql}")
+    private boolean showSql;
+
     @Bean
     @Primary
     public DataSource dataSource() {
@@ -64,7 +67,7 @@ public class DatasourceConfig {
     ) {
         Map<String,Object> properties = new HashMap<>();
         properties.put("dialect", "org.hibernate.dialect.MySQL8InnoDBDialect");
-        properties.put("hibernate.show_sql", true);
+        properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.format_sql", true);
 //        properties.put("hibernate.ddl-auto", "update");
         properties.put("open_in_view", "false");

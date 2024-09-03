@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: ${name:local}
+    active: ${name:test}
 server:
   port: 8092
 management:
