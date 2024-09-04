@@ -27,7 +27,7 @@ public class CurrentOrderEventManageService {
     private OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
 
-    private volatile int currentApplyCountIndex;
+    @Getter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
     @Transactional(transactionManager = "orderResultTransactionManager")
@@ -119,7 +119,6 @@ public class CurrentOrderEventManageService {
          */
         orderApplyCountsFromServerMemory = orderApplyCountRepository.findAll();
         orderApplyCountsFromServerMemory.forEach(OrderApplyCount::clearCount);
-        currentApplyCountIndex = 0;
     }
 
     public boolean checkPrevious(String submitAnswer){

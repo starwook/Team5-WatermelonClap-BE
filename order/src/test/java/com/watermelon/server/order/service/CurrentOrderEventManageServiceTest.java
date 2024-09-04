@@ -20,8 +20,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +41,7 @@ class CurrentOrderEventManageServiceTest {
     private OrderApplyCountRepository orderApplyCountRepository;
     @BeforeEach
     void setUp() {
-        when(orderApplyCountRepository.findFirstApplyCountById()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+//        when(orderApplyCountRepository.findFirstApplyCountById()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
         currentOrderEventManageService.refreshOrderEventInProgress(
                 OrderEvent.makeOrderEventWithOutImage(
                         RequestOrderEventDto.makeForTestOpened(
@@ -47,12 +49,14 @@ class CurrentOrderEventManageServiceTest {
                         )
                 )
         );
+        List<OrderApplyCount> orderApplyCountList =currentOrderEventManageService.getOrderApplyCountsFromServerMemory();
+        for(int i=0;i<4;i++) orderApplyCountList.add(OrderApplyCount.createWithNothing());
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
-        when(orderApplyCountRepository.findLimitOneExclusiveLock()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isTrue();
     }
 
@@ -64,7 +68,8 @@ class CurrentOrderEventManageServiceTest {
         for(int i = 0; i<currentOrderEventManageService.getOrderEventFromServerMemory().getWinnerCount(); i++){
             orderApplyCount.addCount();
         }
-        when(orderApplyCountRepository.findLimitOneExclusiveLock()).thenReturn(Optional.of(orderApplyCount));
+
+        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(orderApplyCount));
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
 //        org.junit.jupiter.api.Assertions.assertThrows(
 //                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
