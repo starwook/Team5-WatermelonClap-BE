@@ -12,25 +12,31 @@ import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Stack;
 
 
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
     private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
+
     @Getter
     private OrderEvent currentOrderEvent;
-
     private final OrderApplyCountRepository orderApplyCountRepository;
+    private Stack<String> customHandOffQueue = new Stack<>();
 
-   @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
-    private final HikariDataSource dataSource;
+
+    public void addToCustomHandOffQueue(String applyTicket) {
+        customHandOffQueue.push(applyTicket);
+    }
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
@@ -44,26 +50,33 @@ public class CurrentOrderEventManageService {
              orderApplyCountRepository.save(orderApplyCount);
              return true;
         }
-
-        // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
-        // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
         this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
+
+
+
     @Transactional
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
-        //동일한 이벤트라면
+        /**
+         * 서버에 임시적으로 저장되어있는 OrderEvent와 DB에서 온 인자의 OrderEvent가 같다면
+         * 실제 DB에서 온 OrderEvent에, 서버에 임시적으로 저장되어있는 OrderEvent의 상태를 덮어씌운다.
+         *
+         * 하지만 다르다면 서버에 저장되어있는 OrderEvent를 최신화 시켜주고
+         * 당첨자 수 또한 초기화 시켜준다.
+         */
         if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
             if(getCurrentApplyCount()<currentOrderEvent.getWinnerCount()){
                 this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
             }
-            //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
             orderEventFromDB.setOrderEventStatus(currentOrderEvent.getOrderEventStatus());
             return;
         }
         currentOrderEvent = orderEventFromDB;
         clearOrderApplyCount();
     }
+
+
     @Transactional(transactionManager = "orderResultTransactionManager")
     public int getCurrentApplyCount() {
         if(orderApplyCountRepository.findAll().isEmpty()) orderApplyCountRepository.save(OrderApplyCount.builder().build());

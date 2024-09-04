@@ -40,18 +40,6 @@ public class OrderResultCommandService {
             return ResponseApplyTicketDto.applySuccess(applyToken);
         }
         return ResponseApplyTicketDto.fullApply();
-//        for(int i=0;i<toGetConnectionCount;i++) {
-//            try{
-//
-//            }
-//            catch (CannotCreateTransactionException e){
-//                e.printStackTrace();
-//                if(currentOrderEventManageService.isOrderApplyFull()){
-//                    return ResponseApplyTicketDto.fullApply();
-//                }
-//            }
-//        }
-//        return ResponseApplyTicketDto.fullApply();
     }
 
 
