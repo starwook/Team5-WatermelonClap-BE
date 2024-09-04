@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 
 @Component
-@Profile("test")
+@Profile("!local")
 @RequiredArgsConstructor
 public class OrderEventTestEnvironmentService {
 
