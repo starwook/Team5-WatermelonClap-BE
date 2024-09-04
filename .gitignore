@@ -88,7 +88,7 @@ node_modules
 *.xml
 !**/release/log4j2.xml
 !lottery/pinpoint-agent-2.5.3/profiles/release/log4j2.xml
-
+order/pinpoint-agent-2.2.3-NCP-RC1/pinpoint.license
 # bin
 *.bin
 

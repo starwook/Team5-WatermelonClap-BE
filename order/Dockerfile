@@ -16,5 +16,6 @@ ENV SPRING_PROFILES_ACTIVE=deploy
 ENTRYPOINT ["java","-jar", \
 "-javaagent:/usr/local/pinpoint-bootstrap.jar", \
 "-Dpinpoint.applicationName=order-api", \
+"-Dpinpoint.agentId=order-api-id",\
 "-Dpinpoint.config=/usr/local/pinpoint-root.config", \
 "/watermelon.jar"]
