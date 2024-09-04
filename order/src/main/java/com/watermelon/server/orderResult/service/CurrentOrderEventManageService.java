@@ -7,20 +7,15 @@ import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
 import com.watermelon.server.orderResult.domain.OrderApplyCount;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -29,32 +24,54 @@ public class CurrentOrderEventManageService {
     private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
 
     @Getter
-    private OrderEvent currentOrderEvent;
+    private OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
-    private Stack<String> customHandOffQueue = new Stack<>();
 
-
-    public void addToCustomHandOffQueue(String applyTicket) {
-        customHandOffQueue.push(applyTicket);
-    }
+    private volatile int currentApplyCountIndex;
+    private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
         if(isOrderApplyFull()) {
             return false;
         }
-        Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
-        OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
-        if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
-             orderApplyCount.addCount();
-             orderApplyCountRepository.save(orderApplyCount);
-             return true;
+        /**
+         * DB에 저장되어서 Lock을 걸고 가져오는 OrderApplyCount와
+         * 서버에 저장되어있는 OrderApplyCount를 분리하여 관리
+         */
+        OrderApplyCount orderApplyCountFromServerMemory = null;
+        OrderApplyCount orderApplyCountFromDB =null;
+        for(int i = 0; i< orderApplyCountsFromServerMemory.size(); i++){
+            /**
+             * 서버에 저장되어있는 OrderApplyCount가 꽉 차지 않았을때만 락을 걸고 동일 ID를 가지고 있는 OrderApplyCount를 가져온다
+             */
+            if(orderApplyCountsFromServerMemory.get(i).isFull()) continue;
+            orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(i);
+            orderApplyCountFromDB =
+                    orderApplyCountRepository.findWithIdExclusiveLock(orderApplyCountFromServerMemory.getId()).get();
+
+            if(orderEventFromServerMemory.getWinnerCount()/ orderApplyCountsFromServerMemory.size()- orderApplyCountFromDB.getCount()>0){
+                orderApplyCountFromDB.addCount();
+                orderApplyCountRepository.save(orderApplyCountFromDB);
+                return true;
+            }
+            /**
+             * 이 부분에 오면 현재의 OrderApplyCount가 꽉 찼다는 의미이다.
+             */
+            orderApplyCountFromServerMemory.makeFull();
+            orderApplyCountFromDB.makeFull();
         }
-        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
+        /**
+         * 모든 ApplyCount가 꽉 차지 않았다면 return false만 해주고, 모두 꽉 찼다면 현재 이벤트의 상태 flag를 바꾼다
+         */
+        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
+            if(!eachOrderApplyCount.isFull()){
+                return false;
+            }
+        }
+        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);
         return false;
     }
-
-
 
     @Transactional
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
@@ -65,40 +82,56 @@ public class CurrentOrderEventManageService {
          * 하지만 다르다면 서버에 저장되어있는 OrderEvent를 최신화 시켜주고
          * 당첨자 수 또한 초기화 시켜준다.
          */
-        if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
-            if(getCurrentApplyCount()<currentOrderEvent.getWinnerCount()){
-                this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
+        if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
+
+            if(!checkIfApplyCountFull()){
+                this.orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
             }
-            orderEventFromDB.setOrderEventStatus(currentOrderEvent.getOrderEventStatus());
+            orderEventFromDB.setOrderEventStatus(orderEventFromServerMemory.getOrderEventStatus());
             return;
         }
-        currentOrderEvent = orderEventFromDB;
+        orderEventFromServerMemory = orderEventFromDB;
         clearOrderApplyCount();
     }
 
-
     @Transactional(transactionManager = "orderResultTransactionManager")
-    public int getCurrentApplyCount() {
-        if(orderApplyCountRepository.findAll().isEmpty()) orderApplyCountRepository.save(OrderApplyCount.builder().build());
-        return orderApplyCountRepository.findCurrent().get().getCount();
+    public boolean checkIfApplyCountFull() {
+        boolean isAllApplyCountFull = true;
+        List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
+        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
+            if(eachOrderApplyCount.getCount()<orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size()){
+                eachOrderApplyCount.makeNotFull();
+                isAllApplyCountFull = false;
+                orderApplyCountRepository.save(eachOrderApplyCount);
+            }
+        }
+        return isAllApplyCountFull;
     }
 
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public void clearOrderApplyCount() {
-        orderApplyCountRepository.findCurrent().get().clearCount();
+        /**
+         * 서버에 저장되고 있는 이벤트가 바뀔 때마다 실행되는 메소드
+         * 1. 모든 ApplyCount를 찾아온 다음
+         * 2. 각 레코드들을 초기화 시켜주고
+         * 3. 현재 요청이 들어온다면 접근해야하는 ApplyCount의 ID의 인덱스가 저장되어있는 변수를 초기화 해준다.
+         */
+        orderApplyCountsFromServerMemory = orderApplyCountRepository.findAll();
+        orderApplyCountsFromServerMemory.forEach(OrderApplyCount::clearCount);
+        currentApplyCountIndex = 0;
     }
 
     public boolean checkPrevious(String submitAnswer){
-        if(currentOrderEvent.getQuiz().isCorrect(submitAnswer)) return true;
+        if(orderEventFromServerMemory.getQuiz().isCorrect(submitAnswer)) return true;
         return false;
     }
     public boolean isTimeInEvent(LocalDateTime now){
-        if(now.isAfter(currentOrderEvent.getStartDate()) &&now.isBefore(currentOrderEvent.getEndDate())) return true;
+        if(now.isAfter(orderEventFromServerMemory.getStartDate()) &&now.isBefore(orderEventFromServerMemory.getEndDate())) return true;
         return false;
     }
     public boolean isEventAndQuizIdWrong( Long eventId,Long quizId) {
-        if(currentOrderEvent !=null && currentOrderEvent.getId().equals(eventId) && currentOrderEvent.getQuiz().getId().equals(quizId)) return true;
+        if(orderEventFromServerMemory !=null && orderEventFromServerMemory.getId().equals(eventId) && orderEventFromServerMemory.getQuiz().getId().equals(quizId)) return true;
         return false;
     }
     public void checkingInfoErrors( Long eventId, Long quizId)
@@ -107,12 +140,12 @@ public class CurrentOrderEventManageService {
         if (!isTimeInEvent(LocalDateTime.now())) throw new NotDuringEventPeriodException();
     }
     public Long getCurrentOrderEventId() {
-        if (currentOrderEvent == null) return null;
-        return this.currentOrderEvent.getId();
+        if (orderEventFromServerMemory == null) return null;
+        return this.orderEventFromServerMemory.getId();
     }
 
     public boolean isOrderApplyFull() {
-        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
+        if(orderEventFromServerMemory.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
         return false;
     }
 }
