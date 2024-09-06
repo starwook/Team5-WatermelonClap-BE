@@ -47,7 +47,7 @@ public class CurrentOrderEventManageService {
             OrderApplyCount orderApplyCountFromDB =null;
 
             /**
-             * 현재 접근해야하는 ApplyCount의 Index(PK아 님)를 배정받은 후에
+             * 배정받은 현재 접근해야하는 ApplyCount의 Index에
              * 서버에 저장되어있는 ApplyCount 목록에서 해당 Index의 ApplyCount를 가져온다
              * 그 이후에 해당 ApplyCount의 ID로 DB에 비관적 락을 걸고 접근한다.
              */

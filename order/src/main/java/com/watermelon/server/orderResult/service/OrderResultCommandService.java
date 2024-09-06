@@ -36,7 +36,14 @@ public class OrderResultCommandService {
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         try{
+            /**
+             * ApplyCountIndex는 당첨자 수만큼 배정된다. 그리고 ApplyCountIndex에는 접근해야하는 ApplyCount 레코드의 정보 또한 가지고 있다.
+             * ApplyCountIndex를 할당받지 못 한다면 즉 이미 모든 값들이 할당되었다면, NullPointerException이 발생한다.
+             */
             int applyCountIndex = indexLoadBalanceService.getIndex();
+            /**
+             * 에러가 발생하지 않고 할당이 성공했을 때만  토큰을 생성하고 DB커넥션을 여는 메소드를 실행한다.
+             */
             String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
             if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken,applyCountIndex)){ // 커넥션이 열리는 메소드
                 return ResponseApplyTicketDto.applySuccess(applyToken);
