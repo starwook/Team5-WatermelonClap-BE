@@ -17,4 +17,9 @@ public class ConcurrentQueueIndexLoadBalanceService implements IndexLoadBalanceS
 
     }
 
+    @Override
+    public void refreshQueue() {
+
+    }
+
 }

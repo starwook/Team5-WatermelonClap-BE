@@ -8,11 +8,12 @@ import java.util.concurrent.BlockingQueue;
 
 @Service
 public class BlockingQueueIndexLoadBalanceService implements IndexLoadBalanceService {
+
+
+    private BlockingQueue<Integer> blockingQueue;
     public BlockingQueueIndexLoadBalanceService() {
         this.blockingQueue = new ArrayBlockingQueue<>(1000);
     }
-
-    private BlockingQueue<Integer> blockingQueue;
     @Override
     public int getIndex() {
         return blockingQueue.poll();
@@ -22,6 +23,12 @@ public class BlockingQueueIndexLoadBalanceService implements IndexLoadBalanceSer
         for(int index=0;index<totalIndexCount;index++){
             blockingQueue.add((index%maxIndexNumber));
         }
+    }
+
+    @Override
+    public void refreshQueue() {
+        this.blockingQueue.clear();
+
     }
 }
 

@@ -92,46 +92,56 @@ public class CurrentOrderEventManageService {
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
         /**
          * 서버에 임시적으로 저장되어있는 OrderEvent와 DB에서 온 인자의 OrderEvent가 같다면
-         * 실제 DB에서 온 OrderEvent에, 서버에 임시적으로 저장되어있는 OrderEvent의 상태를 덮어씌운다.
+         * 실제 DB에 서버에 임시적으로 저장되어있는 OrderEvent의 상태를 덮어씌운다.
          *
          * 하지만 다르다면 서버에 저장되어있는 OrderEvent를 최신화 시켜주고
          * 당첨자 수 또한 초기화 시켜준다.
          */
         if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
-            if(!checkIfApplyCountFull()){
-                orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
-            }
+//            if(!checkIfApplyCountFull()){
+//                orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
+//            }
             orderEventFromDB.setOrderEventStatus(orderEventFromServerMemory.getOrderEventStatus());
             return;
         }
         orderEventFromServerMemory = orderEventFromDB;
-        clearOrderApplyCount();
-        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
+        refreshApplyCount();
     }
 
+
+
     @Transactional(transactionManager = "orderResultTransactionManager")
-    public boolean checkIfApplyCountFull() {
-        boolean isAllApplyCountFull = true;
-        int remainWinnerCount = 0;
-        List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
-        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
-            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size();
-            int eachRemainWinnerCount = eachOrderApplyCount.getCount();
-            if(eachRemainWinnerCount<eachMaxWinnerCount){
-                if(eachOrderApplyCount.isFull()){
-                    remainWinnerCount += (eachMaxWinnerCount-eachRemainWinnerCount);
-                    log.info("remain Winner Count = {}" ,remainWinnerCount);
-                    eachOrderApplyCount.makeNotFull();
-                    isAllApplyCountFull = false;
-                    orderApplyCountRepository.save(eachOrderApplyCount);
-                }
-            }
-        }
-        indexLoadBalanceService.addIndexToQueue(remainWinnerCount, orderApplyCountsFromDB.size());
-        orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
-        return isAllApplyCountFull;
+    public void refreshApplyCount() {
+        clearOrderApplyCount();
+        indexLoadBalanceService.refreshQueue();
+        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
+        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
     }
-    @Transactional(transactionManager = "orderResultTransactionManager")
+
+//    @Transactional(transactionManager = "orderResultTransactionManager")
+//    public boolean checkIfApplyCountFull() {
+//        boolean isAllApplyCountFull = true;
+//        int remainWinnerCount = 0;
+//        List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
+//        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
+//            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size();
+//            int eachRemainWinnerCount = eachOrderApplyCount.getCount();
+//            if(eachRemainWinnerCount<eachMaxWinnerCount){
+//                if(eachOrderApplyCount.isFull()){
+//                    remainWinnerCount += (eachMaxWinnerCount-eachRemainWinnerCount);
+//                    log.info("remain Winner Count = {}" ,remainWinnerCount);
+//                    eachOrderApplyCount.makeNotFull();
+//                    isAllApplyCountFull = false;
+//                    orderApplyCountRepository.save(eachOrderApplyCount);
+//                }
+//            }
+//        }
+//        indexLoadBalanceService.addIndexToQueue(remainWinnerCount, orderApplyCountsFromDB.size());
+//        orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
+//        return isAllApplyCountFull;
+//    }
+//
+
     public void clearOrderApplyCount() {
         /**
          * 서버에 저장되고 있는 이벤트가 바뀔 때마다 실행되는 메소드

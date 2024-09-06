@@ -17,9 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.CannotCreateTransactionException;
-
-import java.sql.SQLTransientConnectionException;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +63,10 @@ public class OrderResultCommandService {
             return ResponseApplyTicketDto.wrongAnswer();
         }
         return createTokenAndMakeTicket(orderEventId);
+    }
+
+    public void refreshApplyCount(){
+        currentOrderEventManageService.refreshApplyCount();
     }
 //         log.info("Locked OrderApplyCount record");
 //        log.info("HikariCP Pool Status: ");
