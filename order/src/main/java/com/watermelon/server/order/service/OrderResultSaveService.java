@@ -26,8 +26,8 @@ public class OrderResultSaveService {
 
 
     @Transactional(transactionManager = "orderResultTransactionManager")
-    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken) throws CannotCreateTransactionException {
-        if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
+    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken,int applyCountIndex) throws CannotCreateTransactionException {
+        if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(applyCountIndex)){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
             saveOrderResult(orderResult);
             return true;

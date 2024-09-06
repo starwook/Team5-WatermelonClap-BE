@@ -29,20 +29,24 @@ public class OrderResultCommandService {
     private final CurrentOrderEventManageService currentOrderEventManageService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
-    private final int toGetConnectionCount = 120;
+    private final IndexLoadBalanceService indexLoadBalanceService;
     @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     @Getter
     private final HikariDataSource dataSource;
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
-        String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
-        if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)){ // 커넥션이 열리는 메소드
-            return ResponseApplyTicketDto.applySuccess(applyToken);
+        try{
+            int applyCountIndex = indexLoadBalanceService.getIndex();
+            String applyToken = applyTokenProvider.createTokenByOrderEventId(JwtPayload.from(String.valueOf(orderEventId)));
+            if(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken,applyCountIndex)){ // 커넥션이 열리는 메소드
+                return ResponseApplyTicketDto.applySuccess(applyToken);
+            }
+            return ResponseApplyTicketDto.fullApply();
+        }catch (NullPointerException noMoreIndexException){
+            noMoreIndexException.printStackTrace();
+            return ResponseApplyTicketDto.fullApply();
         }
-        return ResponseApplyTicketDto.fullApply();
     }
-
-
 
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
         currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
