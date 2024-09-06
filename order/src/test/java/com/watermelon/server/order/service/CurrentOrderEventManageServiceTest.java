@@ -42,6 +42,7 @@ class CurrentOrderEventManageServiceTest {
     private CurrentOrderEventManageService currentOrderEventManageService;
     @Mock
     private OrderApplyCountRepository orderApplyCountRepository;
+    private int applyCountIndex =1;
     @BeforeEach
     void setUp() {
 //        when(orderApplyCountRepository.findFirstApplyCountById()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
@@ -60,7 +61,7 @@ class CurrentOrderEventManageServiceTest {
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
         when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isTrue();
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
     }
 
     @Test
@@ -73,10 +74,6 @@ class CurrentOrderEventManageServiceTest {
         }
 
         when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(orderApplyCount));
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
-//        org.junit.jupiter.api.Assertions.assertThrows(
-//                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
-//        );
-
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
     }
 }

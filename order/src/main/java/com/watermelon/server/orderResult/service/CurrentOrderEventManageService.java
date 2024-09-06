@@ -30,6 +30,7 @@ public class CurrentOrderEventManageService {
     private final IndexLoadBalanceService indexLoadBalanceService;
 
     @Getter
+    @Setter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
     @Transactional(transactionManager = "orderResultTransactionManager")
