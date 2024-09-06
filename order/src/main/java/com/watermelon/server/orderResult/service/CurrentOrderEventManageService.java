@@ -24,7 +24,7 @@ public class CurrentOrderEventManageService {
     private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
 
     @Getter
-    private OrderEvent orderEventFromServerMemory;
+    private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
 
     @Getter
@@ -32,6 +32,7 @@ public class CurrentOrderEventManageService {
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
+        log.info(orderEventFromServerMemory.toString());
         if(isOrderApplyFull()) {
             return false;
         }
@@ -84,8 +85,9 @@ public class CurrentOrderEventManageService {
          */
         if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
 
+            log.info(orderEventFromServerMemory.toString());
             if(!checkIfApplyCountFull()){
-                this.orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
+                orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
             }
             orderEventFromDB.setOrderEventStatus(orderEventFromServerMemory.getOrderEventStatus());
             return;
@@ -105,6 +107,7 @@ public class CurrentOrderEventManageService {
                 orderApplyCountRepository.save(eachOrderApplyCount);
             }
         }
+        orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
         return isAllApplyCountFull;
     }
 
@@ -113,9 +116,8 @@ public class CurrentOrderEventManageService {
     public void clearOrderApplyCount() {
         /**
          * 서버에 저장되고 있는 이벤트가 바뀔 때마다 실행되는 메소드
-         * 1. 모든 ApplyCount를 찾아온 다음
-         * 2. 각 레코드들을 초기화 시켜주고
-         * 3. 현재 요청이 들어온다면 접근해야하는 ApplyCount의 ID의 인덱스가 저장되어있는 변수를 초기화 해준다.
+         * 1. 모든 ApplyCount 레코드들을 초기화 시켜주고
+         * 2. 현재 요청이 들어온다면 접근해야하는 ApplyCount의 ID의 인덱스가 저장되어있는 변수를 초기화 해준다.
          */
         orderApplyCountsFromServerMemory = orderApplyCountRepository.findAll();
         orderApplyCountsFromServerMemory.forEach(OrderApplyCount::clearCount);
@@ -144,7 +146,9 @@ public class CurrentOrderEventManageService {
     }
 
     public boolean isOrderApplyFull() {
-        if(orderEventFromServerMemory.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
+        if(orderEventFromServerMemory.getOrderEventStatus().equals(OrderEventStatus.CLOSED)){
+            return true;
+        }
         return false;
     }
 }
