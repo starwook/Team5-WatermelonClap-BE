@@ -7,6 +7,7 @@ import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.orderResult.repository.OrderResultRepository;
 import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
 import com.watermelon.server.order.service.OrderResultSaveService;
+import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
 import com.watermelon.server.orderResult.service.OrderResultCommandService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import org.assertj.core.api.Assertions;
@@ -37,6 +38,8 @@ class OrderResultCommandServiceTest {
     @InjectMocks
     private OrderResultCommandService orderResultCommandService;
     @Mock
+    private  IndexLoadBalanceService indexLoadBalanceService;
+    @Mock
     private OrderResultRepository orderResultRepository;
 
     @Mock
@@ -46,6 +49,7 @@ class OrderResultCommandServiceTest {
     private Long quizId=1L;
     private Long eventId =1L;
     private String answer ="answer";
+    private int applyCountIndex =1;
 
     private String applyToken = "applyToken";
 
@@ -53,8 +57,8 @@ class OrderResultCommandServiceTest {
     @DisplayName("선착순 응모 결과 생성(선착순 꽉차지 않을시))")
     public void makeOrderResult() {
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
-
-        when(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)).thenReturn(true);
+        when(indexLoadBalanceService.getIndex()).thenReturn(applyCountIndex);
+        when(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken,applyCountIndex)).thenReturn(true);
         Assertions.assertThat(orderResultCommandService.createTokenAndMakeTicket(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.SUCCESS.name());
     }
@@ -63,7 +67,8 @@ class OrderResultCommandServiceTest {
     public void makeOrderResultFull() {
 
         when(applyTokenProvider.createTokenByOrderEventId(any())).thenReturn(applyToken);
-        when(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken)).thenReturn(false);
+        when(indexLoadBalanceService.getIndex()).thenReturn(applyCountIndex);
+        when(orderResultSaveService.isOrderApplyNotFullThenSaveConnectionOpen(applyToken,applyCountIndex)).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.createTokenAndMakeTicket(1L).getResult())
                 .isEqualTo(ApplyTicketStatus.CLOSED.name());
     }

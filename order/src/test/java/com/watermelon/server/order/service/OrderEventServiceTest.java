@@ -25,7 +25,7 @@ import java.util.List;
 
 //@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //replace None 사용시 실제 DB사용
-@TestPropertySource("classpath:application-local-db.yml")
+
 @SpringBootTest(classes = OrderApplication.class)
 @DisplayName("[단위] 선착순 서비스")
 class OrderEventServiceTest {

@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLTransientConnectionException;
+import java.util.Stack;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +24,10 @@ public class OrderResultSaveService {
     private final OrderResultRepository orderResultRepository;
     private final CurrentOrderEventManageService currentOrderEventManageService;
 
-    @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
-    @Getter
-    private final HikariDataSource dataSource;
 
-    @Transactional(transactionManager = "orderResultTransactionManager") //transactional 매니저도 변경
-    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken) throws CannotCreateTransactionException {
-        if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()){
+    @Transactional(transactionManager = "orderResultTransactionManager")
+    public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken,int applyCountIndex) throws CannotCreateTransactionException {
+        if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(applyCountIndex)){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
             saveOrderResult(orderResult);
             return true;

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,8 +19,17 @@ public interface OrderApplyCountRepository extends JpaRepository<OrderApplyCount
             @QueryHint(name = "jakarta.persistence.lock.timeout", value = "2000")
     })
     @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
-    Optional<OrderApplyCount> findWithExclusiveLock();
+    Optional<OrderApplyCount> findLimitOneExclusiveLock();
+
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE) //InnoDb는 레코드락만 건다
+    @QueryHints({
+            @QueryHint(name = "jakarta.persistence.lock.timeout", value = "2000")
+    })
+    @Query("select oac from OrderApplyCount oac where oac.id = :id")
+    Optional<OrderApplyCount> findWithIdExclusiveLock(@Param("id") Long id);
+
     @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
-    Optional<OrderApplyCount> findCurrent();
+    Optional<OrderApplyCount> findFirstApplyCountById();
 
 }

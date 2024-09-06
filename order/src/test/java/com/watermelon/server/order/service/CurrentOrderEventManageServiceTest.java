@@ -10,7 +10,7 @@ import com.watermelon.server.orderResult.repository.OrderResultRepository;
 import com.watermelon.server.orderResult.domain.OrderApplyCount;
 import com.watermelon.server.orderResult.domain.OrderResult;
 import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
-import org.assertj.core.api.Assert;
+import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +19,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.CannotCreateTransactionException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,13 +36,16 @@ class CurrentOrderEventManageServiceTest {
     private OrderEventRepository orderEventRepository;
     @Mock
     private OrderResultRepository orderResultRepository;
+    @Mock
+    private IndexLoadBalanceService indexLoadBalanceService;
     @InjectMocks
     private CurrentOrderEventManageService currentOrderEventManageService;
     @Mock
     private OrderApplyCountRepository orderApplyCountRepository;
+    private int applyCountIndex =1;
     @BeforeEach
     void setUp() {
-        when(orderApplyCountRepository.findCurrent()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+//        when(orderApplyCountRepository.findFirstApplyCountById()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
         currentOrderEventManageService.refreshOrderEventInProgress(
                 OrderEvent.makeOrderEventWithOutImage(
                         RequestOrderEventDto.makeForTestOpened(
@@ -50,13 +53,15 @@ class CurrentOrderEventManageServiceTest {
                         )
                 )
         );
+        List<OrderApplyCount> orderApplyCountList =currentOrderEventManageService.getOrderApplyCountsFromServerMemory();
+        for(int i=0;i<4;i++) orderApplyCountList.add(OrderApplyCount.createWithNothing());
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
-        when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isTrue();
+        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
     }
 
     @Test
@@ -64,14 +69,11 @@ class CurrentOrderEventManageServiceTest {
     public void checkIsOrderApplyFull() {
         ArrayList<OrderResult> orderResults = new ArrayList<>();
         OrderApplyCount orderApplyCount = OrderApplyCount.createWithNothing();
-        for(int i=0;i<currentOrderEventManageService.getCurrentOrderEvent().getWinnerCount();i++){
+        for(int i = 0; i<currentOrderEventManageService.getOrderEventFromServerMemory().getWinnerCount(); i++){
             orderApplyCount.addCount();
         }
-        when(orderApplyCountRepository.findWithExclusiveLock()).thenReturn(Optional.of(orderApplyCount));
-        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()).isFalse();
-//        org.junit.jupiter.api.Assertions.assertThrows(
-//                NullPointerException.class ,()-> currentOrderEventManageService.isOrderApplyNotFullThenPlusCount()
-//        );
 
+        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(orderApplyCount));
+        Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
     }
 }

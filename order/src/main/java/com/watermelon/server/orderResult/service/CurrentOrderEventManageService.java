@@ -7,85 +7,161 @@ import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
 import com.watermelon.server.orderResult.domain.OrderApplyCount;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
 public class CurrentOrderEventManageService {
     private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
-    @Getter
-    private OrderEvent currentOrderEvent;
 
+    @Getter
+    private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
 
-   @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
-    private final HikariDataSource dataSource;
+    private final IndexLoadBalanceService indexLoadBalanceService;
+
+    @Getter
+    @Setter
+    private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
     @Transactional(transactionManager = "orderResultTransactionManager")
-    public boolean isOrderApplyNotFullThenPlusCount(){
+    public boolean isOrderApplyNotFullThenPlusCount(int applyCountIndex){
         if(isOrderApplyFull()) {
             return false;
         }
-        Optional<OrderApplyCount> orderApplyCountOptional = orderApplyCountRepository.findWithExclusiveLock();
-        OrderApplyCount orderApplyCount = orderApplyCountOptional.get();
-        if(currentOrderEvent.getWinnerCount()- orderApplyCount.getCount()>0){
-             orderApplyCount.addCount();
-             orderApplyCountRepository.save(orderApplyCount);
-             return true;
-        }
+        /**
+         * DB에 저장되어서 Lock을 걸고 가져오는 OrderApplyCount와
+         * 서버에 저장되어있는 OrderApplyCount를 분리하여 관리
+         */
+        try{
+            OrderApplyCount orderApplyCountFromServerMemory = null;
+            OrderApplyCount orderApplyCountFromDB =null;
 
-        // 여기서 CLOSED로 바꿀지 언정 실제 DB에는 저장되지 않음(currentOrderEvent는 DB에서 꺼내온 정보가 아님)
-        // 이 CLOSED는 REDIS를 읽는 작업을 줄여주기 위한 변수용
-        this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.CLOSED);
-        return false;
+            /**
+             * 배정받은 현재 접근해야하는 ApplyCount의 Index에
+             * 서버에 저장되어있는 ApplyCount 목록에서 해당 Index의 ApplyCount를 가져온다
+             * 그 이후에 해당 ApplyCount의 ID로 DB에 비관적 락을 걸고 접근한다.
+             */
+            orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
+            if(orderApplyCountFromServerMemory.isFull()) return false;
+
+            orderApplyCountFromDB =
+                    orderApplyCountRepository.findWithIdExclusiveLock(orderApplyCountFromServerMemory.getId()).get();
+
+            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
+            if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){
+                orderApplyCountFromDB.addCount();
+                orderApplyCountRepository.save(orderApplyCountFromDB);
+                /**
+                 * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
+                 * 해당 ApplyCount의 flag를 full로 만들어준다.
+                 */
+                if(eachMaxWinnerCount == orderApplyCountFromDB.getCount()){
+                    orderApplyCountFromServerMemory.makeFull();
+                    orderApplyCountFromDB.makeFull();
+                    orderApplyCountRepository.save(orderApplyCountFromDB);
+                }
+                return true;
+            }
+            return false;
+        }
+        finally {
+            /**
+             * 모든 ApplyCount의 flag가 full이라면 현재 이벤트의 상태 flag를 바꾼다
+             */
+            boolean allFull = true;
+            for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
+                if(!eachOrderApplyCount.isFull()){
+                    allFull = false;
+                }
+            }
+            if(allFull){orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);}
+        }
     }
+
     @Transactional
     public void refreshOrderEventInProgress(OrderEvent orderEventFromDB){
-        //동일한 이벤트라면
-        if(currentOrderEvent != null && orderEventFromDB.getId().equals(currentOrderEvent.getId())){
-            if(getCurrentApplyCount()<currentOrderEvent.getWinnerCount()){
-                this.currentOrderEvent.setOrderEventStatus(OrderEventStatus.OPEN);
-            }
-            //실제 DB에 CLOSED로 바꾸어주는 메소드는 이곳 (스케쥴링)
-            orderEventFromDB.setOrderEventStatus(currentOrderEvent.getOrderEventStatus());
+        /**
+         * 서버에 임시적으로 저장되어있는 OrderEvent와 DB에서 온 인자의 OrderEvent가 같다면
+         * 실제 DB에 서버에 임시적으로 저장되어있는 OrderEvent의 상태를 덮어씌운다.
+         *
+         * 하지만 다르다면 서버에 저장되어있는 OrderEvent를 최신화 시켜주고
+         * 당첨자 수 또한 초기화 시켜준다.
+         */
+        if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
+//            if(!checkIfApplyCountFull()){
+//                orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
+//            }
+            orderEventFromDB.setOrderEventStatus(orderEventFromServerMemory.getOrderEventStatus());
             return;
         }
-        currentOrderEvent = orderEventFromDB;
+        orderEventFromServerMemory = orderEventFromDB;
+        refreshApplyCount();
+    }
+
+
+
+    @Transactional(transactionManager = "orderResultTransactionManager")
+    public void refreshApplyCount() {
         clearOrderApplyCount();
-    }
-    @Transactional(transactionManager = "orderResultTransactionManager")
-    public int getCurrentApplyCount() {
-        if(orderApplyCountRepository.findAll().isEmpty()) orderApplyCountRepository.save(OrderApplyCount.builder().build());
-        return orderApplyCountRepository.findCurrent().get().getCount();
+        indexLoadBalanceService.refreshQueue();
+        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
+        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
     }
 
+//    @Transactional(transactionManager = "orderResultTransactionManager")
+//    public boolean checkIfApplyCountFull() {
+//        boolean isAllApplyCountFull = true;
+//        int remainWinnerCount = 0;
+//        List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
+//        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
+//            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size();
+//            int eachRemainWinnerCount = eachOrderApplyCount.getCount();
+//            if(eachRemainWinnerCount<eachMaxWinnerCount){
+//                if(eachOrderApplyCount.isFull()){
+//                    remainWinnerCount += (eachMaxWinnerCount-eachRemainWinnerCount);
+//                    log.info("remain Winner Count = {}" ,remainWinnerCount);
+//                    eachOrderApplyCount.makeNotFull();
+//                    isAllApplyCountFull = false;
+//                    orderApplyCountRepository.save(eachOrderApplyCount);
+//                }
+//            }
+//        }
+//        indexLoadBalanceService.addIndexToQueue(remainWinnerCount, orderApplyCountsFromDB.size());
+//        orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
+//        return isAllApplyCountFull;
+//    }
+//
 
-    @Transactional(transactionManager = "orderResultTransactionManager")
     public void clearOrderApplyCount() {
-        orderApplyCountRepository.findCurrent().get().clearCount();
+        /**
+         * 서버에 저장되고 있는 이벤트가 바뀔 때마다 실행되는 메소드
+         * 1. 모든 ApplyCount 레코드들을 초기화 시켜주고
+         * 2. 현재 요청이 들어온다면 접근해야하는 ApplyCount의 ID의 인덱스가 저장되어있는 변수를 초기화 해준다.
+         */
+        orderApplyCountsFromServerMemory = orderApplyCountRepository.findAll();
+        orderApplyCountsFromServerMemory.forEach(OrderApplyCount::clearCount);
     }
 
     public boolean checkPrevious(String submitAnswer){
-        if(currentOrderEvent.getQuiz().isCorrect(submitAnswer)) return true;
+        if(orderEventFromServerMemory.getQuiz().isCorrect(submitAnswer)) return true;
         return false;
     }
     public boolean isTimeInEvent(LocalDateTime now){
-        if(now.isAfter(currentOrderEvent.getStartDate()) &&now.isBefore(currentOrderEvent.getEndDate())) return true;
+        if(now.isAfter(orderEventFromServerMemory.getStartDate()) &&now.isBefore(orderEventFromServerMemory.getEndDate())) return true;
         return false;
     }
     public boolean isEventAndQuizIdWrong( Long eventId,Long quizId) {
-        if(currentOrderEvent !=null && currentOrderEvent.getId().equals(eventId) && currentOrderEvent.getQuiz().getId().equals(quizId)) return true;
+        if(orderEventFromServerMemory !=null && orderEventFromServerMemory.getId().equals(eventId) && orderEventFromServerMemory.getQuiz().getId().equals(quizId)) return true;
         return false;
     }
     public void checkingInfoErrors( Long eventId, Long quizId)
@@ -94,12 +170,14 @@ public class CurrentOrderEventManageService {
         if (!isTimeInEvent(LocalDateTime.now())) throw new NotDuringEventPeriodException();
     }
     public Long getCurrentOrderEventId() {
-        if (currentOrderEvent == null) return null;
-        return this.currentOrderEvent.getId();
+        if (orderEventFromServerMemory == null) return null;
+        return this.orderEventFromServerMemory.getId();
     }
 
     public boolean isOrderApplyFull() {
-        if(currentOrderEvent.getOrderEventStatus().equals(OrderEventStatus.CLOSED))return true;
+        if(orderEventFromServerMemory.getOrderEventStatus().equals(OrderEventStatus.CLOSED)){
+            return true;
+        }
         return false;
     }
 }

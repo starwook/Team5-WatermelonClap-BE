@@ -66,6 +66,12 @@ public class OrderEventController {
         orderEventCommandService.makeOrderEventWinner(applyTicket,eventId,orderEventWinnerRequestDto);
     }
 
+    @PostMapping(path="/event/order/refresh")
+    public void refreshOrderEvent(){
+        orderResultCommandService.refreshApplyCount();
+    }
+
+
     @ExceptionHandler(WrongPhoneNumberFormatException.class)
     public ResponseEntity<ErrorResponse> handleWrongPhoneNumberFormatException(WrongPhoneNumberFormatException wrongPhoneNumberFormatException){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ErrorResponse.of(wrongPhoneNumberFormatException.getMessage()));

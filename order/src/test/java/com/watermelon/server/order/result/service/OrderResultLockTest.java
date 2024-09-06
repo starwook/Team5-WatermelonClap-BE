@@ -41,7 +41,7 @@ class OrderResultLockTest {
 
     @BeforeEach
     void setUp() {
-         Optional<OrderApplyCount> applyCount = orderApplyCountRepository.findCurrent();
+         Optional<OrderApplyCount> applyCount = orderApplyCountRepository.findFirstApplyCountById();
          if(applyCount.isPresent()) {
              orderApplyCount = applyCount.get();
          }

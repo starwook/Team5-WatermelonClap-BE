@@ -19,6 +19,8 @@ public class OrderApplyCount {
     @Setter
     private int count;
 
+    boolean isFull;
+
     public static OrderApplyCount create(OrderEvent orderEvent) {
         return OrderApplyCount.builder()
                 .build();
@@ -37,5 +39,12 @@ public class OrderApplyCount {
 
     public void clearCount(){
         this.count = 0;
+        this.isFull = false;
+    }
+    public void makeFull(){
+        this.isFull = true;
+    }
+    public void makeNotFull(){
+        this.isFull = false;
     }
 }
