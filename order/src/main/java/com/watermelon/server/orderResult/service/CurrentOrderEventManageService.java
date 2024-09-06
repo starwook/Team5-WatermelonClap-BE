@@ -44,19 +44,27 @@ public class CurrentOrderEventManageService {
         try{
             OrderApplyCount orderApplyCountFromServerMemory = null;
             OrderApplyCount orderApplyCountFromDB =null;
-            int orderApplyCountIndex = indexLoadBalanceService.getIndex();
-            log.info("indexNumber is {}", orderApplyCountIndex);
-            if(orderApplyCountsFromServerMemory.get(orderApplyCountIndex).isFull()) return false;
 
+            /**
+             * 현재 접근해야하는 ApplyCount의 Index(PK아 님)를 배정받은 후에
+             * 서버에 저장되어있는 ApplyCount 목록에서 해당 Index의 ApplyCount를 가져온다
+             * 그 이후에 해당 ApplyCount의 ID로 DB에 비관적 락을 걸고 접근한다.
+             */
+            int orderApplyCountIndex = indexLoadBalanceService.getIndex();
             orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(orderApplyCountIndex);
+            if(orderApplyCountFromServerMemory.isFull()) return false;
+
             orderApplyCountFromDB =
                     orderApplyCountRepository.findWithIdExclusiveLock(orderApplyCountFromServerMemory.getId()).get();
 
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
-
             if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){
                 orderApplyCountFromDB.addCount();
                 orderApplyCountRepository.save(orderApplyCountFromDB);
+                /**
+                 * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
+                 * 해당 ApplyCount의 flag를 full로 만들어준다.
+                 */
                 if(eachMaxWinnerCount == orderApplyCountFromDB.getCount()){
                     orderApplyCountFromServerMemory.makeFull();
                     orderApplyCountFromDB.makeFull();
@@ -67,6 +75,9 @@ public class CurrentOrderEventManageService {
             return false;
         }
         finally {
+            /**
+             * 모든 ApplyCount의 flag가 full이라면 현재 이벤트의 상태 flag를 바꾼다
+             */
             boolean allFull = true;
             for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
                 if(!eachOrderApplyCount.isFull()){
@@ -75,13 +86,6 @@ public class CurrentOrderEventManageService {
             }
             if(allFull){orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);}
         }
-        /**
-         * 이 부분에 오면 현재의 OrderApplyCount가 꽉 찼다는 의미이다.
-         */
-
-        /**
-         * 모든 ApplyCount가 꽉 차지 않았다면 return false만 해주고, 모두 꽉 찼다면 현재 이벤트의 상태 flag를 바꾼다
-         */
     }
 
     @Transactional
