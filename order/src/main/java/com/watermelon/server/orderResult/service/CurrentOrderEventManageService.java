@@ -27,12 +27,13 @@ public class CurrentOrderEventManageService {
     private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
 
+    private final IndexLoadBalanceService indexLoadBalanceService;
+
     @Getter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(){
-        log.info(orderEventFromServerMemory.toString());
         if(isOrderApplyFull()) {
             return false;
         }
@@ -40,38 +41,47 @@ public class CurrentOrderEventManageService {
          * DB에 저장되어서 Lock을 걸고 가져오는 OrderApplyCount와
          * 서버에 저장되어있는 OrderApplyCount를 분리하여 관리
          */
-        OrderApplyCount orderApplyCountFromServerMemory = null;
-        OrderApplyCount orderApplyCountFromDB =null;
-        for(int i = 0; i< orderApplyCountsFromServerMemory.size(); i++){
-            /**
-             * 서버에 저장되어있는 OrderApplyCount가 꽉 차지 않았을때만 락을 걸고 동일 ID를 가지고 있는 OrderApplyCount를 가져온다
-             */
-            if(orderApplyCountsFromServerMemory.get(i).isFull()) continue;
-            orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(i);
+        try{
+            OrderApplyCount orderApplyCountFromServerMemory = null;
+            OrderApplyCount orderApplyCountFromDB =null;
+            int orderApplyCountIndex = indexLoadBalanceService.getIndex();
+            log.info("indexNumber is {}", orderApplyCountIndex);
+            if(orderApplyCountsFromServerMemory.get(orderApplyCountIndex).isFull()) return false;
+
+            orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(orderApplyCountIndex);
             orderApplyCountFromDB =
                     orderApplyCountRepository.findWithIdExclusiveLock(orderApplyCountFromServerMemory.getId()).get();
 
-            if(orderEventFromServerMemory.getWinnerCount()/ orderApplyCountsFromServerMemory.size()- orderApplyCountFromDB.getCount()>0){
+            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
+
+            if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){
                 orderApplyCountFromDB.addCount();
                 orderApplyCountRepository.save(orderApplyCountFromDB);
+                if(eachMaxWinnerCount == orderApplyCountFromDB.getCount()){
+                    orderApplyCountFromServerMemory.makeFull();
+                    orderApplyCountFromDB.makeFull();
+                    orderApplyCountRepository.save(orderApplyCountFromDB);
+                }
                 return true;
             }
-            /**
-             * 이 부분에 오면 현재의 OrderApplyCount가 꽉 찼다는 의미이다.
-             */
-            orderApplyCountFromServerMemory.makeFull();
-            orderApplyCountFromDB.makeFull();
+            return false;
         }
+        finally {
+            boolean allFull = true;
+            for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
+                if(!eachOrderApplyCount.isFull()){
+                    allFull = false;
+                }
+            }
+            if(allFull){orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);}
+        }
+        /**
+         * 이 부분에 오면 현재의 OrderApplyCount가 꽉 찼다는 의미이다.
+         */
+
         /**
          * 모든 ApplyCount가 꽉 차지 않았다면 return false만 해주고, 모두 꽉 찼다면 현재 이벤트의 상태 flag를 바꾼다
          */
-        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
-            if(!eachOrderApplyCount.isFull()){
-                return false;
-            }
-        }
-        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);
-        return false;
     }
 
     @Transactional
@@ -84,8 +94,6 @@ public class CurrentOrderEventManageService {
          * 당첨자 수 또한 초기화 시켜준다.
          */
         if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
-
-            log.info(orderEventFromServerMemory.toString());
             if(!checkIfApplyCountFull()){
                 orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
             }
@@ -94,24 +102,31 @@ public class CurrentOrderEventManageService {
         }
         orderEventFromServerMemory = orderEventFromDB;
         clearOrderApplyCount();
+        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
     }
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean checkIfApplyCountFull() {
         boolean isAllApplyCountFull = true;
+        int remainWinnerCount = 0;
         List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
         for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
-            if(eachOrderApplyCount.getCount()<orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size()){
-                eachOrderApplyCount.makeNotFull();
-                isAllApplyCountFull = false;
-                orderApplyCountRepository.save(eachOrderApplyCount);
+            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size();
+            int eachRemainWinnerCount = eachOrderApplyCount.getCount();
+            if(eachRemainWinnerCount<eachMaxWinnerCount){
+                if(eachOrderApplyCount.isFull()){
+                    remainWinnerCount += (eachMaxWinnerCount-eachRemainWinnerCount);
+                    log.info("remain Winner Count = {}" ,remainWinnerCount);
+                    eachOrderApplyCount.makeNotFull();
+                    isAllApplyCountFull = false;
+                    orderApplyCountRepository.save(eachOrderApplyCount);
+                }
             }
         }
+        indexLoadBalanceService.addIndexToQueue(remainWinnerCount, orderApplyCountsFromDB.size());
         orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
         return isAllApplyCountFull;
     }
-
-
     @Transactional(transactionManager = "orderResultTransactionManager")
     public void clearOrderApplyCount() {
         /**
