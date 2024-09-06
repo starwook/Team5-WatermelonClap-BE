@@ -10,6 +10,7 @@ import com.watermelon.server.orderResult.repository.OrderResultRepository;
 import com.watermelon.server.orderResult.domain.OrderApplyCount;
 import com.watermelon.server.orderResult.domain.OrderResult;
 import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,8 @@ class CurrentOrderEventManageServiceTest {
     private OrderEventRepository orderEventRepository;
     @Mock
     private OrderResultRepository orderResultRepository;
+    @Mock
+    private IndexLoadBalanceService indexLoadBalanceService;
     @InjectMocks
     private CurrentOrderEventManageService currentOrderEventManageService;
     @Mock
