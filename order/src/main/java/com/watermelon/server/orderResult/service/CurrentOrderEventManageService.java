@@ -47,8 +47,8 @@ public class CurrentOrderEventManageService {
             OrderApplyCount orderApplyCountFromDB =null;
 
             /**
-             * 배정받은 현재 접근해야하는 ApplyCount의 Index에
-             * 서버에 저장되어있는 ApplyCount 목록에서 해당 Index의 ApplyCount를 가져온다
+             * 배정받은 현재 접근해야하는 ApplyCount의 Index로
+             * 서버에 저장되어있는 ApplyCount 목록에서 ApplyCount를 가져온다
              * 그 이후에 해당 ApplyCount의 ID로 DB에 비관적 락을 걸고 접근한다.
              */
             orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
@@ -98,16 +98,12 @@ public class CurrentOrderEventManageService {
          * 당첨자 수 또한 초기화 시켜준다.
          */
         if(orderEventFromServerMemory != null && orderEventFromDB.getId().equals(orderEventFromServerMemory.getId())){
-//            if(!checkIfApplyCountFull()){
-//                orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
-//            }
             orderEventFromDB.setOrderEventStatus(orderEventFromServerMemory.getOrderEventStatus());
             return;
         }
         orderEventFromServerMemory = orderEventFromDB;
         refreshApplyCount();
     }
-
 
 
     @Transactional(transactionManager = "orderResultTransactionManager")
@@ -117,30 +113,6 @@ public class CurrentOrderEventManageService {
         indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
         orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
     }
-
-//    @Transactional(transactionManager = "orderResultTransactionManager")
-//    public boolean checkIfApplyCountFull() {
-//        boolean isAllApplyCountFull = true;
-//        int remainWinnerCount = 0;
-//        List<OrderApplyCount> orderApplyCountsFromDB = orderApplyCountRepository.findAll();
-//        for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromDB){
-//            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromDB.size();
-//            int eachRemainWinnerCount = eachOrderApplyCount.getCount();
-//            if(eachRemainWinnerCount<eachMaxWinnerCount){
-//                if(eachOrderApplyCount.isFull()){
-//                    remainWinnerCount += (eachMaxWinnerCount-eachRemainWinnerCount);
-//                    log.info("remain Winner Count = {}" ,remainWinnerCount);
-//                    eachOrderApplyCount.makeNotFull();
-//                    isAllApplyCountFull = false;
-//                    orderApplyCountRepository.save(eachOrderApplyCount);
-//                }
-//            }
-//        }
-//        indexLoadBalanceService.addIndexToQueue(remainWinnerCount, orderApplyCountsFromDB.size());
-//        orderApplyCountsFromServerMemory = orderApplyCountsFromDB;
-//        return isAllApplyCountFull;
-//    }
-//
 
     public void clearOrderApplyCount() {
         /**

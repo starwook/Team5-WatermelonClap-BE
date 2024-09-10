@@ -27,6 +27,10 @@ public class OrderResultSaveService {
 
     @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenSaveConnectionOpen(String applyToken,int applyCountIndex) throws CannotCreateTransactionException {
+        /**
+         * 먼저 락을 걸고 ApplyCount의 숫자를 올리는 메소드가 성공하였다면
+         * 토큰이 담긴 당첨 정보를 저장한다
+         */
         if( currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(applyCountIndex)){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
             saveOrderResult(orderResult);
