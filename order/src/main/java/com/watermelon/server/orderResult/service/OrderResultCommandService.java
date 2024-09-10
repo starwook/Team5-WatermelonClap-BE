@@ -31,6 +31,24 @@ public class OrderResultCommandService {
     @Getter
     private final HikariDataSource dataSource;
 
+    /**
+     * DB 접근이 가능한지 확인하기 이전에
+     * 이벤트 ID, 퀴즈 정답, 꽉 찼는지 Flag 변수 등
+     * 빠르게 검증 가능한 것들을 먼저 검증한다.
+     */
+    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
+        currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
+        if(currentOrderEventManageService.isOrderApplyFull()){ //
+            return ResponseApplyTicketDto.fullApply();
+        }
+        if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
+        {
+            return ResponseApplyTicketDto.wrongAnswer();
+        }
+        return createTokenAndMakeTicket(orderEventId);
+    }
+
+
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         try{
             /**
@@ -52,22 +70,10 @@ public class OrderResultCommandService {
         }
     }
 
-    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
-        currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
-        // 퀴즈 틀릴 시에ApplyNotFullThenSave())
-        if(currentOrderEventManageService.isOrderApplyFull()){ //
-            return ResponseApplyTicketDto.fullApply();
-        }
-        if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
-        {
-            return ResponseApplyTicketDto.wrongAnswer();
-        }
-        return createTokenAndMakeTicket(orderEventId);
-    }
-
     public void refreshApplyCount(){
         currentOrderEventManageService.refreshApplyCount();
     }
+
 //         log.info("Locked OrderApplyCount record");
 //        log.info("HikariCP Pool Status: ");
 //        log.info("Active Connections: {}", dataSource.getHikariPoolMXBean().getActiveConnections());
