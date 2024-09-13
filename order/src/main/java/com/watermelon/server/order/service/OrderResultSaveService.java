@@ -26,7 +26,7 @@ public class OrderResultSaveService {
          */
         if(orderEventFromServerMemoryService.isOrderApplyNotFullThenPlusCount(applyCountIndex)){
             OrderResult orderResult = OrderResult.makeOrderEventApply(applyToken);
-            saveOrderResult(orderResult);
+//            saveOrderResult(orderResult);
             return true;
         }
         return false;
