@@ -28,12 +28,12 @@ public class CurrentOrderEventManageService {
     private final OrderApplyCountRepository orderApplyCountRepository;
 
     private final IndexLoadBalanceService indexLoadBalanceService;
+    private final OrderApplyCountLockService orderApplyCountLockService;
 
     @Getter
     @Setter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
-    @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(int applyCountIndex){
         if(isOrderApplyFull()) {
             return false;
@@ -54,8 +54,8 @@ public class CurrentOrderEventManageService {
             orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
             if(orderApplyCountFromServerMemory.isFull()) return false;
 
-            orderApplyCountFromDB =
-                    orderApplyCountRepository.findWithIdExclusiveLock(orderApplyCountFromServerMemory.getId()).get();
+            orderApplyCountFromDB = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountFromServerMemory.getId());
+
 
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
             if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){

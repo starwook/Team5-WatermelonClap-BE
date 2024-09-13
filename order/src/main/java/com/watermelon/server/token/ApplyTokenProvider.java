@@ -11,12 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.UUID;
 
 
-@Component
+@Service
 public class ApplyTokenProvider {
     private static final Logger log = LoggerFactory.getLogger(ApplyTokenProvider.class);
     private final SecretKey TOKEN_SECRET;
