@@ -28,8 +28,7 @@ public class OrderEventFromServerMemoryService {
     private final OrderApplyCountRepository orderApplyCountRepository;
 
     private final IndexLoadBalanceService indexLoadBalanceService;
-    private final OrderApplyCountLockService orderApplyCountLockService;
-
+    private final OrderApplyCountService orderApplyCountService;
     @Getter
     @Setter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
@@ -44,31 +43,18 @@ public class OrderEventFromServerMemoryService {
          */
         try{
             OrderApplyCount orderApplyCountFromServerMemory = null;
-            OrderApplyCount orderApplyCountFromDB =null;
-
             /**
              * 배정받은 현재 접근해야하는 ApplyCount의 Index로
-             * 서버에 저장되어있는 ApplyCount 목록에서 ApplyCount를 가져온다
-             * 그 이후에 해당 ApplyCount의 ID로 DB에 비관적 락을 걸고 접근한다.
+             * 1차적으로. 서버에 저장되어있는 ApplyCount 목록에서 ApplyCount를 가져와 검증한다
+             * 2차적으로. DB에 저장되어있는 ApplyCount에 접근하는 Service를 호출한다
              */
             orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
             if(orderApplyCountFromServerMemory.isFull()) return false;
 
-            orderApplyCountFromDB = orderApplyCountLockService.getOrderApplyCountWithLock(applyCountIndex);
-
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
-            if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){
-                orderApplyCountFromDB.addCount();
-                orderApplyCountRepository.save(orderApplyCountFromDB);
-                /**
-                 * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
-                 * 해당 ApplyCount의 flag를 full로 만들어준다.
-                 */
-                if(eachMaxWinnerCount == orderApplyCountFromDB.getCount()){
-                    orderApplyCountFromServerMemory.makeFull();
-                    orderApplyCountFromDB.makeFull();
-                    orderApplyCountRepository.save(orderApplyCountFromDB);
-                }
+            if(orderApplyCountService.isOrderApplyCountAddable(orderApplyCountFromServerMemory.getId(),eachMaxWinnerCount)){
+                orderApplyCountFromServerMemory.addCount();
+                orderApplyCountFromServerMemory.isCountMaxThenMakeFull(eachMaxWinnerCount);
                 return true;
             }
             return false;

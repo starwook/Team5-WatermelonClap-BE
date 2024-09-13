@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 public interface OrderApplyCountLockService {
 
     public OrderApplyCount getOrderApplyCountWithLock(long orderApplyCountId);
+
 }

@@ -37,6 +37,14 @@ public class OrderApplyCount {
         this.count++;
     }
 
+    /**
+     * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
+     * 해당 ApplyCount의 flag를 full로 만들어준다.
+     */
+    public void isCountMaxThenMakeFull(int maxCount){
+        if(maxCount <= this.count){ this.makeFull();}
+    }
+
     public void clearCount(){
         this.count = 0;
         this.isFull = false;
