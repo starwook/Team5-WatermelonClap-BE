@@ -54,7 +54,7 @@ public class CurrentOrderEventManageService {
             orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
             if(orderApplyCountFromServerMemory.isFull()) return false;
 
-            orderApplyCountFromDB = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountFromServerMemory.getId());
+            orderApplyCountFromDB = orderApplyCountLockService.getOrderApplyCountWithLock(applyCountIndex);
 
 
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();

@@ -11,6 +11,7 @@ import com.watermelon.server.orderResult.domain.OrderApplyCount;
 import com.watermelon.server.orderResult.domain.OrderResult;
 import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
 import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
+import com.watermelon.server.orderResult.service.OrderApplyCountLockService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +44,8 @@ class CurrentOrderEventManageServiceTest {
     private CurrentOrderEventManageService currentOrderEventManageService;
     @Mock
     private OrderApplyCountRepository orderApplyCountRepository;
+    @Mock
+    private OrderApplyCountLockService orderApplyCountLockService;
     private int applyCountIndex =1;
     @BeforeEach
     void setUp() {
@@ -60,20 +64,17 @@ class CurrentOrderEventManageServiceTest {
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
-        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(OrderApplyCount.createWithNothing()));
+        OrderApplyCount orderApplyCount = currentOrderEventManageService.getOrderApplyCountsFromServerMemory().get(applyCountIndex);
+        when(orderApplyCountLockService.getOrderApplyCountWithLock(anyLong())).thenReturn(orderApplyCount);
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 실패 (꽉참)")
     public void checkIsOrderApplyFull() {
-        ArrayList<OrderResult> orderResults = new ArrayList<>();
-        OrderApplyCount orderApplyCount = OrderApplyCount.createWithNothing();
-        for(int i = 0; i<currentOrderEventManageService.getOrderEventFromServerMemory().getWinnerCount(); i++){
-            orderApplyCount.addCount();
-        }
-
-        when(orderApplyCountRepository.findWithIdExclusiveLock(any())).thenReturn(Optional.of(orderApplyCount));
+        OrderApplyCount orderApplyCount = currentOrderEventManageService.getOrderApplyCountsFromServerMemory().get(applyCountIndex);
+        for(int i=0;i<currentOrderEventManageService.getOrderEventFromServerMemory().getWinnerCount();i++) orderApplyCount.addCount();
+        when(orderApplyCountLockService.getOrderApplyCountWithLock(anyLong())).thenReturn(orderApplyCount);
         Assertions.assertThat(currentOrderEventManageService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
     }
 }
