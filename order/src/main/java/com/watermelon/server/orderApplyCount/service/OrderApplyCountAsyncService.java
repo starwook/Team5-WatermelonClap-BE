@@ -4,6 +4,7 @@ package com.watermelon.server.orderApplyCount.service;
 import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,28 +21,22 @@ public class OrderApplyCountAsyncService implements OrderApplyCountService{
     public LinkedBlockingDeque<CompletableFuture<Boolean>> applyCountApis = new LinkedBlockingDeque<>();
     private long orderApplyCountId;
     private int eachMaxWinnerCount;
+
     @Override
     public boolean isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount) {
-        log.info("thread check");
+        log.info("first thread check");
         this.orderApplyCountId = orderApplyCountId;
         this.eachMaxWinnerCount = eachMaxWinnerCount;
-        try{
-            return getEachResult().get();
-        }
-        catch (ExecutionException e){
-            e.printStackTrace();
-            return false;
-        }
-        catch (InterruptedException e){
-            return false;
-        }
+        return getEachResult().join();
     }
+
     public CompletableFuture<Boolean> getEachResult(){
-        log.info("completable thread check");
+        log.info("second thread check");
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         applyCountApis.offer(future);
         return future;
     }
+
     @Scheduled(fixedRate = 250L)
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void processBatch(){
