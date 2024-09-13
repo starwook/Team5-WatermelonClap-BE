@@ -32,6 +32,7 @@ public class OrderEventFromServerMemoryService {
     @Setter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
+    @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(int applyCountIndex){
         if(isOrderApplyFull()) {
             return false;
@@ -52,7 +53,7 @@ public class OrderEventFromServerMemoryService {
 
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
             if(orderApplyCountService.isOrderApplyCountAddable(orderApplyCountFromServerMemory.getId(),eachMaxWinnerCount)){
-                orderApplyCountFromServerMemory.addCount();
+                orderApplyCountFromServerMemory.addCountOnce();
                 orderApplyCountFromServerMemory.isCountMaxThenMakeFull(eachMaxWinnerCount);
                 return true;
             }

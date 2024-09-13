@@ -18,7 +18,7 @@ public class OrderApplyCountBasicService implements OrderApplyCountService {
     public boolean isOrderApplyCountAddable(long orderApplyCountId,int eachMaxWinnerCount) {
         OrderApplyCount orderApplyCount = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountId);
         if(eachMaxWinnerCount>orderApplyCount.getCount()){
-            orderApplyCount.addCount();
+            orderApplyCount.addCountOnce();
             orderApplyCount.isCountMaxThenMakeFull(eachMaxWinnerCount);
             return true;
         }

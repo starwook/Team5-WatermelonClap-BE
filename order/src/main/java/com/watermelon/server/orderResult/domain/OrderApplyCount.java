@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.query.Order;
 
 @Entity
 @Getter
@@ -43,8 +42,11 @@ public class OrderApplyCount {
     }
 
 
-    public void addCount(){
+    public void addCountOnce(){
         this.count++;
+    }
+    public void addCount(int count){
+        this.count +=count;
     }
     /**
      * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
