@@ -26,7 +26,6 @@ public class OrderEventFromServerMemoryService {
     @Getter
     private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
-
     private final IndexLoadBalanceService indexLoadBalanceService;
     private final OrderApplyCountService orderApplyCountService;
     @Getter
