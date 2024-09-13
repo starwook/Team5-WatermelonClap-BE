@@ -4,10 +4,10 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
-import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 
 import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
 import com.watermelon.server.order.service.OrderResultSaveService;

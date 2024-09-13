@@ -1,4 +1,4 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.orderApplyCount.service;
 
 import org.springframework.stereotype.Service;
 

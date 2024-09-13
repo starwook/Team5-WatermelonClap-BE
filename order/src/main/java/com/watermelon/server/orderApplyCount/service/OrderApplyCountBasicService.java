@@ -1,9 +1,10 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.orderApplyCount.service;
 
 
-import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class OrderApplyCountBasicService implements OrderApplyCountService {
      * 그리고 인원을 더할 수 있다면 더한다.
      */
     @Override
+    @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public boolean isOrderApplyCountAddable(long orderApplyCountId,int eachMaxWinnerCount) {
         OrderApplyCount orderApplyCount = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountId);
         if(eachMaxWinnerCount>orderApplyCount.getCount()){

@@ -1,6 +1,6 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.orderApplyCount.service;
 
-import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import org.springframework.stereotype.Service;
 
 @Service

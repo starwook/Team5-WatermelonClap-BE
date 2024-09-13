@@ -5,8 +5,9 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
-import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderApplyCount.service.OrderApplyCountService;
+import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
+import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,6 @@ public class OrderEventFromServerMemoryService {
     @Setter
     private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
 
-    @Transactional(transactionManager = "orderResultTransactionManager")
     public boolean isOrderApplyNotFullThenPlusCount(int applyCountIndex){
         if(isOrderApplyFull()) {
             return false;
@@ -91,7 +91,7 @@ public class OrderEventFromServerMemoryService {
     }
 
 
-    @Transactional(transactionManager = "orderResultTransactionManager")
+    @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void refreshApplyCount() {
         clearOrderApplyCount();
         indexLoadBalanceService.refreshQueue();
