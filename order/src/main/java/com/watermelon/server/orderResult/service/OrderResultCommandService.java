@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class OrderResultCommandService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderResultCommandService.class);
-    private final CurrentOrderEventManageService currentOrderEventManageService;
+    private final OrderEventFromServerMemoryService orderEventFromServerMemoryService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
     private final IndexLoadBalanceService indexLoadBalanceService;
@@ -37,11 +37,11 @@ public class OrderResultCommandService {
      * 빠르게 검증 가능한 것들을 먼저 검증한다.
      */
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
-        currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
-        if(currentOrderEventManageService.isOrderApplyFull()){ //
+        orderEventFromServerMemoryService.checkingInfoErrors(orderEventId,quizId);
+        if(orderEventFromServerMemoryService.isOrderApplyFull()){ //
             return ResponseApplyTicketDto.fullApply();
         }
-        if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
+        if(!orderEventFromServerMemoryService.checkPrevious(requestAnswerDto.getAnswer()))
         {
             return ResponseApplyTicketDto.wrongAnswer();
         }
@@ -71,7 +71,7 @@ public class OrderResultCommandService {
     }
 
     public void refreshApplyCount(){
-        currentOrderEventManageService.refreshApplyCount();
+        orderEventFromServerMemoryService.refreshApplyCount();
     }
 
 //         log.info("Locked OrderApplyCount record");

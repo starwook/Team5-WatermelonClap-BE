@@ -1,6 +1,6 @@
 package com.watermelon.server;
 
-import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
 import com.watermelon.server.order.service.OrderEventSchedulingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +15,10 @@ public class Scheduler {
 
 
     private final OrderEventSchedulingService orderEventSchedulingService;
-    private final CurrentOrderEventManageService currentOrderEventManageService;
+    private final OrderEventFromServerMemoryService orderEventFromServerMemoryService;
     @Scheduled(fixedRate = 500)
     public void checkOrderEvent(){
-        Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
+        Long currentEventId = orderEventFromServerMemoryService.getCurrentOrderEventId();
         orderEventSchedulingService.changeOrderStatusByTime();
         Long newCurrentEventId = orderEventSchedulingService.changeCurrentOrderEvent();
         if(currentEventId!=null && !currentEventId.equals(newCurrentEventId)){
@@ -27,7 +27,7 @@ public class Scheduler {
     }
     @Scheduled(fixedRate = 300000)
     public void checkCurrentOrderEvent(){
-        Long currentEventId = currentOrderEventManageService.getCurrentOrderEventId();
+        Long currentEventId = orderEventFromServerMemoryService.getCurrentOrderEventId();
         log.info("current order event id is {}", currentEventId);
     }
 }

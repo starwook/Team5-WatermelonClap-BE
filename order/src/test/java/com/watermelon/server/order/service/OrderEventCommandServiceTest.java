@@ -3,7 +3,7 @@ package com.watermelon.server.order.service;
 import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.domain.Quiz;
 import com.watermelon.server.order.repository.OrderEventRepository;
-import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
 import com.watermelon.server.orderResult.service.OrderResultCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class OrderEventCommandServiceTest {
     @Mock
     private OrderEventRepository orderEventRepository;
     @Mock
-    private CurrentOrderEventManageService currentOrderEventManageService;
+    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
     @Mock
     private OrderResultCommandService orderResultCommandService;
     @InjectMocks

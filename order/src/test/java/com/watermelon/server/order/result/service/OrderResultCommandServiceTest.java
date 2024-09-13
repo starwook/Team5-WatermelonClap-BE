@@ -5,7 +5,7 @@ import com.watermelon.server.order.dto.request.RequestAnswerDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 import com.watermelon.server.orderResult.repository.OrderResultRepository;
-import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
 import com.watermelon.server.order.service.OrderResultSaveService;
 import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
 import com.watermelon.server.orderResult.service.OrderResultCommandService;
@@ -34,7 +34,7 @@ class OrderResultCommandServiceTest {
 
 
     @Mock
-    private CurrentOrderEventManageService currentOrderEventManageService;
+    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
     @InjectMocks
     private OrderResultCommandService orderResultCommandService;
     @Mock
@@ -76,7 +76,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 정답 틀림 ")
     void makeApplyTicketWrongAnswer() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        when(currentOrderEventManageService.checkPrevious(any())).thenReturn(false);
+        when(orderEventFromServerMemoryService.checkPrevious(any())).thenReturn(false);
         Assertions.assertThat(orderResultCommandService.makeApplyTicket(RequestAnswerDto.makeWith(answer),1L,1L).getResult())
                 .isEqualTo(ApplyTicketStatus.WRONG.name());
     }
@@ -85,7 +85,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 에러(존재하지 않음) ")
     void makeApplyTicketIdError() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        Mockito.doThrow(WrongOrderEventFormatException.class).when(currentOrderEventManageService).checkingInfoErrors(any(),any());
+        Mockito.doThrow(WrongOrderEventFormatException.class).when(orderEventFromServerMemoryService).checkingInfoErrors(any(),any());
         Assertions.assertThatThrownBy(()->
                 orderResultCommandService.makeApplyTicket(RequestAnswerDto.builder()
                         .answer(answer)
@@ -95,7 +95,7 @@ class OrderResultCommandServiceTest {
     @Test
     @DisplayName("선착순 응모 - 에러(기간 오류)")
     void makeApplyTicketTimeError() throws NotDuringEventPeriodException, WrongOrderEventFormatException {
-        Mockito.doThrow(NotDuringEventPeriodException.class).when(currentOrderEventManageService).checkingInfoErrors(any(),any());
+        Mockito.doThrow(NotDuringEventPeriodException.class).when(orderEventFromServerMemoryService).checkingInfoErrors(any(),any());
         Assertions.assertThatThrownBy(()->
                 orderResultCommandService.makeApplyTicket(RequestAnswerDto.builder()
                         .answer(answer)

@@ -20,8 +20,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CurrentOrderEventManageService {
-    private static final Logger log = LoggerFactory.getLogger(CurrentOrderEventManageService.class);
+public class OrderEventFromServerMemoryService {
+    private static final Logger log = LoggerFactory.getLogger(OrderEventFromServerMemoryService.class);
 
     @Getter
     private volatile OrderEvent orderEventFromServerMemory;
@@ -55,7 +55,6 @@ public class CurrentOrderEventManageService {
             if(orderApplyCountFromServerMemory.isFull()) return false;
 
             orderApplyCountFromDB = orderApplyCountLockService.getOrderApplyCountWithLock(applyCountIndex);
-
 
             int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
             if(eachMaxWinnerCount > orderApplyCountFromDB.getCount()){
