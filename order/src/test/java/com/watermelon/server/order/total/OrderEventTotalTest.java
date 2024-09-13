@@ -10,11 +10,10 @@ import com.watermelon.server.order.dto.request.*;
 import com.watermelon.server.orderResult.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 import com.watermelon.server.orderResult.domain.OrderApplyCount;
-import com.watermelon.server.orderResult.service.CurrentOrderEventManageService;
+import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,7 +50,7 @@ public class OrderEventTotalTest {
     @Autowired
     private AdminOrderEventService adminOrderEventService;
     @Autowired
-    private CurrentOrderEventManageService currentOrderEventManageService;
+    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
 
 
     @Autowired
@@ -280,7 +279,7 @@ public class OrderEventTotalTest {
     @DisplayName("선착순 퀴즈 제출 - 실패(에러 - 현재 진행되지 않는 이벤트,퀴즈 ID)")
     public void orderEventApplyWrongEventId() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
-        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
+        orderEventFromServerMemoryService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId()+1L,quiz.getId())
@@ -294,7 +293,7 @@ public class OrderEventTotalTest {
     @DisplayName("선착순 퀴즈 제출 - 실패(에러 - 기간이 틀림)")
     public void orderEventApplyWrongDuration() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(unOpenOrderEvent);
-        currentOrderEventManageService.refreshOrderEventInProgress(unOpenOrderEvent);
+        orderEventFromServerMemoryService.refreshOrderEventInProgress(unOpenOrderEvent);
         Quiz quiz = unOpenOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer());
         mvc.perform(post("/event/order/{eventId}/{quizId}",unOpenOrderEvent.getId(),quiz.getId())
@@ -308,7 +307,7 @@ public class OrderEventTotalTest {
     @DisplayName("선착순 퀴즈 제출 - 실패(정답이 틀림)")
     public void orderEventApplyWrongAnswer() throws Exception {
         adminOrderEventService.saveOrderEventWithCacheEvict(openOrderEvent);
-        currentOrderEventManageService.refreshOrderEventInProgress(openOrderEvent);
+        orderEventFromServerMemoryService.refreshOrderEventInProgress(openOrderEvent);
         Quiz quiz = openOrderEvent.getQuiz();
         RequestAnswerDto requestAnswerDto = RequestAnswerDto.makeWith(quiz.getAnswer()+"/wrong");
         mvc.perform(post("/event/order/{eventId}/{quizId}",openOrderEvent.getId(),quiz.getId())

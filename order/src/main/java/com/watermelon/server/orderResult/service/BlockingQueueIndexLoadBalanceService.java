@@ -12,7 +12,7 @@ public class BlockingQueueIndexLoadBalanceService implements IndexLoadBalanceSer
 
     private BlockingQueue<Integer> blockingQueue;
     public BlockingQueueIndexLoadBalanceService() {
-        this.blockingQueue = new ArrayBlockingQueue<>(1000);
+        this.blockingQueue = new ArrayBlockingQueue<>(10000);
     }
     @Override
     public int getIndex() {

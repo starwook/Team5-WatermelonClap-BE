@@ -7,12 +7,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.query.Order;
 
 @Entity
 @Getter
 @Table(name="order_apply_count")
 public class OrderApplyCount {
     @Id
+    @Setter
     @GeneratedValue
     private Long id;
 
@@ -28,14 +30,30 @@ public class OrderApplyCount {
     public static OrderApplyCount createWithNothing(){
         return OrderApplyCount.builder().build();
     }
+    public static OrderApplyCount createWithGeneratingId(long id){
+        OrderApplyCount orderApplyCount = OrderApplyCount.builder().build();
+        orderApplyCount.setId(id);
+        return orderApplyCount;
+
+    }
 
     @Builder
     public OrderApplyCount() {
         this.count =0;
     }
+
+
     public void addCount(){
         this.count++;
     }
+    /**
+     * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
+     * 해당 ApplyCount의 flag를 full로 만들어준다.
+     */
+    public void isCountMaxThenMakeFull(int maxCount){
+        if(maxCount <= this.count){ this.makeFull();}
+    }
+
 
     public void clearCount(){
         this.count = 0;

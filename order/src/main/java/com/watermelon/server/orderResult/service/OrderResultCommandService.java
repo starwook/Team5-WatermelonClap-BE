@@ -23,13 +23,31 @@ import org.springframework.stereotype.Service;
 public class OrderResultCommandService {
 
     private static final Logger log = LoggerFactory.getLogger(OrderResultCommandService.class);
-    private final CurrentOrderEventManageService currentOrderEventManageService;
+    private final OrderEventFromServerMemoryService orderEventFromServerMemoryService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
     private final IndexLoadBalanceService indexLoadBalanceService;
     @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     @Getter
     private final HikariDataSource dataSource;
+
+    /**
+     * DB 접근이 가능한지 확인하기 이전에
+     * 이벤트 ID, 퀴즈 정답, 꽉 찼는지 Flag 변수 등
+     * 빠르게 검증 가능한 것들을 먼저 검증한다.
+     */
+    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
+        orderEventFromServerMemoryService.checkingInfoErrors(orderEventId,quizId);
+        if(orderEventFromServerMemoryService.isOrderApplyFull()){ //
+            return ResponseApplyTicketDto.fullApply();
+        }
+        if(!orderEventFromServerMemoryService.checkPrevious(requestAnswerDto.getAnswer()))
+        {
+            return ResponseApplyTicketDto.wrongAnswer();
+        }
+        return createTokenAndMakeTicket(orderEventId);
+    }
+
 
     public ResponseApplyTicketDto createTokenAndMakeTicket(Long orderEventId) {
         try{
@@ -52,22 +70,10 @@ public class OrderResultCommandService {
         }
     }
 
-    public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
-        currentOrderEventManageService.checkingInfoErrors(orderEventId,quizId);
-        // 퀴즈 틀릴 시에ApplyNotFullThenSave())
-        if(currentOrderEventManageService.isOrderApplyFull()){ //
-            return ResponseApplyTicketDto.fullApply();
-        }
-        if(!currentOrderEventManageService.checkPrevious(requestAnswerDto.getAnswer()))
-        {
-            return ResponseApplyTicketDto.wrongAnswer();
-        }
-        return createTokenAndMakeTicket(orderEventId);
+    public void refreshApplyCount(){
+        orderEventFromServerMemoryService.refreshApplyCount();
     }
 
-    public void refreshApplyCount(){
-        currentOrderEventManageService.refreshApplyCount();
-    }
 //         log.info("Locked OrderApplyCount record");
 //        log.info("HikariCP Pool Status: ");
 //        log.info("Active Connections: {}", dataSource.getHikariPoolMXBean().getActiveConnections());
