@@ -1,6 +1,6 @@
-package com.watermelon.server.orderResult.repository;
+package com.watermelon.server.orderApplyCount.repository;
 
-import com.watermelon.server.orderResult.domain.OrderApplyCount;
+import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.JpaRepository;
