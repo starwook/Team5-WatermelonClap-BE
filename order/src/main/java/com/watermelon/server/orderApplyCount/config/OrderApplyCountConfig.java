@@ -18,6 +18,6 @@ public class OrderApplyCountConfig {
 
     @Bean
     public OrderApplyCountLockService orderApplyCountLockService(){
-        return new OrderApplyCountPessimisticLockLockService(orderApplyCountRepository);
+        return new OrderApplyCountPessimisticLockService(orderApplyCountRepository);
     }
 }
