@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OrderApplyCountPessimisticLockLockService implements OrderApplyCountLockService {
+public class OrderApplyCountPessimisticLockService implements OrderApplyCountLockService {
     private final OrderApplyCountRepository orderApplyCountRepository;
 
     @Override

@@ -18,12 +18,8 @@ public class OrderApplyCountBasicService implements OrderApplyCountService {
     @Override
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public boolean isOrderApplyCountAddable(long orderApplyCountId,int eachMaxWinnerCount) {
+        //락을 거는 곳
         OrderApplyCount orderApplyCount = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountId);
-        if(eachMaxWinnerCount>orderApplyCount.getCount()){
-            orderApplyCount.addCountOnce();
-            orderApplyCount.isCountMaxThenMakeFull(eachMaxWinnerCount);
-            return true;
-        }
-        return false;
+        return orderApplyCount.tryAddCountIfUnderMax(eachMaxWinnerCount);
     }
 }

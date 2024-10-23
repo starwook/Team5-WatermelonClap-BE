@@ -32,4 +32,14 @@ public interface OrderApplyCountRepository extends JpaRepository<OrderApplyCount
     @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
     Optional<OrderApplyCount> findFirstApplyCountById();
 
+
+    /**
+     *
+     mysql 네임드락 쿼리
+     */
+    @Query(value = "SELECT GET_LOCK(:lockName, :timeout)", nativeQuery = true)
+    Optional<Integer> acquireNamedLock(@Param("lockName") String lockName, @Param("timeout") int timeout);
+
+    @Query(value = "SELECT RELEASE_LOCK(:lockName)", nativeQuery = true)
+    Optional<Integer> releaseNamedLock(@Param("lockName") String lockName);
 }

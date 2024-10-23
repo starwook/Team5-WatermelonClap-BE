@@ -24,14 +24,12 @@ public class OrderApplyCountAsyncService implements OrderApplyCountService{
 
     @Override
     public boolean isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount) {
-        log.info("first thread check");
         this.orderApplyCountId = orderApplyCountId;
         this.eachMaxWinnerCount = eachMaxWinnerCount;
         return getEachResult().join();
     }
 
     public CompletableFuture<Boolean> getEachResult(){
-        log.info("second thread check");
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         applyCountApis.offer(future);
         return future;

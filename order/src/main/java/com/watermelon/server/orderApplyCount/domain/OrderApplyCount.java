@@ -56,6 +56,18 @@ public class OrderApplyCount {
         if(maxCount <= this.count){ this.makeFull();}
     }
 
+    /**
+     *정해진 갯수만큼 꽉 찼는지 판별하고 그에 따라 행동한다
+     */
+    public boolean tryAddCountIfUnderMax(int maxCount) {
+        if (this.count < maxCount) {
+            this.addCountOnce();
+            this.isCountMaxThenMakeFull(maxCount);
+            return true;
+        }
+        return false;
+    }
+
 
     public void clearCount(){
         this.count = 0;
