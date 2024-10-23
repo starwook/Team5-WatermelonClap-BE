@@ -13,7 +13,7 @@ public class OrderApplyCountConfig {
 
     @Bean
     public OrderApplyCountService orderApplyCountService(){
-        return new OrderApplyCountNamedLockService(orderApplyCountRepository);
+        return new OrderApplyCountAsyncService(orderApplyCountLockService());
     }
 
     @Bean
