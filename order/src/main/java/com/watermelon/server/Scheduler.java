@@ -1,6 +1,6 @@
 package com.watermelon.server;
 
-import com.watermelon.server.orderResult.service.MemoryOrderEventService;
+import com.watermelon.server.order.service.MemoryOrderEventService;
 import com.watermelon.server.order.service.OrderEventSchedulingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

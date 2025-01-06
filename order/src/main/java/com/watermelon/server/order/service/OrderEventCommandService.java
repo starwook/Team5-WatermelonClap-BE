@@ -11,7 +11,6 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
 
-import com.watermelon.server.orderResult.service.MemoryOrderEventService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

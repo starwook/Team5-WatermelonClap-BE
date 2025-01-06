@@ -1,7 +1,10 @@
-package com.watermelon.server.orderApplyCount.config;
+package com.watermelon.server.order;
 
-import com.watermelon.server.orderApplyCount.service.*;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountAsyncService;
+import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountLockService;
+import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountPessimisticLockService;
+import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountService;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

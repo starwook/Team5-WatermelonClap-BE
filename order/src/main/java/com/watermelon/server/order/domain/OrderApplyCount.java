@@ -1,8 +1,7 @@
-package com.watermelon.server.orderApplyCount.domain;
+package com.watermelon.server.order.domain;
 
 
 
-import com.watermelon.server.order.domain.OrderEvent;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +18,10 @@ public class OrderApplyCount {
 
     @Setter
     private int count;
+
+    @OneToOne
+    @JoinColumn
+    private OrderEvent orderEvent;
 
     boolean isFull;
 

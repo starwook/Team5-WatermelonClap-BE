@@ -1,4 +1,4 @@
-package com.watermelon.server.orderResult.domain;
+package com.watermelon.server.order.domain;
 
 
 import jakarta.persistence.*;

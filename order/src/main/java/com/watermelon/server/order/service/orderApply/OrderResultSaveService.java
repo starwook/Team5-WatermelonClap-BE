@@ -1,8 +1,8 @@
-package com.watermelon.server.order.service;
+package com.watermelon.server.order.service.orderApply;
 
-import com.watermelon.server.orderResult.domain.OrderApplyResult;
-import com.watermelon.server.orderResult.repository.OrderApplyResultRepository;
-import com.watermelon.server.orderResult.service.MemoryOrderEventService;
+import com.watermelon.server.order.domain.OrderApplyResult;
+import com.watermelon.server.order.repository.OrderApplyResultRepository;
+import com.watermelon.server.order.service.MemoryOrderEventService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.order.service.orderApply;
 
 
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
@@ -6,8 +6,7 @@ import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 
-import com.watermelon.server.order.service.OrderResultSaveService;
-
+import com.watermelon.server.order.service.MemoryOrderEventService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import com.zaxxer.hikari.HikariDataSource;

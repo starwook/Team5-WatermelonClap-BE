@@ -1,6 +1,5 @@
 package com.watermelon.server.order.domain;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.watermelon.server.BaseEntity;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import jakarta.persistence.*;
@@ -29,13 +28,15 @@ public class OrderEvent extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private Quiz quiz;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderApplyCount orderApplyCount;
+
     @OneToMany(mappedBy = "orderEvent")
     private List<OrderEventWinner> orderEventWinner = new ArrayList<>();
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int winnerCount;
 
-    private int currentWinnerCount;
     @Setter
 //    @Enumerated(EnumType.STRING)
     private OrderEventStatus orderEventStatus;
@@ -147,14 +148,6 @@ public class OrderEvent extends BaseEntity {
     public void openEvent(){
         this.orderEventStatus = OrderEventStatus.OPEN;
     }
-    public boolean isWinnerAddable(){
-        if(currentWinnerCount < winnerCount) return true;
-        return false;
-    }
-    public void addWinner(){
-        this.currentWinnerCount++;
-    }
-
     @Override
     public String toString() {
         return "OrderEvent{" +
@@ -164,7 +157,6 @@ public class OrderEvent extends BaseEntity {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", winnerCount=" + winnerCount +
-                ", currentWinnerCount=" + currentWinnerCount +
                 ", orderEventStatus=" + orderEventStatus +
                 '}';
     }

@@ -4,14 +4,14 @@ import com.watermelon.server.order.domain.OrderEvent;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
+import com.watermelon.server.order.domain.OrderApplyCount;
 
-import com.watermelon.server.orderResult.service.MemoryOrderEventService;
-import com.watermelon.server.order.service.OrderResultSaveService;
-import com.watermelon.server.orderResult.service.OrderApplyService;
+import com.watermelon.server.order.service.MemoryOrderEventService;
+import com.watermelon.server.order.service.orderApply.OrderResultSaveService;
+import com.watermelon.server.order.service.orderApply.OrderApplyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

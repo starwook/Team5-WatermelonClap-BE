@@ -1,13 +1,14 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.order.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
 
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.orderApplyCount.service.OrderApplyCountService;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
+import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountService;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.domain.OrderApplyCount;
+import com.watermelon.server.order.service.orderApply.BlockingQueueTokenForDbAccessProviderService;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

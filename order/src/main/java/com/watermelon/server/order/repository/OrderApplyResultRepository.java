@@ -1,15 +1,11 @@
-package com.watermelon.server.orderResult.repository;
+package com.watermelon.server.order.repository;
 
-import com.watermelon.server.orderResult.domain.OrderApplyResult;
+import com.watermelon.server.order.domain.OrderApplyResult;
 
-import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface OrderApplyResultRepository extends JpaRepository<OrderApplyResult, Long> {

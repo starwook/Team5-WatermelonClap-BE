@@ -1,7 +1,7 @@
-package com.watermelon.server.orderApplyCount.service;
+package com.watermelon.server.order.service.orderApplyCount;
 
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.domain.OrderApplyCount;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
