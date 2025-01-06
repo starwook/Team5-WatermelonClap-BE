@@ -8,8 +8,7 @@ import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepositor
 import com.watermelon.server.order.repository.OrderEventRepository;
 import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 import com.watermelon.server.orderApplyCount.service.OrderApplyCountService;
-import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
-import com.watermelon.server.orderResult.service.IndexLoadBalanceService;
+import com.watermelon.server.orderResult.service.MemoryOrderEventService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +27,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 //@TestPropertySource("classpath:application-local-db.yml")
 @DisplayName("[단위] 선착순 관리 서비스")
-class OrderEventFromServerMemoryServiceTest {
+class MemoryOrderEventServiceTest {
 
     @Mock
     private OrderEventRepository orderEventRepository;
     @Mock
-    private IndexLoadBalanceService indexLoadBalanceService;
+    private TokenForDbAccessProviderService tokenForDbAccessProviderService;
     @InjectMocks
-    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
+    private MemoryOrderEventService memoryOrderEventService;
     @Mock
     private OrderApplyCountRepository orderApplyCountRepository;
     @Mock
@@ -44,14 +43,14 @@ class OrderEventFromServerMemoryServiceTest {
     private int applyCountIndex =1;
     @BeforeEach
     void setUp() {
-        orderEventFromServerMemoryService.refreshOrderEventInProgress(
+        memoryOrderEventService.refreshOrderEventInProgress(
                 OrderEvent.makeOrderEventWithOutImage(
                         RequestOrderEventDto.makeForTestOpened(
                                 RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
                         )
                 )
         );
-        List<OrderApplyCount> orderApplyCountList = orderEventFromServerMemoryService.getOrderApplyCountsFromServerMemory();
+        List<OrderApplyCount> orderApplyCountList = memoryOrderEventService.getOrderApplyCountsFromServerMemory();
         for(int i=0;i<4;i++){
             OrderApplyCount orderApplyCount = OrderApplyCount.createWithGeneratingId(i);
             orderApplyCountList.add(orderApplyCount);
@@ -62,13 +61,13 @@ class OrderEventFromServerMemoryServiceTest {
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
         doReturn(true).when(orderApplyCountService).isOrderApplyCountAddable(anyLong(),anyInt());
-        Assertions.assertThat(orderEventFromServerMemoryService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
+        Assertions.assertThat(memoryOrderEventService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 실패 (꽉참)")
     public void checkIsOrderApplyFull() {
         when(orderApplyCountService.isOrderApplyCountAddable(anyLong(),anyInt())).thenReturn(false);
-        Assertions.assertThat(orderEventFromServerMemoryService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
+        Assertions.assertThat(memoryOrderEventService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
     }
 }

@@ -31,6 +31,7 @@ public class ApplyTokenProvider {
     public String createTokenByOrderEventId(JwtPayload payload){
         return Jwts.builder()
                 .claim(eventIdClaimKey,payload.getEventId())
+                //고유성을 위함
                 .claim(randomClaimKey, UUID.randomUUID())
                 .issuer(tokenIssuer)
                 .signWith(TOKEN_SECRET,Jwts.SIG.HS256)

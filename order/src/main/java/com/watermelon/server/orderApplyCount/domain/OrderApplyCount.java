@@ -33,7 +33,6 @@ public class OrderApplyCount {
         OrderApplyCount orderApplyCount = OrderApplyCount.builder().build();
         orderApplyCount.setId(id);
         return orderApplyCount;
-
     }
 
     @Builder

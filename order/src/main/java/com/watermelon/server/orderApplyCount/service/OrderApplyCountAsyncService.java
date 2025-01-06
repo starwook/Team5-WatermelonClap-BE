@@ -35,6 +35,7 @@ public class OrderApplyCountAsyncService implements OrderApplyCountService{
         return future;
     }
 
+
     @Scheduled(fixedRate = 250L)
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void processBatch(){

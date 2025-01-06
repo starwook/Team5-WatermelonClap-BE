@@ -10,7 +10,7 @@ import lombok.*;
 @Entity
 @RequiredArgsConstructor
 @Table(name ="order_result")
-public class OrderResult {
+public class OrderApplyResult {
 
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -19,14 +19,14 @@ public class OrderResult {
 
 
 
-    public static OrderResult makeOrderEventApply(String applyToken){
-        return OrderResult.builder()
+    public static OrderApplyResult makeOrderEventApply(String applyToken){
+        return OrderApplyResult.builder()
                 .applyToken(applyToken)
                 .build();
     }
 
     @Builder
-    OrderResult(String applyToken) {
+    OrderApplyResult(String applyToken) {
         this.applyToken = applyToken;
     }
 }

@@ -14,9 +14,6 @@ public class Quiz {
     @Id @GeneratedValue
     private Long id;
 
-    @OneToOne
-    private OrderEvent orderEvent;
-
     private String answer;
     private String imgSrc;
 

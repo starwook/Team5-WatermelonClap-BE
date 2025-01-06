@@ -21,13 +21,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderEventFromServerMemoryService {
-    private static final Logger log = LoggerFactory.getLogger(OrderEventFromServerMemoryService.class);
+public class MemoryOrderEventService {
+    private static final Logger log = LoggerFactory.getLogger(MemoryOrderEventService.class);
 
     @Getter
     private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
-    private final IndexLoadBalanceService indexLoadBalanceService;
+    private final BlockingQueueTokenForDbAccessProviderService blockingQueueTokenForDbAccessProviderService;
     private final OrderApplyCountService orderApplyCountService;
     @Getter
     @Setter
@@ -94,8 +94,8 @@ public class OrderEventFromServerMemoryService {
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void refreshApplyCount() {
         clearOrderApplyCount();
-        indexLoadBalanceService.refreshQueue();
-        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
+        blockingQueueTokenForDbAccessProviderService.refreshQueue();
+        blockingQueueTokenForDbAccessProviderService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
         orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
     }
 

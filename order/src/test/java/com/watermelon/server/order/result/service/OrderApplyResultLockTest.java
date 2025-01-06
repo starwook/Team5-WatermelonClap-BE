@@ -9,9 +9,9 @@ import com.watermelon.server.order.repository.OrderEventRepository;
 
 import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
 
-import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
+import com.watermelon.server.orderResult.service.MemoryOrderEventService;
 import com.watermelon.server.order.service.OrderResultSaveService;
-import com.watermelon.server.orderResult.service.OrderResultCommandService;
+import com.watermelon.server.orderResult.service.OrderApplyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,12 +23,12 @@ import java.util.Optional;
 
 @SpringBootTest
 @DisplayName("[통합] 선착순 결과 Lock")
-class OrderResultLockTest {
+class OrderApplyResultLockTest {
     @Autowired
-    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
+    private MemoryOrderEventService memoryOrderEventService;
 
     @Autowired
-    private OrderResultCommandService orderResultCommandService;
+    private OrderApplyService orderApplyService;
     @Autowired
     private OrderEventRepository orderEventRepository;
     @Autowired
@@ -53,7 +53,7 @@ class OrderResultLockTest {
                         RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
                 )
         ));
-         orderEventFromServerMemoryService.refreshOrderEventInProgress(orderEvent);
+         memoryOrderEventService.refreshOrderEventInProgress(orderEvent);
     }
     @AfterEach
     void delete(){
