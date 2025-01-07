@@ -23,8 +23,6 @@ public class OrderWinningCount {
     @JoinColumn
     private OrderEvent orderEvent;
 
-    boolean isFull;
-
     public static OrderWinningCount create(OrderEvent orderEvent) {
         return OrderWinningCount.builder()
                 .build();
@@ -54,31 +52,17 @@ public class OrderWinningCount {
      * 만약 각 ApplyCount에 정해진 개수만큼 꽉 찼다면
      * 해당 ApplyCount의 flag를 full로 만들어준다.
      */
-    public void isCountMaxThenMakeFull(int maxCount){
-        if(maxCount <= this.count){ this.makeFull();}
-    }
-
     /**
      *정해진 갯수만큼 꽉 찼는지 판별하고 그에 따라 행동한다
      */
     public boolean tryAddCountIfUnderMax(int maxCount) {
         if (this.count < maxCount) {
             this.addCountOnce();
-            this.isCountMaxThenMakeFull(maxCount);
             return true;
         }
         return false;
     }
-
-
     public void clearCount(){
         this.count = 0;
-        this.isFull = false;
-    }
-    public void makeFull(){
-        this.isFull = true;
-    }
-    public void makeNotFull(){
-        this.isFull = false;
     }
 }

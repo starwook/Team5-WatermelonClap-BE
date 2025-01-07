@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class OrderEventWinningCountManageService implements OrderEventWinningCountService {
+public class OrderEventWinningCountBasicService implements OrderEventWinningCountService {
     private final OrderEventWinningCountLockService orderEventWinningCountLockService;
     /**
      * Lock을 걸고 OrderApplyCount를 가져온다.

@@ -38,35 +38,15 @@ public class MemoryOrderEventService {
         if(isOrderApplyFull()) {
             return false;
         }
-        /**
-         * DB에 저장되어서 Lock을 걸고 가져오는 OrderApplyCount와
-         * 서버에 저장되어있는 OrderApplyCount를 분리하여 관리
-         */
-        try{
-            OrderWinningCount orderWinningCountFromServerMemory = orderEventFromServerMemory.getOrderWinningCount();
-            if(orderWinningCountFromServerMemory.isFull()) return false;
-
-            int winnerCount = orderEventFromServerMemory.getWinnerCount();
-            // 이부분에서 락을 걸고 가져옴
-            if(orderEventWinningCountService.isOrderApplyCountAddable(orderWinningCountFromServerMemory.getId(),winnerCount)){
-                orderWinningCountFromServerMemory.addCountOnce();
-                orderWinningCountFromServerMemory.isCountMaxThenMakeFull(winnerCount);
-                return true;
-            }
-            return false;
+        OrderWinningCount orderWinningCountFromServerMemory = orderEventFromServerMemory.getOrderWinningCount();
+        int winnerCount = orderEventFromServerMemory.getWinnerCount();
+        // 이 곳에서 락을 걸고 가져온다.
+        if(orderEventWinningCountService.isOrderApplyCountAddable(orderWinningCountFromServerMemory.getId(),winnerCount)){
+            orderWinningCountFromServerMemory.addCountOnce();
+            return true;
         }
-        finally {
-            /**
-             * 모든 ApplyCount의 flag가 full이라면 현재 이벤트의 상태 flag를 바꾼다
-             */
-            boolean allFull = true;
-            for(OrderWinningCount eachOrderWinningCount : orderWinningCountsFromServerMemory){
-                if(!eachOrderWinningCount.isFull()){
-                    allFull = false;
-                }
-            }
-            if(allFull){orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);}
-        }
+        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);
+        return false;
     }
 
     @Transactional
