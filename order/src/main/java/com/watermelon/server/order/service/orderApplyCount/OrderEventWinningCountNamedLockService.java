@@ -1,6 +1,6 @@
 package com.watermelon.server.order.service.orderApplyCount;
 
-import com.watermelon.server.order.domain.OrderApplyCount;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 @Service
 @RequiredArgsConstructor
-public class OrderApplyCountNamedLockService implements OrderApplyCountService{
+public class OrderEventWinningCountNamedLockService implements OrderEventWinningCountService {
     private final OrderApplyCountRepository orderApplyCountRepository;
     private final String LOCK_KEY ="ORDER_APPLY_COUNT";
     private final int WAIT_SECOND = 10;
@@ -23,8 +23,8 @@ public class OrderApplyCountNamedLockService implements OrderApplyCountService{
             orderApplyCountRepository.acquireNamedLock(LOCK_KEY, WAIT_SECOND);
 
             // 2. 비즈니스 로직 수행
-            OrderApplyCount orderApplyCount = orderApplyCountRepository.findById(orderApplyCountId).orElseThrow();
-            boolean result = orderApplyCount.tryAddCountIfUnderMax(eachMaxWinnerCount);
+            OrderWinningCount orderWinningCount = orderApplyCountRepository.findById(orderApplyCountId).orElseThrow();
+            boolean result = orderWinningCount.tryAddCountIfUnderMax(eachMaxWinnerCount);
             // 3. 트랜잭션 완료 후 락 해제를 등록
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override

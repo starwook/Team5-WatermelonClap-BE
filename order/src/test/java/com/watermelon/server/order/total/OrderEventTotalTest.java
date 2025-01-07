@@ -2,14 +2,11 @@ package com.watermelon.server.order.total;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watermelon.server.admin.service.AdminOrderEventService;
-import com.watermelon.server.order.domain.ApplyTicketStatus;
-import com.watermelon.server.order.domain.OrderEvent;
-import com.watermelon.server.order.domain.OrderEventStatus;
-import com.watermelon.server.order.domain.Quiz;
+import com.watermelon.server.order.domain.*;
 import com.watermelon.server.order.dto.request.*;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
-import com.watermelon.server.order.domain.OrderApplyCount;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import com.watermelon.server.order.service.MemoryOrderEventService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
@@ -58,7 +55,7 @@ public class OrderEventTotalTest {
     private OrderEvent soonOpenOrderEvent;
     private OrderEvent openOrderEvent;
     private OrderEvent unOpenOrderEvent;
-    private OrderApplyCount orderApplyCount;
+    private OrderWinningCount orderWinningCount;
     @Autowired
     private OrderApplyCountRepository orderApplyCountRepository;
 
@@ -66,8 +63,8 @@ public class OrderEventTotalTest {
     @CacheEvict(value = "orderEvents",allEntries = true)
     @BeforeEach
     public void setUp(){
-        orderApplyCount = OrderApplyCount.createWithNothing();
-        orderApplyCountRepository.save(orderApplyCount);
+        orderWinningCount = OrderWinningCount.createWithNothing();
+        orderApplyCountRepository.save(orderWinningCount);
         openOrderEvent = OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(),

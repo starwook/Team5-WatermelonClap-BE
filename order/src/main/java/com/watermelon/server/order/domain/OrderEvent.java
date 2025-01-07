@@ -29,7 +29,7 @@ public class OrderEvent extends BaseEntity {
     private Quiz quiz;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private OrderApplyCount orderApplyCount;
+    private OrderWinningCount orderWinningCount;
 
     @OneToMany(mappedBy = "orderEvent")
     private List<OrderEventWinner> orderEventWinner = new ArrayList<>();

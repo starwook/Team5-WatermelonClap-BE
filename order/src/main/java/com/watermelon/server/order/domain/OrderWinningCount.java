@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Table(name="order_apply_count")
-public class OrderApplyCount {
+public class OrderWinningCount {
     @Id
     @Setter
     @GeneratedValue
@@ -25,21 +25,21 @@ public class OrderApplyCount {
 
     boolean isFull;
 
-    public static OrderApplyCount create(OrderEvent orderEvent) {
-        return OrderApplyCount.builder()
+    public static OrderWinningCount create(OrderEvent orderEvent) {
+        return OrderWinningCount.builder()
                 .build();
     }
-    public static OrderApplyCount createWithNothing(){
-        return OrderApplyCount.builder().build();
+    public static OrderWinningCount createWithNothing(){
+        return OrderWinningCount.builder().build();
     }
-    public static OrderApplyCount createWithGeneratingId(long id){
-        OrderApplyCount orderApplyCount = OrderApplyCount.builder().build();
-        orderApplyCount.setId(id);
-        return orderApplyCount;
+    public static OrderWinningCount createWithGeneratingId(long id){
+        OrderWinningCount orderWinningCount = OrderWinningCount.builder().build();
+        orderWinningCount.setId(id);
+        return orderWinningCount;
     }
 
     @Builder
-    public OrderApplyCount() {
+    public OrderWinningCount() {
         this.count =0;
     }
 

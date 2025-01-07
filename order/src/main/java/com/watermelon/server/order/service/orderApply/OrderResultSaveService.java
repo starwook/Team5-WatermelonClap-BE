@@ -23,9 +23,7 @@ public class OrderResultSaveService {
          * 먼저 락을 걸고 ApplyCount의 숫자를 올리는 메소드가 성공하였다면
          * 토큰이 담긴 당첨 정보를 저장한다
          */
-        if(memoryOrderEventService.isOrderApplyNotFullThenPlusCount(applyCountIndex)){
-            OrderApplyResult orderApplyResult = OrderApplyResult.makeOrderEventApply(applyToken);
-//            saveOrderResult(orderResult);
+        if(memoryOrderEventService.isOrderApplyNotFullThenPlusCount()){
             return true;
         }
         return false;

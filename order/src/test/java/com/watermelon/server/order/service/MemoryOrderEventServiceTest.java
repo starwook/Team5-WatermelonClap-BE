@@ -6,8 +6,8 @@ import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
-import com.watermelon.server.order.domain.OrderApplyCount;
-import com.watermelon.server.order.service.orderApplyCount.OrderApplyCountService;
+import com.watermelon.server.order.domain.OrderWinningCount;
+import com.watermelon.server.order.service.orderApplyCount.OrderEventWinningCountService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ class MemoryOrderEventServiceTest {
     @Mock
     private OrderApplyCountRepository orderApplyCountRepository;
     @Mock
-    private OrderApplyCountService orderApplyCountService;
+    private OrderEventWinningCountService orderEventWinningCountService;
 
     private int applyCountIndex =1;
     @BeforeEach
@@ -49,24 +49,24 @@ class MemoryOrderEventServiceTest {
                         )
                 )
         );
-        List<OrderApplyCount> orderApplyCountList = memoryOrderEventService.getOrderApplyCountsFromServerMemory();
+        List<OrderWinningCount> orderWinningCountList = memoryOrderEventService.getOrderWinningCountsFromServerMemory();
         for(int i=0;i<4;i++){
-            OrderApplyCount orderApplyCount = OrderApplyCount.createWithGeneratingId(i);
-            orderApplyCountList.add(orderApplyCount);
+            OrderWinningCount orderWinningCount = OrderWinningCount.createWithGeneratingId(i);
+            orderWinningCountList.add(orderWinningCount);
         }
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 성공")
     public void checkIsOrderApplyNotFullThenPlusCount() {
-        doReturn(true).when(orderApplyCountService).isOrderApplyCountAddable(anyLong(),anyInt());
+        doReturn(true).when(orderEventWinningCountService).isOrderApplyCountAddable(anyLong(),anyInt());
         Assertions.assertThat(memoryOrderEventService.isOrderApplyNotFullThenPlusCount(0)).isTrue();
     }
 
     @Test
     @DisplayName("선착순 이벤트 제한수 확인 - 실패 (꽉참)")
     public void checkIsOrderApplyFull() {
-        when(orderApplyCountService.isOrderApplyCountAddable(anyLong(),anyInt())).thenReturn(false);
+        when(orderEventWinningCountService.isOrderApplyCountAddable(anyLong(),anyInt())).thenReturn(false);
         Assertions.assertThat(memoryOrderEventService.isOrderApplyNotFullThenPlusCount(0)).isFalse();
     }
 }

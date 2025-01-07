@@ -2547,10 +2547,10 @@
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.order.service.OrderEventSchedulingService, registry size: 7
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.order.service.OrderEventWinnerService, registry size: 8
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.order.service.orderApply.OrderResultSaveService, registry size: 9
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService, registry size: 10
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyCount.service.OrderApplyCountBasicService, registry size: 11
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyCount.service.OrderApplyCountNamedLockService, registry size: 12
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyCount.service.OrderApplyCountPessimisticLockService, registry size: 13
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService, registry size: 10
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderWinningCount.service.OrderApplyCountBasicService, registry size: 11
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderWinningCount.service.OrderApplyCountNamedLockService, registry size: 12
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderWinningCount.service.OrderApplyCountPessimisticLockService, registry size: 13
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyResult.service.BlockingQueueTokenForDbAccessProviderService, registry size: 14
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyResult.service.ConcurrentQueueTokenForDbAccessProviderService, registry size: 15
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- added dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com.watermelon.server.orderApplyResult.service.OrderEventFromServerMemoryService, registry size: 16
@@ -2568,10 +2568,10 @@
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/order/service/OrderEventSchedulingService, registry size: 14
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/order/service/OrderEventWinnerService, registry size: 13
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/order/service/OrderResultSaveService, registry size: 12
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyCount/service/OrderApplyCountAsyncService, registry size: 11
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyCount/service/OrderApplyCountBasicService, registry size: 10
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyCount/service/OrderApplyCountNamedLockService, registry size: 9
-01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyCount/service/OrderApplyCountPessimisticLockService, registry size: 8
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderWinningCount/service/OrderApplyCountAsyncService, registry size: 11
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderWinningCount/service/OrderApplyCountBasicService, registry size: 10
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderWinningCount/service/OrderApplyCountNamedLockService, registry size: 9
+01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderWinningCount/service/OrderApplyCountPessimisticLockService, registry size: 8
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyResult/service/BlockingQueueIndexLoadBalanceService, registry size: 7
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyResult/service/ConcurrentQueueIndexLoadBalanceService, registry size: 6
 01-07 00:43:30.030 [           main] INFO  .p.p.t.DefaultDynamicTransformerRegistry -- removed dynamic transformer classLoader: jdk.internal.loader.ClassLoaders$AppClassLoader@1dbd16a6, className: com/watermelon/server/orderApplyResult/service/OrderEventFromServerMemoryService, registry size: 5
@@ -3734,7 +3734,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -3758,7 +3758,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -3782,7 +3782,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -3806,7 +3806,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -3830,7 +3830,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -3854,7 +3854,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
+01-07 00:43:32.032 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6490,7 +6490,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6514,7 +6514,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6538,7 +6538,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6562,7 +6562,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6586,7 +6586,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -6610,7 +6610,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
+01-07 00:43:35.035 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9219,7 +9219,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 43 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 27, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9243,7 +9243,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 44 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.getEachResult()" line: 33, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9267,7 +9267,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 45 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountAsyncService.processBatch()" line: 42, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9291,7 +9291,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 46 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountBasicService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 22, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9315,7 +9315,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 47 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountNamedLockService.isOrderApplyCountAddable(long orderApplyCountId, int eachMaxWinnerCount)" line: 24, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]
@@ -9339,7 +9339,7 @@ Caused by: io.netty.channel.ConnectTimeoutException: connection timed out: /211.
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:995) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.77.Final.jar:4.1.77.Final]
 	... 3 more
-01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderApplyCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
+01-07 00:43:38.038 [l-Executor(8-0)] INFO  c.n.p.p.s.g.MetadataGrpcDataSender       -- Error. request=apiId: 48 apiInfo: "com.watermelon.server.orderWinningCount.service.OrderApplyCountPessimisticLockService.getOrderApplyCountWithLock(long orderApplyCountId)" line: 15, cause=UNAVAILABLE: io exception
 io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
 	at io.grpc.Status.asRuntimeException(Status.java:535) ~[grpc-api-1.49.2.jar:1.49.2]
 	at io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onClose(ClientCalls.java:487) ~[grpc-stub-1.49.2.jar:1.49.2]

@@ -1,13 +1,12 @@
 package com.watermelon.server.order.result.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
 import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
-
-import com.watermelon.server.order.domain.OrderApplyCount;
 
 import com.watermelon.server.order.service.MemoryOrderEventService;
 import com.watermelon.server.order.service.orderApply.OrderResultSaveService;
@@ -36,17 +35,17 @@ class OrderApplyResultLockTest {
 
     private OrderEvent orderEvent;
 
-    private OrderApplyCount orderApplyCount;
+    private OrderWinningCount orderWinningCount;
     private OrderResultSaveService orderResultSaveService;
 
     @BeforeEach
     void setUp() {
-         Optional<OrderApplyCount> applyCount = orderApplyCountRepository.findFirstApplyCountById();
+         Optional<OrderWinningCount> applyCount = orderApplyCountRepository.findFirstApplyCountById();
          if(applyCount.isPresent()) {
-             orderApplyCount = applyCount.get();
+             orderWinningCount = applyCount.get();
          }
          else {
-             orderApplyCount = orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
+             orderWinningCount = orderApplyCountRepository.save(OrderWinningCount.createWithNothing());
          }
          orderEvent = orderEventRepository.save(OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
@@ -57,7 +56,7 @@ class OrderApplyResultLockTest {
     }
     @AfterEach
     void delete(){
-        orderApplyCount.clearCount();
+        orderWinningCount.clearCount();
        orderEventRepository.delete(orderEvent);
     }
 //    @Test
