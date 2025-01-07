@@ -11,7 +11,7 @@ import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WinnerAlreadyParticipateException;
 import com.watermelon.server.order.exception.WrongPhoneNumberFormatException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.orderResult.service.OrderResultCommandService;
+import com.watermelon.server.order.service.orderApply.OrderApplyService;
 import com.watermelon.server.order.service.OrderEventCommandService;
 import com.watermelon.server.order.service.OrderEventQueryService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class OrderEventController {
 
     private final OrderEventQueryService orderEventQueryService;
     private final OrderEventCommandService orderEventCommandService;
-    private final OrderResultCommandService orderResultCommandService;
+    private final OrderApplyService orderApplyService;
 
 
 
@@ -47,19 +47,19 @@ public class OrderEventController {
     }
 
     @PostMapping(path = "/event/order/{eventId}/{quizId}")
-    public ResponseApplyTicketDto makeApplyTicket(@RequestBody RequestAnswerDto requestAnswerDto,
+    public ResponseApplyTicketDto applyOrderEvent(@RequestBody RequestAnswerDto requestAnswerDto,
                                                   @PathVariable("eventId") Long orderEventId,
                                                   @PathVariable("quizId") Long quizId)
             throws WrongOrderEventFormatException, NotDuringEventPeriodException {
 
-        return orderResultCommandService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
+        return orderApplyService.makeApplyTicket(requestAnswerDto,orderEventId,quizId);
     }
 
     @PostMapping(path = "/event/order/{eventId}/{quizId}/apply")
-    public void makeApply(@RequestHeader("ApplyTicket") String applyTicket,
-                          @PathVariable("eventId") Long eventId,
-                          @PathVariable("quizId") Long quizId,
-                          @RequestBody OrderEventWinnerRequestDto orderEventWinnerRequestDto)
+    public void makeWinnerInformation(@RequestHeader("ApplyTicket") String applyTicket,
+                                      @PathVariable("eventId") Long eventId,
+                                      @PathVariable("quizId") Long quizId,
+                                      @RequestBody OrderEventWinnerRequestDto orderEventWinnerRequestDto)
             throws ApplyTicketWrongException
             , WrongOrderEventFormatException
             , WrongPhoneNumberFormatException, WinnerAlreadyParticipateException {
@@ -68,7 +68,7 @@ public class OrderEventController {
 
     @PostMapping(path="/event/order/refresh")
     public void refreshOrderEvent(){
-        orderResultCommandService.refreshApplyCount();
+        orderApplyService.refreshApplyCount();
     }
 
 

@@ -1,6 +1,6 @@
-package com.watermelon.server.orderApplyCount.repository;
+package com.watermelon.server.order.repository;
 
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,24 +13,24 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderApplyCountRepository extends JpaRepository<OrderApplyCount,Long> {
+public interface OrderApplyCountRepository extends JpaRepository<OrderWinningCount,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE) //InnoDb는 레코드락만 건다
     @QueryHints({
             @QueryHint(name = "jakarta.persistence.lock.timeout", value = "2000")
     })
-    @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
-    Optional<OrderApplyCount> findLimitOneExclusiveLock();
+    @Query("select oac from OrderWinningCount oac order by oac.id asc limit 1")
+    Optional<OrderWinningCount> findLimitOneExclusiveLock();
 
 
     @Lock(LockModeType.PESSIMISTIC_WRITE) //InnoDb는 레코드락만 건다
     @QueryHints({
             @QueryHint(name = "jakarta.persistence.lock.timeout", value = "2000")
     })
-    @Query("select oac from OrderApplyCount oac where oac.id = :id")
-    Optional<OrderApplyCount> findWithIdExclusiveLock(@Param("id") Long id);
+    @Query("select oac from OrderWinningCount oac where oac.id = :id")
+    Optional<OrderWinningCount> findWithIdExclusiveLock(@Param("id") Long id);
 
-    @Query("select oac from OrderApplyCount oac order by oac.id asc limit 1")
-    Optional<OrderApplyCount> findFirstApplyCountById();
+    @Query("select oac from OrderWinningCount oac order by oac.id asc limit 1")
+    Optional<OrderWinningCount> findFirstApplyCountById();
 
 
     /**

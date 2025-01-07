@@ -1,17 +1,16 @@
 package com.watermelon.server.order.result.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import com.watermelon.server.order.dto.request.RequestOrderEventDto;
 import com.watermelon.server.order.dto.request.RequestOrderRewardDto;
 import com.watermelon.server.order.dto.request.RequestQuizDto;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
 import com.watermelon.server.order.repository.OrderEventRepository;
 
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
-
-import com.watermelon.server.orderResult.service.OrderEventFromServerMemoryService;
-import com.watermelon.server.order.service.OrderResultSaveService;
-import com.watermelon.server.orderResult.service.OrderResultCommandService;
+import com.watermelon.server.order.service.MemoryOrderEventService;
+import com.watermelon.server.order.service.orderApply.OrderResultSaveService;
+import com.watermelon.server.order.service.orderApply.OrderApplyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,12 +22,12 @@ import java.util.Optional;
 
 @SpringBootTest
 @DisplayName("[통합] 선착순 결과 Lock")
-class OrderResultLockTest {
+class OrderApplyResultLockTest {
     @Autowired
-    private OrderEventFromServerMemoryService orderEventFromServerMemoryService;
+    private MemoryOrderEventService memoryOrderEventService;
 
     @Autowired
-    private OrderResultCommandService orderResultCommandService;
+    private OrderApplyService orderApplyService;
     @Autowired
     private OrderEventRepository orderEventRepository;
     @Autowired
@@ -36,28 +35,28 @@ class OrderResultLockTest {
 
     private OrderEvent orderEvent;
 
-    private OrderApplyCount orderApplyCount;
+    private OrderWinningCount orderWinningCount;
     private OrderResultSaveService orderResultSaveService;
 
     @BeforeEach
     void setUp() {
-         Optional<OrderApplyCount> applyCount = orderApplyCountRepository.findFirstApplyCountById();
+         Optional<OrderWinningCount> applyCount = orderApplyCountRepository.findFirstApplyCountById();
          if(applyCount.isPresent()) {
-             orderApplyCount = applyCount.get();
+             orderWinningCount = applyCount.get();
          }
          else {
-             orderApplyCount = orderApplyCountRepository.save(OrderApplyCount.createWithNothing());
+             orderWinningCount = orderApplyCountRepository.save(OrderWinningCount.createWithNothing());
          }
          orderEvent = orderEventRepository.save(OrderEvent.makeOrderEventWithOutImage(
                 RequestOrderEventDto.makeForTestOpened(
                         RequestQuizDto.makeForTest(), RequestOrderRewardDto.makeForTest()
                 )
         ));
-         orderEventFromServerMemoryService.refreshOrderEventInProgress(orderEvent);
+         memoryOrderEventService.refreshOrderEventInProgress(orderEvent);
     }
     @AfterEach
     void delete(){
-        orderApplyCount.clearCount();
+        orderWinningCount.clearCount();
        orderEventRepository.delete(orderEvent);
     }
 //    @Test

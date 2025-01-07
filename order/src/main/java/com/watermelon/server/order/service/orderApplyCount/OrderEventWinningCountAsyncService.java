@@ -1,23 +1,21 @@
-package com.watermelon.server.orderApplyCount.service;
+package com.watermelon.server.order.service.orderApplyCount;
 
 
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
+import com.watermelon.server.order.domain.OrderWinningCount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingDeque;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderApplyCountAsyncService implements OrderApplyCountService{
-    private final OrderApplyCountLockService orderApplyCountLockService;
+public class OrderEventWinningCountAsyncService implements OrderEventWinningCountService {
+    private final OrderEventWinningCountLockService orderEventWinningCountLockService;
     public LinkedBlockingDeque<CompletableFuture<Boolean>> applyCountApis = new LinkedBlockingDeque<>();
     private long orderApplyCountId;
     private int eachMaxWinnerCount;
@@ -35,19 +33,20 @@ public class OrderApplyCountAsyncService implements OrderApplyCountService{
         return future;
     }
 
+
     @Scheduled(fixedRate = 250L)
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void processBatch(){
         if(orderApplyCountId == 0L) return;
-        OrderApplyCount orderApplyCount = orderApplyCountLockService.getOrderApplyCountWithLock(orderApplyCountId);
-        int remainCount = eachMaxWinnerCount-orderApplyCount.getCount();
+        OrderWinningCount orderWinningCount = orderEventWinningCountLockService.getOrderApplyCountWithLock(orderApplyCountId);
+        int remainCount = eachMaxWinnerCount- orderWinningCount.getCount();
         int plusCount;
         for(plusCount=0;plusCount<remainCount;plusCount++){
             if(applyCountApis.isEmpty()) break;
             CompletableFuture<Boolean> future = applyCountApis.poll();
             future.complete(true);
         }
-        orderApplyCount.addCount(plusCount);
+        orderWinningCount.addCount(plusCount);
         while(!applyCountApis.isEmpty()){
             CompletableFuture<Boolean> future = applyCountApis.poll();
             future.complete(false);

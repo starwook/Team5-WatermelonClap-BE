@@ -1,4 +1,4 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.order.service.orderApply;
 
 
 import com.watermelon.server.order.dto.request.RequestAnswerDto;
@@ -6,8 +6,7 @@ import com.watermelon.server.order.dto.response.ResponseApplyTicketDto;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
 
-import com.watermelon.server.order.service.OrderResultSaveService;
-
+import com.watermelon.server.order.service.MemoryOrderEventService;
 import com.watermelon.server.token.ApplyTokenProvider;
 import com.watermelon.server.token.JwtPayload;
 import com.zaxxer.hikari.HikariDataSource;
@@ -20,13 +19,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OrderResultCommandService {
+public class OrderApplyService {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderResultCommandService.class);
-    private final OrderEventFromServerMemoryService orderEventFromServerMemoryService;
+    private static final Logger log = LoggerFactory.getLogger(OrderApplyService.class);
+    private final MemoryOrderEventService memoryOrderEventService;
     private final ApplyTokenProvider applyTokenProvider;
     private final OrderResultSaveService orderResultSaveService;
-    private final IndexLoadBalanceService indexLoadBalanceService;
+    private final BlockingQueueTokenForDbAccessProviderService blockingQueueTokenForDbAccessProviderService;
     @Qualifier("orderResultDatasource") //timeOut이 다른 커넥션을 가져온다.
     @Getter
     private final HikariDataSource dataSource;
@@ -37,11 +36,11 @@ public class OrderResultCommandService {
      * 빠르게 검증 가능한 것들을 먼저 검증한다.
      */
     public ResponseApplyTicketDto makeApplyTicket(RequestAnswerDto requestAnswerDto, Long orderEventId, Long quizId) throws NotDuringEventPeriodException, WrongOrderEventFormatException{
-        orderEventFromServerMemoryService.checkingInfoErrors(orderEventId,quizId);
-        if(orderEventFromServerMemoryService.isOrderApplyFull()){ //
+        memoryOrderEventService.checkingInfoErrors(orderEventId,quizId);
+        if(memoryOrderEventService.isOrderApplyFull()){ //
             return ResponseApplyTicketDto.fullApply();
         }
-        if(!orderEventFromServerMemoryService.checkPrevious(requestAnswerDto.getAnswer()))
+        if(!memoryOrderEventService.checkPrevious(requestAnswerDto.getAnswer()))
         {
             return ResponseApplyTicketDto.wrongAnswer();
         }
@@ -55,7 +54,7 @@ public class OrderResultCommandService {
              * ApplyCountIndex는 당첨자 수만큼 배정된다. 그리고 ApplyCountIndex에는 접근해야하는 ApplyCount 레코드의 정보 또한 가지고 있다.
              * ApplyCountIndex를 할당받지 못 한다면 즉 이미 모든 값들이 할당되었다면, NullPointerException이 발생한다.
              */
-            int applyCountIndex = indexLoadBalanceService.getIndex();
+            int applyCountIndex = blockingQueueTokenForDbAccessProviderService.getIndex();
             /**
              * 에러가 발생하지 않고 할당이 성공했을 때만  토큰을 생성하고 DB커넥션을 여는 메소드를 실행한다.
              */
@@ -71,7 +70,7 @@ public class OrderResultCommandService {
     }
 
     public void refreshApplyCount(){
-        orderEventFromServerMemoryService.refreshApplyCount();
+        memoryOrderEventService.refreshApplyCount();
     }
 
 //         log.info("Locked OrderApplyCount record");

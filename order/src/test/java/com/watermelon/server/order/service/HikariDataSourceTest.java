@@ -1,21 +1,13 @@
 package com.watermelon.server.order.service;
 
 
+import com.watermelon.server.order.service.orderApply.OrderResultSaveService;
 import com.zaxxer.hikari.HikariDataSource;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.TransactionManager;
-
-import java.sql.SQLException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @SpringBootTest
 @DisplayName("[통합] 커넥션 풀")

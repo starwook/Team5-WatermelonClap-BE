@@ -1,13 +1,14 @@
-package com.watermelon.server.orderResult.service;
+package com.watermelon.server.order.service;
 
 import com.watermelon.server.order.domain.OrderEvent;
 
 import com.watermelon.server.order.domain.OrderEventStatus;
 import com.watermelon.server.order.exception.NotDuringEventPeriodException;
 import com.watermelon.server.order.exception.WrongOrderEventFormatException;
-import com.watermelon.server.orderApplyCount.service.OrderApplyCountService;
-import com.watermelon.server.orderApplyCount.repository.OrderApplyCountRepository;
-import com.watermelon.server.orderApplyCount.domain.OrderApplyCount;
+import com.watermelon.server.order.service.orderApplyCount.OrderEventWinningCountService;
+import com.watermelon.server.order.repository.OrderApplyCountRepository;
+import com.watermelon.server.order.domain.OrderWinningCount;
+import com.watermelon.server.order.service.orderApply.BlockingQueueTokenForDbAccessProviderService;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,56 +22,31 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderEventFromServerMemoryService {
-    private static final Logger log = LoggerFactory.getLogger(OrderEventFromServerMemoryService.class);
+public class MemoryOrderEventService {
+    private static final Logger log = LoggerFactory.getLogger(MemoryOrderEventService.class);
 
     @Getter
     private volatile OrderEvent orderEventFromServerMemory;
     private final OrderApplyCountRepository orderApplyCountRepository;
-    private final IndexLoadBalanceService indexLoadBalanceService;
-    private final OrderApplyCountService orderApplyCountService;
+    private final BlockingQueueTokenForDbAccessProviderService blockingQueueTokenForDbAccessProviderService;
+    private final OrderEventWinningCountService orderEventWinningCountService;
     @Getter
     @Setter
-    private List<OrderApplyCount> orderApplyCountsFromServerMemory = new ArrayList<>();
+    private List<OrderWinningCount> orderWinningCountsFromServerMemory = new ArrayList<>();
 
-    public boolean isOrderApplyNotFullThenPlusCount(int applyCountIndex){
+    public boolean isOrderApplyNotFullThenPlusCount(){
         if(isOrderApplyFull()) {
             return false;
         }
-        /**
-         * DB에 저장되어서 Lock을 걸고 가져오는 OrderApplyCount와
-         * 서버에 저장되어있는 OrderApplyCount를 분리하여 관리
-         */
-        try{
-            OrderApplyCount orderApplyCountFromServerMemory = null;
-            /**
-             * 배정받은 현재 접근해야하는 ApplyCount의 Index로
-             * 1차적으로. 서버에 저장되어있는 ApplyCount 목록에서 ApplyCount를 가져와 검증한다
-             * 2차적으로. DB에 저장되어있는 ApplyCount에 접근하는 Service를 호출한다
-             */
-            orderApplyCountFromServerMemory = orderApplyCountsFromServerMemory.get(applyCountIndex);
-            if(orderApplyCountFromServerMemory.isFull()) return false;
-
-            int eachMaxWinnerCount = orderEventFromServerMemory.getWinnerCount()/orderApplyCountsFromServerMemory.size();
-            if(orderApplyCountService.isOrderApplyCountAddable(orderApplyCountFromServerMemory.getId(),eachMaxWinnerCount)){
-                orderApplyCountFromServerMemory.addCountOnce();
-                orderApplyCountFromServerMemory.isCountMaxThenMakeFull(eachMaxWinnerCount);
-                return true;
-            }
-            return false;
+        OrderWinningCount orderWinningCountFromServerMemory = orderEventFromServerMemory.getOrderWinningCount();
+        int winnerCount = orderEventFromServerMemory.getWinnerCount();
+        // 이 곳에서 락을 걸고 가져온다.
+        if(orderEventWinningCountService.isOrderApplyCountAddable(orderWinningCountFromServerMemory.getId(),winnerCount)){
+            orderWinningCountFromServerMemory.addCountOnce();
+            return true;
         }
-        finally {
-            /**
-             * 모든 ApplyCount의 flag가 full이라면 현재 이벤트의 상태 flag를 바꾼다
-             */
-            boolean allFull = true;
-            for(OrderApplyCount eachOrderApplyCount : orderApplyCountsFromServerMemory){
-                if(!eachOrderApplyCount.isFull()){
-                    allFull = false;
-                }
-            }
-            if(allFull){orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);}
-        }
+        orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.CLOSED);
+        return false;
     }
 
     @Transactional
@@ -94,8 +70,8 @@ public class OrderEventFromServerMemoryService {
     @Transactional(transactionManager = "orderApplyCountTransactionManager")
     public void refreshApplyCount() {
         clearOrderApplyCount();
-        indexLoadBalanceService.refreshQueue();
-        indexLoadBalanceService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderApplyCountsFromServerMemory.size());
+        blockingQueueTokenForDbAccessProviderService.refreshQueue();
+        blockingQueueTokenForDbAccessProviderService.addIndexToQueue(orderEventFromServerMemory.getWinnerCount(), orderWinningCountsFromServerMemory.size());
         orderEventFromServerMemory.setOrderEventStatus(OrderEventStatus.OPEN);
     }
 
@@ -105,8 +81,8 @@ public class OrderEventFromServerMemoryService {
          * 1. 모든 ApplyCount 레코드들을 초기화 시켜주고
          * 2. 현재 요청이 들어온다면 접근해야하는 ApplyCount의 ID의 인덱스가 저장되어있는 변수를 초기화 해준다.
          */
-        orderApplyCountsFromServerMemory = orderApplyCountRepository.findAll();
-        orderApplyCountsFromServerMemory.forEach(OrderApplyCount::clearCount);
+        orderWinningCountsFromServerMemory = orderApplyCountRepository.findAll();
+        orderWinningCountsFromServerMemory.forEach(OrderWinningCount::clearCount);
     }
 
     public boolean checkPrevious(String submitAnswer){

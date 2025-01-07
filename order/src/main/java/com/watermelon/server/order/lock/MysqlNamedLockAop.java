@@ -1,7 +1,7 @@
 package com.watermelon.server.order.lock;
 
 
-import com.watermelon.server.orderResult.repository.OrderResultRepository;
+import com.watermelon.server.order.repository.OrderApplyResultRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 @RequiredArgsConstructor
 @Slf4j
 public class MysqlNamedLockAop {
-    private final OrderResultRepository orderResultRepository;
+    private final OrderApplyResultRepository orderApplyResultRepository;
     private final AopForTransaction aopForTransaction;
 
     @Around("@annotation(com.watermelon.server.order.lock.MysqlNamedLock)")
@@ -30,13 +30,13 @@ public class MysqlNamedLockAop {
         String key = mysqlNamedLock.key();
         int waitTime = mysqlNamedLock.waitTime();
         try{ //일단은 한 번만 시도
-            orderResultRepository.getLock(key,waitTime);
+            orderApplyResultRepository.getLock(key,waitTime);
             //어노테이션이 달린 함수 실행
             return aopForTransaction.proceed(joinPoint);
         }
         finally {
             try{
-                orderResultRepository.releaseLock(key);
+                orderApplyResultRepository.releaseLock(key);
             }
             catch (Exception e){ //Lock이 없음애도 해제 시도
                 e.printStackTrace();
