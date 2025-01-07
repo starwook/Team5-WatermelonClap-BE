@@ -91,7 +91,8 @@ res: 리소스 관련 (String, Color 등) 파일 `안드로이드 한정`
 
 ## 📌 ERD
 
-<img width="1059" alt="image" src="https://github.com/user-attachments/assets/358f88a3-77ee-4270-975e-26ba1f9ccc42" />
+<img width="1351" alt="image" src="https://github.com/user-attachments/assets/277243e6-9014-456a-876c-ef2fbfc91881" />
+
 
 
 
